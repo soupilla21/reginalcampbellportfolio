@@ -362,7 +362,7 @@
  <span class="text-neutral-400 text-sm mt-1">Monthly Transactions Managed</span>
  </div>
  <div class="flex flex-col items-center sm:items-start">
- <span class="font-mono text-3xl font-bold text-white">14</span>
+ <span class="font-mono text-3xl font-bold text-white">9</span>
  <span class="text-neutral-400 text-sm mt-1">Autonomous Agents Deployed</span>
  </div>
  <div class="flex flex-col items-center sm:items-start">
@@ -838,6 +838,25 @@
  </div>
  </div>
 
+  <!-- Technical highlights -->
+ <div>
+ <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-4">Technical Highlights</h4>
+ <div class="grid md:grid-cols-3 gap-4">
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-teal-500/15">
+ <p class="text-teal-400 font-mono text-xs font-semibold mb-2">Multi-Tenant Isolation</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Row Level Security enforced at the PostgreSQL level ensures zero cross-tenant data leakage regardless of application logic.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-teal-500/15">
+ <p class="text-teal-400 font-mono text-xs font-semibold mb-2">Zero-Trust Authentication</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">ES256/JWKS token verification with role-based access control across platform_admin, tenant_admin, editor, and viewer tiers.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-teal-500/15">
+ <p class="text-teal-400 font-mono text-xs font-semibold mb-2">API-First Architecture</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">FastAPI backend with full audit logging per run, stage, and QC result. Every action is traceable and exportable for compliance review.</p>
+ </div>
+ </div>
+ </div>
+
  <div>
  <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-4">Platform Architecture</h4>
  <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any node to learn what it does.</p>
@@ -1089,7 +1108,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
  <i class="fas fa-map-marker-alt text-amber-400 text-xl mb-3"></i>
  <h3 class="font-semibold text-white">Response Time</h3>
- <p class="text-neutral-400 text-sm mt-2">Director-level inquiries: within 24 hours. Consulting and architecture inquiries: within 48 hours.</p>
+ <p class="text-neutral-400 text-sm mt-2">Enterprise leadership inquiries: within 24 hours. Consulting and architecture inquiries: within 48 hours.</p>
  </div>
  </div>
  </div>
