@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+ <title>Reginal Campbell | Enterprise AI & Data Strategy</title>
+ <meta name="description" content="PMP-certified enterprise leader with 15+ years managing $40M+ portfolios. Driving strategy through data, AI, and execution. Available for Director-level roles in AI Strategy, Data Platforms, and Enterprise Product Development.">
+ <meta name="author" content="Reginal Campbell">
+ <meta property="og:title" content="Reginal Campbell | Enterprise AI & Data Strategy">
+ <meta property="og:description" content="PMP-certified enterprise leader driving strategy through data, AI, and execution. 15+ years, $40M+ portfolios, 2B+ monthly transactions managed.">
+ <meta property="og:type" content="website">
+ <meta name="twitter:card" content="summary">
+ <meta name="twitter:title" content="Reginal Campbell | Enterprise AI & Data Strategy">
+ <meta name="twitter:description" content="PMP-certified enterprise leader driving strategy through data, AI, and execution.">
+ <script src="https://cdn.tailwindcss.com"></script>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <style>
+ * { box-sizing: border-box; }
+ a { color: inherit; text-decoration: none; }
+ a:visited { color: inherit; }
+ html { scroll-behavior: smooth; }
+ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #050505; color: #EAEAEA; overflow-x: hidden; max-width: 100vw; }
+ .font-mono { font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; }
+
+ /* backdrop-filter with Android fallback */
+ .glass-panel { background: rgba(10,10,10,0.95); border: 1px solid rgba(255,255,255,0.06); }
+ @supports (backdrop-filter: blur(10px)) {
+ .glass-panel { background: rgba(15,15,15,0.65); backdrop-filter: blur(10px); }
+ }
+
+ @keyframes softPulse {
+ 0% { border-color: rgba(255,255,255,0.2); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+ 50% { border-color: rgba(255,255,255,0.6); box-shadow: 0 0 6px 0 rgba(255,255,255,0.3); }
+ 100% { border-color: rgba(255,255,255,0.2); box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+ }
+ .pulse-active { animation: softPulse 1.5s infinite ease-in-out; }
+
+ .tag-cloud span { transition: all 0.2s; }
+ .tag-cloud span:hover { transform: scale(1.02); background: rgba(255,255,255,0.12); }
+
+ ::-webkit-scrollbar { width: 6px; height: 6px; }
+ ::-webkit-scrollbar-track { background: #111; }
+ ::-webkit-scrollbar-thumb { background: #333; border-radius: 6px; }
+
+ /* scroll-margin-top - set via CSS variable updated by JS to match actual nav height */
+ :root { --nav-height: 72px; }
+ #main-content { padding-top: var(--nav-height) !important; }
+ section, #hero, #innovation-lab, #philosophy, #toolkit, #contact, #decision-matrix {
+ scroll-margin-top: calc(var(--nav-height) + 12px);
+ }
+
+ /* Portrait mobile nav - allow wrapping with auto height */
+ @media (max-width: 640px) {
+ #main-nav { padding: 0 1rem; }
+ #main-nav > div { padding: 10px 0 !important; gap: 8px !important; }
+ }
+
+ /* scroll-reveal */
+ .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.55s ease, transform 0.55s ease; }
+ .reveal.visible { opacity: 1; transform: translateY(0); }
+
+ /* nav active */
+ nav a.nav-active { color: #fff !important; border-bottom: 1px solid rgba(255,255,255,0.4); padding-bottom: 2px; }
+
+ /* form focus */
+ .form-input:focus { outline: none; border-color: #F59E0B !important; box-shadow: 0 0 0 2px rgba(245,158,11,0.15); }
+
+ /* Accessibility - visible focus states for keyboard navigation */
+ :focus-visible {
+ outline: 2px solid #F59E0B;
+ outline-offset: 3px;
+ border-radius: 4px;
+ }
+ button:focus-visible, a:focus-visible {
+ outline: 2px solid #F59E0B;
+ outline-offset: 3px;
+ border-radius: 6px;
+ }
+ .pipeline-node:focus-visible {
+ outline: 2px solid #F59E0B;
+ outline-offset: 3px;
+ }
+ .card-item:focus-visible {
+ outline: 2px solid #F59E0B;
+ outline-offset: 3px;
+ border-radius: 16px;
+ }
+
+ /* toolkit category */
+ .toolkit-category { font-size: 10px; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #6B7280; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+ .toolkit-category:first-child { margin-top: 0; }
+
+ /* pipeline nodes */
+ .pipeline-node { display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 10px; padding: 10px 12px; min-width: 105px; text-align: center; transition: background 0.2s, border-color 0.2s; cursor: pointer; }
+ .pipeline-node.amber { background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.3); }
+ .pipeline-node.amber:hover { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.6); }
+ .pipeline-node.blue { background: rgba(59,130,246,0.07); border: 1px solid rgba(59,130,246,0.3); }
+ .pipeline-node.blue:hover { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.6); }
+ .pipeline-node.teal { background: rgba(20,184,166,0.07); border: 1px solid rgba(20,184,166,0.3); }
+ .pipeline-node.teal:hover { background: rgba(20,184,166,0.15); border-color: rgba(20,184,166,0.6); }
+ .node-title { font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; }
+ .node-title.amber { color: #F59E0B; }
+ .node-title.blue { color: #60A5FA; }
+ .node-title.teal { color: #2DD4BF; }
+ .node-desc { font-size: 10px; color: #9CA3AF; margin-top: 3px; line-height: 1.3; }
+ .pipeline-arrow { font-size: 14px; align-self: center; flex-shrink: 0; }
+ .pipeline-arrow.amber { color: rgba(245,158,11,0.5); }
+ .pipeline-arrow.blue { color: rgba(59,130,246,0.5); }
+ .pipeline-arrow.teal { color: rgba(20,184,166,0.5); }
+
+ /* ── ARCH DETAIL PANEL ── */
+ .arch-panel {
+ display: none;
+ }
+ .arch-panel.open {
+ display: block;
+ animation: panelSlideDown 0.4s ease forwards;
+ }
+ @keyframes panelSlideDown {
+ from { opacity: 0; transform: translateY(-12px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+
+ /* Mobile pipeline - vertical stack on small screens */
+ @media (max-width: 640px) {
+ .pipeline-row {
+ flex-direction: column !important;
+ align-items: center !important;
+ gap: 6px !important;
+ min-width: unset !important;
+ width: 100% !important;
+ }
+ .pipeline-row .pipeline-arrow {
+ transform: rotate(90deg);
+ margin: 0 !important;
+ font-size: 12px;
+ }
+ .pipeline-node {
+ width: 85% !important;
+ min-width: unset !important;
+ }
+ .pipeline-scroll-outer {
+ overflow-x: auto;
+ -webkit-overflow-scrolling: touch;
+ }
+ }
+ @media (min-width: 641px) {
+ .pipeline-scroll-outer {
+ overflow-x: auto;
+ -webkit-overflow-scrolling: touch;
+ }
+ .pipeline-row {
+ min-width: max-content;
+ }
+ }
+
+ /* Mobile-first explicit overrides - not relying on Tailwind breakpoint parsing */
+ @media (max-width: 767px) {
+ .md\:grid-cols-2 { grid-template-columns: 1fr !important; }
+ .md\:grid-cols-3 { grid-template-columns: 1fr !important; }
+ .md\:flex-row { flex-direction: column !important; }
+ .md\:text-left { text-align: left !important; }
+ .md\:inline { display: none !important; }
+ .md\:hidden { display: block !important; }
+ .md\:block { display: none !important; }
+ .md\:mt-0 { margin-top: 0.75rem; }
+ .md\:px-8 { padding-left: 1rem !important; padding-right: 1rem !important; }
+ .md\:p-8 { padding: 1rem !important; }
+ .md\:text-4xl { font-size: 1.875rem !important; }
+ .md\:text-6xl { font-size: 2.25rem !important; }
+ .sm\:grid-cols-3 { grid-template-columns: 1fr !important; }
+ .sm\:items-start { align-items: center !important; }
+ }
+ @media (min-width: 768px) {
+ .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+ .md\:hidden { display: none !important; }
+ .md\:block { display: block !important; }
+ .md\:inline { display: inline !important; }
+ .md\:flex-row { flex-direction: row; }
+ .md\:text-left { text-align: left; }
+ }
+ @media (min-width: 640px) {
+ .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+ .sm\:items-start { align-items: flex-start; }
+ }
+
+ /* Decision matrix - explicit show/hide */
+ @media (max-width: 768px) {
+ .matrix-desktop { display: none !important; }
+ .matrix-mobile { display: grid !important; }
+ }
+ @media (min-width: 769px) {
+ .matrix-desktop { display: block !important; }
+ .matrix-mobile { display: none !important; }
+ }
+
+ /* prefers-reduced-motion - respect user accessibility preferences */
+ @media (prefers-reduced-motion: reduce) {
+ *, *::before, *::after {
+ animation-duration: 0.01ms !important;
+ animation-iteration-count: 1 !important;
+ transition-duration: 0.01ms !important;
+ }
+ html { scroll-behavior: auto; }
+ .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+ .arch-panel.open { animation: none !important; }
+ .pulse-active { animation: none !important; }
+ .pipeline-node { transition: none !important; }
+ }
+
+ /* code toggle */
+ .code-content { display: none; }
+ .code-content.open { display: block; }
+
+ /* Mobile toggle labels */
+ .mobile-toggle-label {
+ font-size: 8px;
+ margin-top: 2px;
+ display: block;
+ }
+ @media (max-width: 480px) {
+ #mobile-toggle-bar button {
+ width: 52px;
+ height: 52px;
+ flex-direction: column;
+ gap: 2px;
+ }
+ .mobile-toggle-label {
+ display: block;
+ font-size: 8px;
+ }
+ }
+ @media (min-width: 481px) {
+ .mobile-toggle-label {
+ display: none;
+ }
+ }
+ #mobile-toggle-bar button {
+ transition: all 0.2s;
+ }
+
+ /* Back to top - show on all devices after scroll */
+ #back-to-top {
+ transition: opacity 0.2s, transform 0.2s;
+ }
+ #back-to-top:hover {
+ transform: scale(1.05);
+ background: rgba(245,158,11,0.25);
+ }
+
+ /* ── State-driven architecture mode ── */
+ body[data-arch="edge"] .arch-toggle[data-arch="edge"],
+ body[data-arch="edge"] .arch-toggle-mobile[data-arch="edge"] { border-color: rgba(245,158,11,0.5) !important; background: rgba(245,158,11,0.08) !important; }
+ body[data-arch="saas"] .arch-toggle[data-arch="saas"],
+ body[data-arch="saas"] .arch-toggle-mobile[data-arch="saas"] { border-color: rgba(20,184,166,0.5) !important; background: rgba(20,184,166,0.08) !important; }
+ body[data-arch="cloud"] .arch-toggle[data-arch="cloud"],
+ body[data-arch="cloud"] .arch-toggle-mobile[data-arch="cloud"] { border-color: rgba(59,130,246,0.5) !important; background: rgba(59,130,246,0.08) !important; }
+
+ /* Active card highlight via body state */
+ body[data-arch="edge"] [data-arch-card="edge"] { border-color: rgba(245,158,11,0.5) !important; opacity: 1 !important; transform: scale(1.01) !important; }
+ body[data-arch="saas"] [data-arch-card="saas"] { border-color: rgba(20,184,166,0.5) !important; opacity: 1 !important; transform: scale(1.01) !important; }
+ body[data-arch="cloud"] [data-arch-card="cloud"] { border-color: rgba(59,130,246,0.5) !important; opacity: 1 !important; transform: scale(1.01) !important; }
+
+ /* Inactive cards - dimmed */
+ body[data-arch="edge"] [data-arch-card="saas"],
+ body[data-arch="edge"] [data-arch-card="cloud"] { opacity: 0.55; transform: scale(1); }
+ body[data-arch="saas"] [data-arch-card="edge"],
+ body[data-arch="saas"] [data-arch-card="cloud"] { opacity: 0.55; transform: scale(1); }
+ body[data-arch="cloud"] [data-arch-card="edge"],
+ body[data-arch="cloud"] [data-arch-card="saas"] { opacity: 0.55; transform: scale(1); }
+
+ /* Transition for cards */
+ [data-arch-card] { transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.25s ease; }
+
+ /* Active panel indicator - thin top accent bar */
+ body[data-arch="edge"] #panel-edge { border-top: 2px solid #F59E0B; }
+ body[data-arch="saas"] #panel-saas { border-top: 2px solid #14B8A6; }
+ body[data-arch="cloud"] #panel-cloud { border-top: 2px solid #3B82F6; }
+
+ </style>
+</head>
+<body class="bg-neutral-950 text-neutral-200 antialiased" data-arch="edge">
+
+ <!-- SIDEBAR - desktop -->
+ <aside id="desktop-sidebar" class="flex flex-col gap-4 border border-white/10 rounded-2xl p-3 shadow-2xl" style="display:none;position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:50;background:rgba(8,8,8,0.95)">
+ <button data-arch="edge" aria-pressed="true" aria-controls="panel-edge" class="arch-toggle group flex flex-col items-center gap-1 px-4 py-3 rounded-xl transition-all duration-200 border border-transparent hover:border-amber-500/40 hover:bg-amber-500/5">
+ <i class="fas fa-microchip text-amber-400 text-xl"></i>
+ <span class="text-xs font-semibold font-mono tracking-tight">Local Edge</span>
+ <span class="text-[10px] text-neutral-400">Data Sovereignty</span>
+ </button>
+ <button data-arch="cloud" aria-pressed="false" aria-controls="panel-cloud" class="arch-toggle group flex flex-col items-center gap-1 px-4 py-3 rounded-xl transition-all duration-200 border border-transparent hover:border-blue-500/40 hover:bg-blue-500/5">
+ <i class="fas fa-cloud-upload-alt text-blue-400 text-xl"></i>
+ <span class="text-xs font-semibold font-mono tracking-tight">Cloud Native</span>
+ <span class="text-[10px] text-neutral-400">Speed & Scale</span>
+ </button>
+ <button data-arch="saas" aria-pressed="false" aria-controls="panel-saas" class="arch-toggle group flex flex-col items-center gap-1 px-4 py-3 rounded-xl transition-all duration-200 border border-transparent hover:border-teal-500/40 hover:bg-teal-500/5">
+ <i class="fas fa-globe text-teal-400 text-xl"></i>
+ <span class="text-xs font-semibold font-mono tracking-tight">SaaS / Web</span>
+ <span class="text-[10px] text-neutral-400">Commercialization</span>
+ </button>
+ </aside>
+
+ <!-- Mobile toggle - bottom right -->
+ <div id="mobile-toggle-bar" class="flex gap-2 rounded-full p-2 border border-white/15 shadow-xl" style="position:fixed;bottom:24px;right:24px;z-index:50;background:rgba(5,5,5,0.97)">
+ <button data-arch="edge" aria-pressed="true" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-amber-400 bg-neutral-800/70 transition-all">
+ <i class="fas fa-microchip text-sm"></i>
+ <span class="mobile-toggle-label text-[8px]">Edge</span>
+ </button>
+ <button data-arch="cloud" aria-pressed="false" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-blue-400 bg-neutral-800/70 transition-all">
+ <i class="fas fa-cloud-upload-alt text-sm"></i>
+ <span class="mobile-toggle-label text-[8px]">Cloud</span>
+ </button>
+ <button data-arch="saas" aria-pressed="false" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-teal-400 bg-neutral-800/70 transition-all">
+ <i class="fas fa-globe text-sm"></i>
+ <span class="mobile-toggle-label text-[8px]">SaaS</span>
+ </button>
+ </div>
+
+ <!-- Back to top button - now visible on all devices -->
+ <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"
+ style="display:none;position:fixed;bottom:100px;right:24px;z-index:49;width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.4);color:#F59E0B;font-size:18px;cursor:pointer;align-items:center;justify-content:center;transition:all 0.2s;">
+ <i class="fas fa-arrow-up"></i>
+ </button>
+
+ <main class="max-w-7xl mx-auto px-4 md:px-8 relative" style="overflow-x:hidden;padding-bottom:80px;padding-top:72px" id="main-content">
+
+ <!-- FLOATING NAV -->
+ <nav id="main-nav" style="position:fixed;top:0;left:0;right:0;z-index:48;background:rgba(5,5,5,0.92);border-bottom:1px solid rgba(255,255,255,0.07);padding:0 2rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:box-shadow 0.3s;" class="flex flex-wrap justify-between items-center">
+ <div style="padding:14px 0;" class="flex flex-wrap justify-between items-center w-full gap-3">
+ <div class="flex items-center gap-2">
+ <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">REGINAL CAMPBELL</span>
+ <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>
+ <span class="hidden md:inline text-sm font-mono text-neutral-400">AI Strategy & Architecture</span>
+ </div>
+ <div class="flex gap-6 text-sm font-medium mt-3 md:mt-0" style="list-style:none">
+ <a href="#innovation-lab" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="innovation-lab">Work</a>
+ <a href="#philosophy" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="philosophy">Philosophy</a>
+ <a href="#toolkit" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="toolkit">Expertise</a>
+ <a href="#contact" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="contact">Contact</a>
+ </div>
+ </div>
+ </nav>
+
+ <!-- HERO -->
+ <section id="hero" class="mb-20 reveal">
+ <h1 class="text-3xl md:text-6xl font-bold leading-tight tracking-tight max-w-4xl break-words">
+ Driving Enterprise Strategy Through Data, AI, and Execution.
+ </h1>
+ <p class="text-neutral-400 text-lg md:text-xl mt-6 max-w-3xl">
+ PMP-certified program leader with 15+ years managing $40M+ portfolios and high-scale platforms. I turn complex systems into operational clarity by aligning stakeholders, data, and delivery.
+ </p>
+ <p class="text-neutral-500 text-base md:text-lg mt-4 max-w-2xl italic">
+ Where strategy meets execution. This is where decisions get made, and where they succeed or fail.
+ </p>
+ <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-12 bg-black/40 border border-white/5 rounded-2xl p-6 glass-panel">
+ <div class="flex flex-col items-center sm:items-start">
+ <span class="font-mono text-3xl font-bold text-white">2B+</span>
+ <span class="text-neutral-400 text-sm mt-1">Monthly Transactions Managed</span>
+ </div>
+ <div class="flex flex-col items-center sm:items-start">
+ <span class="font-mono text-3xl font-bold text-white">14</span>
+ <span class="text-neutral-400 text-sm mt-1">Autonomous Agents Deployed</span>
+ </div>
+ <div class="flex flex-col items-center sm:items-start">
+ <span class="font-mono text-3xl font-bold text-white">$40M</span>
+ <span class="text-neutral-400 text-sm mt-1">Portfolio Under Oversight</span>
+ </div>
+ </div>
+ <div class="flex flex-wrap gap-5 mt-10">
+ <a href="#innovation-lab" class="px-7 py-3 rounded-full border border-white/20 bg-transparent text-white font-medium hover:bg-white/5 transition flex items-center gap-2">
+ View the Innovation Lab <i class="fas fa-arrow-right text-sm"></i>
+ </a>
+ <a href="#contact" class="px-8 py-3 rounded-full bg-amber-400 text-black font-bold shadow-lg hover:bg-amber-300 transition flex items-center gap-2">
+ Schedule a Strategy Call <i class="fas fa-calendar-alt"></i>
+ </a>
+ </div>
+ </section>
+
+ <!-- PHILOSOPHY -->
+ <section id="philosophy" class="mb-28 reveal">
+ <div>
+ <span class="text-amber-400 font-mono text-sm">Philosophy</span>
+ <h2 class="text-3xl font-bold mt-1">Execution Philosophy</h2>
+ <div class="max-w-3xl space-y-4 mt-4">
+ <p class="text-neutral-300">The systems and architecture matter. They do not operate on their own.</p>
+ <p class="text-neutral-300">Execution breaks down when there is no clear standard behind the work. My focus is building systems that create clarity, reduce friction, and support consistent decision-making at scale.</p>
+ <p class="text-neutral-300">Technology should serve that outcome. It should reduce manual effort, remove unnecessary coordination, and make information accessible when it is needed. The goal is not more output. The goal is better decisions.</p>
+ <p class="text-neutral-300">I approach every problem from the constraint first. What must be protected. What must scale. Where speed matters, and where control cannot be compromised. The architecture is a response to those conditions, not a starting point.</p>
+ </div>
+ <div class="mt-8 max-w-3xl">
+ <p class="text-white font-semibold text-lg mb-3">The Standard</p>
+ <div class="space-y-4">
+ <p class="text-neutral-400">My approach is shaped by my time in the Army. Decisions are made with the information available. Communication is direct. Execution is measured by outcomes, not activity.</p>
+ <p class="text-neutral-400">That discipline carries through regardless of the environment. Data platforms, AI systems, and enterprise programs all require the same foundation. Define the objective clearly. Validate that the system is producing what it is supposed to produce. Remove anything that does not contribute to the outcome.</p>
+ <p class="text-neutral-400">The expectation is consistency, accountability, and clarity under pressure.</p>
+ <p class="text-neutral-300 font-medium mt-5">AI supports that process. It does not replace it.</p>
+ </div>
+ </div>
+ </div>
+ <div class="grid md:grid-cols-3 gap-6 mt-10">
+ <div class="bg-neutral-900/30 p-6 rounded-xl border border-white/5">
+ <i class="fas fa-shield-alt text-2xl text-amber-400"></i>
+ <h3 class="font-bold text-lg mt-3">Governance before automation.</h3>
+ <p class="text-neutral-400 text-sm mt-2">If the output cannot be audited, it cannot be trusted in production. Every system has a structured validation layer before output reaches a human, built in from the start, not added later.</p>
+ </div>
+ <div class="bg-neutral-900/30 p-6 rounded-xl border border-white/5">
+ <i class="fas fa-cogs text-2xl text-blue-400"></i>
+ <h3 class="font-bold text-lg mt-3">Constraints drive architecture.</h3>
+ <p class="text-neutral-400 text-sm mt-2">Privacy requirement? Build local. Speed requirement? Go serverless. Scale requirement? Build the product layer. The business objective determines the stack, never the other way around.</p>
+ </div>
+ <div class="bg-neutral-900/30 p-6 rounded-xl border border-white/5">
+ <i class="fas fa-clock text-2xl text-teal-400"></i>
+ <h3 class="font-bold text-lg mt-3">Systems must outlast the project.</h3>
+ <p class="text-neutral-400 text-sm mt-2">Good architecture is maintainable, documentable, and transferable. Not a black box only the builder understands. Built so a new team member can inherit, audit, and extend it.</p>
+ </div>
+ </div>
+ </section>
+
+<!-- INNOVATION LAB -->
+ <section id="innovation-lab" class="mb-28 reveal">
+ <div class="text-center md:text-left">
+ <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">The Innovation Lab</span>
+ <h2 class="text-3xl md:text-4xl font-bold mt-2">Three Architectures. One Strategic Vision.</h2>
+ <p class="text-neutral-400 max-w-2xl mt-3">"The right architecture is a business decision, not a technology preference. Select an architecture lane from the sidebar to explore each system in depth."</p>
+ </div>
+
+ <!-- Cards - Order: edge, cloud, saas (matching sidebar) -->
+ <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12" id="portfolio-grid">
+
+ <!-- CARD A - edge (Leadership Agent) -->
+ <div data-arch-card="edge" role="button" tabindex="0" aria-controls="panel-edge" aria-expanded="true" class="card-item bg-neutral-900/60 rounded-2xl border border-white/5 p-6 transition-all duration-300 hover:border-amber-500/30 flex flex-col cursor-pointer" onclick="setActiveArchitecture('edge', true)" onkeydown="if(event.key==='Enter'||event.key===' '){setActiveArchitecture('edge',true)}">
+ <div class="flex justify-between items-start flex-wrap gap-2">
+ <span class="bg-amber-500/20 text-amber-300 text-xs font-mono px-3 py-1 rounded-full">Operational Efficiency</span>
+ <span class="text-xs font-mono text-amber-400/80 border border-amber-500/30 px-2 py-0.5 rounded">Local Edge</span>
+ </div>
+ <h3 class="text-xl font-bold mt-4">The Leadership Agent</h3>
+ <p class="text-neutral-300 text-sm mt-2 flex-1">Autonomous content intelligence pipeline. 9 agents transforming raw global data into executive-ready insights, entirely on-premises.</p>
+ <div class="mt-4 text-sm text-neutral-400 border-l-2 border-amber-500/50 pl-3">Built on Ubuntu + Ollama. Zero third-party API exposure.</div>
+ <div class="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-neutral-300">
+ <span>✔ 9-stage pipeline</span><span>✔ Gatekeeper filter</span><span>✔ Feedback ingester</span>
+ </div>
+ <span class="inline-flex items-center gap-1 text-amber-400 text-sm font-medium mt-5">Explore this architecture ↓</span>
+ </div>
+
+ <!-- CARD B - cloud (Competitive Intelligence Pulse) -->
+ <div data-arch-card="cloud" role="button" tabindex="0" aria-controls="panel-cloud" aria-expanded="false" class="card-item bg-neutral-900/60 rounded-2xl border border-white/5 p-6 transition-all duration-300 hover:border-blue-500/30 flex flex-col cursor-pointer" onclick="setActiveArchitecture('cloud', true)" onkeydown="if(event.key==='Enter'||event.key===' '){setActiveArchitecture('cloud',true)}">
+ <div class="flex justify-between items-start flex-wrap gap-2">
+ <span class="bg-blue-500/20 text-blue-300 text-xs font-mono px-3 py-1 rounded-full">Strategic Intelligence</span>
+ <span class="text-xs font-mono text-blue-400/80 border border-blue-500/30 px-2 py-0.5 rounded">Cloud Native</span>
+ </div>
+ <div class="mt-3">
+ <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/50 px-2 py-0.5 rounded-full">
+ <i class="fas fa-drafting-compass mr-1 text-[10px]"></i>Architecture Design · In Development
+ </span>
+ </div>
+ <h3 class="text-xl font-bold mt-3">Competitive Intelligence Pulse</h3>
+ <p class="text-neutral-300 text-sm mt-2 flex-1">Real-time market monitoring replacing manual research with automated, predictive intelligence for global enterprise teams.</p>
+ <div class="mt-4 text-sm text-neutral-400 border-l-2 border-blue-500/50 pl-3">Serverless. RAG vector search. Real-time sentiment forecasting.</div>
+ <div class="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-neutral-300">
+ <span>✔ Serverless / Lambda</span><span>✔ RAG pipelines</span><span>✔ Trend forecasting</span>
+ </div>
+ <span class="inline-flex items-center gap-1 text-blue-400 text-sm font-medium mt-5">Explore this architecture ↓</span>
+ </div>
+
+ <!-- CARD C - saas (SaaS Orchestrator) -->
+ <div data-arch-card="saas" role="button" tabindex="0" aria-controls="panel-saas" aria-expanded="false" class="card-item bg-neutral-900/60 rounded-2xl border border-white/5 p-6 transition-all duration-300 hover:border-teal-500/30 flex flex-col cursor-pointer" onclick="setActiveArchitecture('saas', true)" onkeydown="if(event.key==='Enter'||event.key===' '){setActiveArchitecture('saas',true)}">
+ <div class="flex justify-between items-start flex-wrap gap-2">
+ <span class="bg-teal-500/20 text-teal-300 text-xs font-mono px-3 py-1 rounded-full">Scalable Infrastructure</span>
+ <span class="text-xs font-mono text-teal-400/80 border border-teal-500/30 px-2 py-0.5 rounded">SaaS / Web</span>
+ </div>
+ <h3 class="text-xl font-bold mt-4">The SaaS Orchestrator</h3>
+ <p class="text-neutral-300 text-sm mt-2 flex-1">Full-stack backend productizing AI workflows into governed, multi-tenant applications. The difference between a prototype and a shippable enterprise product.</p>
+ <div class="mt-4 text-sm text-neutral-400 border-l-2 border-teal-500/50 pl-3">FastAPI + Supabase. PostgreSQL RLS. ES256/JWKS auth.</div>
+ <div class="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-neutral-300">
+ <span>✔ Multi-tenant RLS</span><span>✔ RBAC roles</span><span>✔ SOC2 ready</span>
+ </div>
+ <span class="inline-flex items-center gap-1 text-teal-400 text-sm font-medium mt-5">Explore this architecture ↓</span>
+ </div>
+ </div>
+
+ <!-- ═══════════════════════════════════════════════════
+ ARCH PANEL - LOCAL EDGE (edge)
+ ═══════════════════════════════════════════════════ -->
+ <div id="panel-edge" class="arch-panel mt-8 rounded-2xl border border-amber-500/20 bg-black/40 overflow-hidden">
+ <div class="border-b border-amber-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+ <div class="flex items-center gap-3">
+ <i class="fas fa-microchip text-amber-400 text-lg"></i>
+ <span class="font-mono font-semibold text-amber-400">Local Edge: The Leadership Agent</span>
+ <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i class="fas fa-circle text-[8px] mr-1"></i>Production · Active</span>
+ </div>
+ <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
+ <span>Ubuntu</span><span>·</span><span>Ollama</span><span>·</span><span>Python</span><span>·</span><span>ChromaDB</span><span>·</span><span>FastAPI</span><span>·</span><span>Supabase</span>
+ </div>
+ </div>
+ <div style="background:rgba(245,158,11,0.06);border-bottom:1px solid rgba(245,158,11,0.15);padding:14px 24px 14px 24px;">
+ <p style="font-size:11px;font-family:monospace;color:#F59E0B;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px 0;">Executive Summary</p>
+ <p style="font-size:14px;color:#e5e5e5;line-height:1.6;margin:0;"><strong style="color:#fff;">The constraint:</strong> Healthcare and federal clients cannot send operational data to third-party APIs. <strong style="color:#fff;">The decision:</strong> Local LLMs on-premises, zero external exposure. <strong style="color:#fff;">The result:</strong> A 9-agent autonomous pipeline that produces publish-ready executive content at near-zero marginal cost with full auditability.</p>
+ </div>
+ <div class="p-4 md:p-8 space-y-8">
+
+ <!-- Architectural narrative -->
+ <div class="max-w-3xl">
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">System Architecture</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">The Leadership Agent is an asynchronous, state-managed pipeline that automates the entire lifecycle of thought leadership from global signal detection to final compliance gating. By deploying 9 specialized agents on local Ubuntu infrastructure, I eliminated external API dependencies and established a closed-loop system that improves its own brand accuracy through human-in-the-loop feedback analysis.</p>
+ </div>
+
+ <!-- Business problem + strategic moat -->
+ <div class="grid md:grid-cols-2 gap-8">
+ <div>
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">The Business Problem</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Ghostwriters charge $10,000/month and lack credible domain insight. Executives with the most authoritative knowledge publish the least, because the infrastructure for consistent, high-quality thought leadership does not exist. The bridge between expert insight and public visibility is broken.</p>
+ </div>
+ <div>
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">The Strategic Moat</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Local-first architecture means zero third-party API exposure. For healthcare and federal clients, this eliminates shadow AI risk entirely. The system runs on commodity hardware with no per-token billing, no vendor dependency, and no compliance grey area.</p>
+ </div>
+ </div>
+
+ <!-- Updated technical highlights -->
+ <div>
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">Technical Highlights</h4>
+ <div class="grid md:grid-cols-3 gap-4">
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-amber-500/15">
+ <p class="text-amber-400 font-mono text-xs font-semibold mb-2">Stateful Orchestration</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Managed 9 discrete agent states with automated retry logic and context persistence across the full pipeline lifecycle.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-amber-500/15">
+ <p class="text-amber-400 font-mono text-xs font-semibold mb-2">Semantic Quality Gating</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Critic/Editor feedback loop maintains 90%+ brand-alignment scores without human oversight on every pipeline run.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-amber-500/15">
+ <p class="text-amber-400 font-mono text-xs font-semibold mb-2">Infrastructure Sovereignty</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Qwen2.5 and local Ollama models ensure 100% data privacy in a zero-trust environment with near-zero marginal cost.</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Pipeline diagram — unchanged -->
+ <div>
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">9-Stage Pipeline Architecture</h4>
+ <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any agent to learn what it does.</p>
+ <div class="pipeline-scroll-outer pb-2 space-y-3">
+ <div class="pipeline-row flex items-start gap-2">
+ <div class="pipeline-node amber" data-agent="researcher" role="button" tabindex="0" aria-label="Learn about researcher agent" onclick="showAgent(this)"><span class="node-title amber">Researcher</span><span class="node-desc">Fetches &amp; scores<br>25+ RSS sources</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="gatekeeper" role="button" tabindex="0" aria-label="Learn about gatekeeper agent" onclick="showAgent(this)"><span class="node-title amber">Gatekeeper</span><span class="node-desc">Brand alignment<br>filter &amp; cache</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="orchestrator" role="button" tabindex="0" aria-label="Learn about orchestrator agent" onclick="showAgent(this)"><span class="node-title amber">Orchestrator</span><span class="node-desc">Topic &amp; format<br>decision</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="strategist" role="button" tabindex="0" aria-label="Learn about strategist agent" onclick="showAgent(this)"><span class="node-title amber">Strategist</span><span class="node-desc">Narrative angle<br>&amp; theme framing</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="writer" role="button" tabindex="0" aria-label="Learn about writer agent" onclick="showAgent(this)"><span class="node-title amber">Writer</span><span class="node-desc">First draft in<br>author&#39;s voice</span></div>
+ </div>
+ <div class="pipeline-row flex items-start gap-2">
+ <div class="pipeline-node amber" data-agent="critic" role="button" tabindex="0" aria-label="Learn about critic agent" onclick="showAgent(this)"><span class="node-title amber">Critic</span><span class="node-desc">Multi-axis quality<br>validation loop</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="editor" role="button" tabindex="0" aria-label="Learn about editor agent" onclick="showAgent(this)"><span class="node-title amber">Editor</span><span class="node-desc">Clarity, hook<br>&amp; brand polish</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="formatter" role="button" tabindex="0" aria-label="Learn about formatter agent" onclick="showAgent(this)"><span class="node-title amber">Formatter</span><span class="node-desc">LinkedIn-ready<br>structure</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node amber" data-agent="publisherqc" role="button" tabindex="0" aria-label="Learn about publisherqc agent" onclick="showAgent(this)"><span class="node-title amber">Publisher QC</span><span class="node-desc">Brand rules gate<br>&amp; audit logging</span></div>
+ <span class="pipeline-arrow amber mt-4">&#8594;</span>
+ <div class="pipeline-node teal" data-agent="feedback" role="button" tabindex="0" aria-label="Learn about feedback agent" onclick="showAgent(this)"><span class="node-title teal">Feedback Ingester</span><span class="node-desc">Learns from edits<br>&#8594; updates brand guide</span></div>
+ </div>
+ </div>
+ <!-- Agent detail card -->
+ <div id="agent-detail-card" style="display:none;margin-top:16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.3);border-left:3px solid #F59E0B;border-radius:12px;padding:16px 20px;">
+ <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+ <div style="flex:1">
+ <p id="agent-stage" style="font-size:10px;font-family:monospace;color:#F59E0B;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 5px 0;"></p>
+ <p id="agent-name" style="font-size:15px;font-weight:600;color:#ffffff;margin:0 0 8px 0;"></p>
+ <p id="agent-detail" style="font-size:13px;color:#d4d4d4;line-height:1.65;margin:0 0 10px 0;"></p>
+ <p id="agent-input" style="font-size:12px;color:#9ca3af;margin:0 0 3px 0;"></p>
+ <p id="agent-output" style="font-size:12px;color:#9ca3af;margin:0;"></p>
+ </div>
+ <button onclick="closeAgent()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0;" aria-label="Close">&#10005;</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Governance + Vision -->
+ <div class="grid md:grid-cols-2 gap-8">
+ <div>
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">Governance Layer</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Every output passes through Publisher QC before delivery. Checks include word count thresholds, banned phrase detection, signature concept density, CTA presence, and structural compliance. Failures are logged with specific remediation notes and not silently dropped.</p>
+ <p class="text-neutral-300 text-sm leading-relaxed mt-3">The Feedback Ingester closes the self-improvement loop: human editorial changes are analyzed, logged, and patterns appearing 3 or more times are automatically promoted into the brand guide. The system improves without manual prompt re-engineering.</p>
+ </div>
+ <div>
+ <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">The Vision</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Currently single-tenant. The SaaS Orchestrator is the productization layer: multi-tenant deployment, per-client brand workspaces, role-based access, and billable usage tracking. At enterprise scale, this becomes a governed content intelligence platform every executive team in a regulated industry needs, and almost no one has built correctly.</p>
+ </div>
+ </div>
+
+ <!-- Feedback Ingester technical innovation callout -->
+ <div style="background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.25);border-left:4px solid #14B8A6;border-radius:12px;padding:20px 24px;">
+ <p style="font-size:10px;font-family:monospace;color:#2DD4BF;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 8px 0;">Technical Innovation: Automated Brand Evolution</p>
+ <p class="text-neutral-200 text-sm leading-relaxed">I engineered a Feedback Ingester module that acts as a continuous learning loop. It performs a semantic diff between the system output and the final human-edited version. If consistent patterns emerge across runs, such as specific vocabulary preferences or structural choices, the module automatically promotes these attributes into the central brand_guide.yaml. This reduced manual brand maintenance intervention by approximately 40% over the first 90 days of active use.</p>
+ </div>
+
+ <!-- Trade-off quote -->
+ <div class="bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
+ <div class="flex items-start gap-3">
+ <i class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <div>
+ <p class="text-base italic font-light text-neutral-100 leading-relaxed">"I chose local LLMs (Qwen2.5 / Ollama) over third-party APIs to eliminate data sovereignty risk and per-token costs at volume. In a federal or healthcare context, sending content derived from sensitive operational data to an external API is a non-starter. It is not a preference, it is a compliance requirement. Local-first architecture solves for both the privacy constraint and the cost model simultaneously."</p>
+ <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">The constraint that drove the decision:</strong> High-volume pipelines running multiple times daily compound per-token API costs quickly. Local inference on commodity hardware delivers strong output quality at near-zero marginal cost, and keeps every byte within the organization's control boundary.</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Orchestrator code sample — replaces gatekeeper snippet -->
+ <div>
+ <button onclick="toggleCode('edge-code')" class="text-sm font-mono text-amber-400 border border-amber-500/30 px-4 py-2 rounded-lg hover:bg-amber-500/10 transition" id="edge-code-btn">
+ View Technical Deep Dive &#8595;
+ </button>
+ <div id="edge-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
+ <p class="text-xs font-mono text-neutral-500 mb-3"># agents/orchestrator.py: Strategic State &amp; Workflow Management</p>
+ <pre class="text-xs font-mono text-green-400 leading-relaxed whitespace-pre" style="min-width:max-content"><code>async def execute_content_pipeline(topic: str, context: dict):
+ """
+ Orchestrates the 9-agent lifecycle using a state-machine pattern.
+ Manages transitions, retries, and cross-agent context injection.
+ """
+ # PHASE 1: INTELLIGENCE GATHERING
+ raw_signals = await researcher.fetch_sources(topic)
+ # Gatekeeper prevents downstream resource waste by filtering early
+ valid_signals = await gatekeeper.validate_alignment(raw_signals)
+
+ # PHASE 2: CREATIVE SYNTHESIS
+ narrative_arc = await strategist.define_angle(valid_signals, context)
+ draft = await writer.generate_initial_content(narrative_arc)
+
+ # PHASE 3: ITERATIVE QUALITY LOOP
+ # Critic triggers a recursive refinement loop if score is below 0.85
+ review = await critic.evaluate(draft)
+ if review.action_required:
+     draft = await editor.apply_revisions(draft, review.feedback)
+
+ # PHASE 4: FINAL COMPLIANCE AND GOVERNANCE
+ return await publisher_qc.signoff(draft)</code></pre>
+ </div>
+ </div>
+
+ </div>
+ </div>
+
+
+    </section><!-- end innovation lab -->
+
+<!-- ═══════════════════════════════════════════════════
+ ARCH PANEL - CLOUD NATIVE (cloud)
+ ═══════════════════════════════════════════════════ -->
+ <div id="panel-cloud" class="arch-panel mt-8 rounded-2xl border border-blue-500/20 bg-black/40 overflow-hidden">
+ <div class="border-b border-blue-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+ <div class="flex items-center gap-3">
+ <i class="fas fa-cloud-upload-alt text-blue-400 text-lg"></i>
+ <span class="font-mono font-semibold text-blue-400">Cloud Native: Competitive Intelligence Pulse</span>
+ <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/40 px-2 py-0.5 rounded-full"><i class="fas fa-drafting-compass mr-1 text-[9px]"></i>Architecture Design · In Development</span>
+ </div>
+ <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
+ <span>AWS Lambda</span><span>·</span><span>Pinecone / pgvector</span><span>·</span><span>Python</span><span>·</span><span>Frontier LLM APIs</span>
+ </div>
+ </div>
+ <div style="background:rgba(59,130,246,0.06);border-bottom:1px solid rgba(59,130,246,0.15);padding:14px 24px 14px 24px;">
+ <p style="font-size:11px;font-family:monospace;color:#60A5FA;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px 0;">Executive Summary</p>
+ <p style="font-size:14px;color:#e5e5e5;line-height:1.6;margin:0;"><strong style="color:#fff;">The constraint:</strong> Leadership teams waste 20+ hours weekly on manual competitive research that arrives too late to matter. <strong style="color:#fff;">The decision:</strong> Serverless RAG pipeline with no idle infrastructure cost, elastic scale, and frontier model reasoning on public web data. <strong style="color:#fff;">The result:</strong> Real-time intelligence alerts that replace the analyst's Monday morning summary.</p>
+ </div>
+ <div class="p-4 md:p-8 space-y-8">
+
+ <!-- Architectural narrative -->
+ <div class="max-w-3xl">
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">System Architecture</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">The Competitive Intelligence Pulse is a cloud-native monitoring engine designed for global market responsiveness. Unlike legacy research tools that produce static reports, this system utilizes a serverless RAG architecture to synthesize thousands of real-time market signals into predictive alerts. It is engineered to eliminate organizational theater by delivering raw, unvarnished market truth directly to decision-makers at sub-second latency.</p>
+ </div>
+
+ <!-- Business problem + strategic moat -->
+ <div class="grid md:grid-cols-2 gap-8">
+ <div>
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">The Business Problem</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Enterprise leadership teams spend 20+ hours per week manually tracking competitor moves, regulatory shifts, and market signals, then packaging them into slide decks that arrive too late to influence decisions. Organizational theater is expensive, slow, and systematically wrong about what matters.</p>
+ </div>
+ <div>
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">The Strategic Moat</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Serverless architecture delivers infinite elastic scale with zero idle infrastructure cost. Frontier model APIs are appropriate here because the data is non-sensitive public competitive intelligence. Speed and breadth outweigh the local-first constraint. The architecture is a direct response to the business objective.</p>
+ </div>
+ </div>
+
+ <!-- Technical highlights -->
+ <div>
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-4">Technical Highlights</h4>
+ <div class="grid md:grid-cols-3 gap-4">
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-blue-500/15">
+ <p class="text-blue-400 font-mono text-xs font-semibold mb-2">Serverless RAG Architecture</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Event-driven pipeline using AWS Lambda and Pinecone to process global market signals with near-zero idle infrastructure cost.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-blue-500/15">
+ <p class="text-blue-400 font-mono text-xs font-semibold mb-2">Frontier Model Guardrails</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Middleware layer validates LLM outputs for groundedness, preventing hallucinations from reaching high-stakes executive reports.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-4 border border-blue-500/15">
+ <p class="text-blue-400 font-mono text-xs font-semibold mb-2">Predictive Signal Scoring</p>
+ <p class="text-neutral-300 text-xs leading-relaxed">Semantic weighting algorithm filters market noise, surfacing only the top 3% of high-impact competitive threats to the executive team.</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Architecture flow diagram — preserved with clickable nodes -->
+ <div>
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-4">Architecture Flow</h4>
+ <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any node to learn what it does.</p>
+ <div class="pipeline-scroll-outer pb-2">
+ <div class="pipeline-row flex items-start gap-2">
+ <div class="pipeline-node blue" data-cloud-agent="ingestor" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about ingestor" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Ingestor</span><span class="node-desc">Multi-source<br>data ingestion</span></div>
+ <span class="pipeline-arrow blue mt-4">&#8594;</span>
+ <div class="pipeline-node blue" data-cloud-agent="embedder" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about embedder" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Embedder</span><span class="node-desc">Vector encoding<br>&amp; storage</span></div>
+ <span class="pipeline-arrow blue mt-4">&#8594;</span>
+ <div class="pipeline-node blue" data-cloud-agent="retriever" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about retriever" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Retriever</span><span class="node-desc">RAG semantic<br>search</span></div>
+ <span class="pipeline-arrow blue mt-4">&#8594;</span>
+ <div class="pipeline-node blue" data-cloud-agent="synthesizer" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about synthesizer" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Synthesizer</span><span class="node-desc">LLM synthesis<br>&amp; trend scoring</span></div>
+ <span class="pipeline-arrow blue mt-4">&#8594;</span>
+ <div class="pipeline-node blue" data-cloud-agent="alerter" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about alerter" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Alerter</span><span class="node-desc">Threshold alerts<br>&amp; delivery</span></div>
+ </div>
+ </div>
+ <!-- Cloud agent detail card -->
+ <div id="cloud-agent-detail-card" style="display:none;margin-top:16px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.3);border-left:3px solid #3B82F6;border-radius:12px;padding:16px 20px;">
+ <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+ <div style="flex:1">
+ <p id="cloud-agent-stage" style="font-size:10px;font-family:monospace;color:#60A5FA;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 5px 0;"></p>
+ <p id="cloud-agent-name" style="font-size:15px;font-weight:600;color:#ffffff;margin:0 0 8px 0;"></p>
+ <p id="cloud-agent-detail" style="font-size:13px;color:#d4d4d4;line-height:1.65;margin:0 0 10px 0;"></p>
+ <p id="cloud-agent-input" style="font-size:12px;color:#9ca3af;margin:0 0 3px 0;"></p>
+ <p id="cloud-agent-output" style="font-size:12px;color:#9ca3af;margin:0;"></p>
+ </div>
+ <button onclick="closeCloudAgent()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0;" aria-label="Close">&#10005;</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Governance + Vision -->
+ <div class="grid md:grid-cols-2 gap-8">
+ <div>
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">Governance Layer</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Source credibility scoring filters low-quality signals before synthesis. Prompt guardrails prevent hallucinated attribution. All intelligence outputs carry source provenance metadata. The system shows its work, not just its conclusions.</p>
+ </div>
+ <div>
+ <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">The Vision</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Full build targeting configurable watchlists per business unit, real-time Slack integration, and a weekly AI-generated competitive briefing that replaces the analyst's Monday morning summary. Designed to plug directly into the SaaS Orchestrator's multi-tenant backend.</p>
+ </div>
+ </div>
+
+ <!-- Governance Gateway innovation callout -->
+ <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);border-left:4px solid #3B82F6;border-radius:12px;padding:20px 24px;">
+ <p style="font-size:10px;font-family:monospace;color:#60A5FA;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 8px 0;">Technical Innovation: The Governance Gateway</p>
+ <p class="text-neutral-200 text-sm leading-relaxed">I architected a centralized AI Gateway that intercepts all cloud LLM calls. This layer enforces real-time PII redaction and prompt injection shields before data reaches third-party APIs. It also provides a token-quota management system, allowing the organization to scale AI adoption across 50+ teams without risking budget overruns or data leakage. This is the governance layer that earns enterprise trust.</p>
+ </div>
+
+ <!-- Trade-off callout -->
+ <div class="bg-black/50 border border-blue-500/25 border-l-4 border-l-blue-500 rounded-2xl p-6">
+ <div class="flex items-start gap-3">
+ <i class="fas fa-quote-left text-blue-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <div>
+ <p class="text-base italic font-light text-neutral-100 leading-relaxed">"For competitive intelligence, the data is public and the constraint is speed, not privacy. That is the opposite of the Leadership Agent's context. So the architecture flips: serverless for elasticity, frontier APIs for maximum reasoning quality, vector DB for semantic breadth across thousands of sources. Same engineering mindset, completely different stack because the business constraint is different."</p>
+ <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why serverless here but not Local Edge:</strong> Ingestion workloads are bursty, heavy during market hours and quiet overnight. Lambda scales to zero between runs. At local edge, the constraint is data sovereignty, not cost elasticity, so a persistent local process is the right call.</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Serverless code sample -->
+ <div>
+ <button onclick="toggleCode('cloud-code')" class="text-sm font-mono text-blue-400 border border-blue-500/30 px-4 py-2 rounded-lg hover:bg-blue-500/10 transition" id="cloud-code-btn">
+ View Technical Deep Dive &#8595;
+ </button>
+ <div id="cloud-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
+ <p class="text-xs font-mono text-neutral-500 mb-3"># signals/processor.py: Cloud-Native Event Orchestration</p>
+ <pre class="text-xs font-mono text-green-400 leading-relaxed whitespace-pre" style="min-width:max-content"><code>async def process_market_signal(event: dict):
+ """
+ AWS Lambda handler for real-time competitive signal ingestion.
+ Scales horizontally to process 10k+ concurrent market events.
+ """
+ # 1. EVENT DECODING AND NORMALIZATION
+ signal = signal_parser.extract(event['body'])
+
+ # 2. SEMANTIC SEARCH (Cloud-Native Vector DB)
+ # Queries signal against 10M+ historical data points in Pinecone
+ relevant_context = await vector_store.query(
+     vector=signal.embedding,
+     top_k=5,
+     namespace="competitive-intel-2026"
+ )
+
+ # 3. FRONTIER MODEL SYNTHESIS
+ # Leverages high-reasoning models with custom Prompt Guardrails
+ analysis = await high_reasoning_llm.analyze(
+     input=signal.text,
+     context=relevant_context,
+     guardrail_profile="executive_strategy_v4"
+ )
+
+ # 4. DOWNSTREAM ALERTING AND DISPATCH
+ return await alert_manager.dispatch(analysis)</code></pre>
+ </div>
+ </div>
+
+ </div>
+ </div>
+
+ <!-- ═══════════════════════════════════════════════════
+ ARCH PANEL - SAAS / WEB (saas)
+ ═══════════════════════════════════════════════════ -->
+ <div id="panel-saas" class="arch-panel mt-8 rounded-2xl border border-teal-500/20 bg-black/40 overflow-hidden">
+ <div class="border-b border-teal-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
+ <div class="flex items-center gap-3">
+ <i class="fas fa-globe text-teal-400 text-lg"></i>
+ <span class="font-mono font-semibold text-teal-400">SaaS / Web: The SaaS Orchestrator</span>
+ <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i class="fas fa-circle text-[8px] mr-1"></i>Backend Production · Active</span>
+ </div>
+ <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
+ <span>FastAPI</span><span>·</span><span>Supabase</span><span>·</span><span>PostgreSQL + RLS</span><span>·</span><span>ES256 / JWKS</span>
+ </div>
+ </div>
+ <div style="background:rgba(20,184,166,0.06);border-bottom:1px solid rgba(20,184,166,0.15);padding:14px 24px 14px 24px;">
+ <p style="font-size:11px;font-family:monospace;color:#2DD4BF;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px 0;">Executive Summary</p>
+ <p style="font-size:14px;color:#e5e5e5;line-height:1.6;margin:0;"><strong style="color:#fff;">The constraint:</strong> AI pipelines fail in enterprise contexts without proper isolation, authentication, and auditability. <strong style="color:#fff;">The decision:</strong> Build a full-stack multi-tenant backend using FastAPI, Supabase, and PostgreSQL RLS, not just a script. <strong style="color:#fff;">The result:</strong> A production-grade SaaS platform a compliance officer can approve on day one.</p>
+ </div>
+ <div class="p-4 md:p-8 space-y-8">
+
+ <div class="grid md:grid-cols-2 gap-8">
+ <div>
+ <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">The Business Problem</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Most AI workflows live and die as single-user scripts. They can't be sold, audited, permissioned, or handed to a second team member without breaking. The gap between "a working AI pipeline" and "an enterprise AI product" is the governance and multi-tenancy layer, and most builders never build it.</p>
+ </div>
+ <div>
+ <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">The Strategic Moat</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">This is the commercialization layer. Row Level Security at the database means tenant data isolation is enforced at the PostgreSQL level, not application logic. ES256/JWKS authentication means tokens are cryptographically verifiable without a round-trip to an auth server. This is the architecture a compliance officer approves on first review.</p>
+ </div>
+ </div>
+
+ <div>
+ <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-4">Platform Architecture</h4>
+ <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any node to learn what it does.</p>
+ <div class="pipeline-scroll-outer pb-2">
+ <div class="pipeline-row flex items-start gap-2">
+ <div class="pipeline-node teal" data-saas-agent="authlayer" role="button" tabindex="0" aria-label="Learn about authlayer" onclick="showSaasAgent(this)"><span class="node-title teal">Auth Layer</span><span class="node-desc">ES256/JWKS<br>RBAC roles</span></div>
+ <span class="pipeline-arrow teal mt-4">&#8594;</span>
+ <div class="pipeline-node teal" data-saas-agent="apigateway" role="button" tabindex="0" aria-label="Learn about apigateway" onclick="showSaasAgent(this)"><span class="node-title teal">API Gateway</span><span class="node-desc">FastAPI<br>tenant-scoped</span></div>
+ <span class="pipeline-arrow teal mt-4">&#8594;</span>
+ <div class="pipeline-node teal" data-saas-agent="datalayer" role="button" tabindex="0" aria-label="Learn about datalayer" onclick="showSaasAgent(this)"><span class="node-title teal">Data Layer</span><span class="node-desc">PostgreSQL + RLS<br>enforced isolation</span></div>
+ <span class="pipeline-arrow teal mt-4">&#8594;</span>
+ <div class="pipeline-node teal" data-saas-agent="tenantworkspace" role="button" tabindex="0" aria-label="Learn about tenantworkspace" onclick="showSaasAgent(this)"><span class="node-title teal">Tenant Workspace</span><span class="node-desc">Brand config<br>&amp; content pool</span></div>
+ <span class="pipeline-arrow teal mt-4">&#8594;</span>
+ <div class="pipeline-node teal" data-saas-agent="pipelinerunner" role="button" tabindex="0" aria-label="Learn about pipelinerunner" onclick="showSaasAgent(this)"><span class="node-title teal">Pipeline Runner</span><span class="node-desc">Agent orchestration<br>&amp; run tracking</span></div>
+ </div>
+ </div>
+ <div id="saas-agent-detail-card" style="display:none;margin-top:16px;background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.3);border-left:3px solid #14B8A6;border-radius:12px;padding:16px 20px;">
+ <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+ <div style="flex:1">
+ <p id="saas-agent-stage" style="font-size:10px;font-family:monospace;color:#2DD4BF;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 5px 0;"></p>
+ <p id="saas-agent-name" style="font-size:15px;font-weight:600;color:#ffffff;margin:0 0 8px 0;"></p>
+ <p id="saas-agent-detail" style="font-size:13px;color:#d4d4d4;line-height:1.65;margin:0 0 10px 0;"></p>
+ <p id="saas-agent-input" style="font-size:12px;color:#9ca3af;margin:0 0 3px 0;"></p>
+ <p id="saas-agent-output" style="font-size:12px;color:#9ca3af;margin:0;"></p>
+ </div>
+ <button onclick="closeSaasAgent()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0;" aria-label="Close">&#10005;</button>
+ </div>
+ </div>
+ </div>
+
+ <div class="grid md:grid-cols-2 gap-8">
+ <div>
+ <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">Governance Layer</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">RLS policies are defined per table and enforced at the PostgreSQL level. A misconfigured application route cannot leak tenant data. Audit logging captures every run, stage result, and QC outcome. Role-based access means a viewer can't trigger a pipeline run. A tenant_admin can't touch another tenant's data. Enterprise controls, not application-level trust.</p>
+ </div>
+ <div>
+ <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">The Vision</h4>
+ <p class="text-neutral-300 text-sm leading-relaxed">Phase 5 adds Stripe billing integration, usage metering per tenant, and a self-serve onboarding flow. The platform becomes a true ISV product: a company buys a seat, configures their brand workspace, and gets a governed AI content pipeline without touching a line of code. This is the $10M ARR scenario.</p>
+ </div>
+ </div>
+
+ <div class="bg-black/50 border border-teal-500/25 border-l-4 border-l-teal-500 rounded-2xl p-6">
+ <div class="flex items-start gap-3">
+ <i class="fas fa-quote-left text-teal-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <div>
+ <p class="text-base italic font-light text-neutral-100 leading-relaxed">"The difference between a script and a product is governance. Anyone can wrap a for-loop around an LLM call. What enterprises actually need is data isolation they can audit, authentication they can revoke, and role boundaries a compliance team can map. I built the SaaS layer because I wanted to demonstrate that I understand how AI gets deployed in production, not just how it gets built in a notebook."</p>
+ <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why Supabase + FastAPI over a managed platform:</strong> Full control over the RLS schema means compliance posture is explicit and auditable. Managed AI platforms abstract this away, which is fine for prototypes, but not for regulated enterprise deployments where the security team needs to read the policy, not trust a SaaS vendor's word for it.</p>
+ </div>
+ </div>
+ </div>
+
+ <div>
+ <button onclick="toggleCode('saas-code')" class="text-sm font-mono text-teal-400 border border-teal-500/30 px-4 py-2 rounded-lg hover:bg-teal-500/10 transition">
+ View Technical Deep Dive ↓
+ </button>
+ <div id="saas-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
+ <p class="text-xs font-mono text-neutral-500 mb-3"># RLS policy example: PostgreSQL (Supabase)</p>
+ <pre class="text-xs font-mono text-green-400 leading-relaxed whitespace-pre" style="min-width:max-content"><code>-- Tenants can only read their own content items
+CREATE POLICY "tenant_isolation_content_items"
+ ON content_items
+ FOR ALL
+ USING (tenant_id = auth.jwt() ->> 'tenant_id');
+
+-- Editors can insert; viewers are read-only
+CREATE POLICY "editor_insert_runs"
+ ON runs
+ FOR INSERT
+ WITH CHECK (
+ tenant_id = auth.jwt() ->> 'tenant_id'
+ AND auth.jwt() ->> 'role' IN ('tenant_admin', 'editor')
+ );
+
+-- FastAPI dependency: validates ES256 token + injects tenant context
+async def get_current_tenant(token: str = Depends(oauth2_scheme)):
+ payload = jwt.decode(token, jwks_client.get_signing_key_from_jwt(token).key,
+ algorithms=["ES256"])
+ return TenantContext(
+ tenant_id=payload["tenant_id"],
+ role=payload["role"]
+ )</code></pre>
+ </div>
+ </div>
+
+ </div>
+ </div>
+
+ </section>
+
+ <!-- DATA STRATEGY -->
+ <section class="mb-28 reveal">
+ <div class="text-center md:text-left">
+ <span class="text-amber-400 font-mono text-sm">Before the Agents</span>
+ <h2 class="text-3xl md:text-4xl font-bold mt-2">Scaling Mission-Critical Ecosystems</h2>
+ <p class="text-neutral-400 max-w-2xl mt-2">Before building agents, I built the platforms that power them. Agents break when the data layer isn't solid. I build the data layer first.</p>
+ </div>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+ <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-amber-500/60">
+ <i class="fas fa-database text-amber-400 text-xl mb-3"></i>
+ <h3 class="font-bold text-xl">National Healthcare Data Fabric</h3>
+ <p class="text-neutral-300 text-sm mt-2">Led implementation of Data Fabric architecture for national healthcare exchanges, enabling federated data access across siloed systems while maintaining HIPAA compliance across organizational boundaries.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-blue-500/60">
+ <i class="fas fa-chart-line text-blue-400 text-xl mb-3"></i>
+ <h3 class="font-bold text-xl">2B+ Monthly Transactions</h3>
+ <p class="text-neutral-300 text-sm mt-2">Managed data strategy for ecosystems processing over 2 billion transactions monthly, designing for resilience, latency, and auditability at enterprise scale across high-velocity environments.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-teal-500/60">
+ <i class="fas fa-notes-medical text-teal-400 text-xl mb-3"></i>
+ <h3 class="font-bold text-xl">Veteran Records Modernization</h3>
+ <p class="text-neutral-300 text-sm mt-2">Directed modernization of legacy systems handling 1M+ veteran records, balancing $40M in program risk with operational continuity and strict federal compliance requirements.</p>
+ </div>
+ <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-white/30">
+ <i class="fas fa-chart-simple text-white/70 text-xl mb-3"></i>
+ <h3 class="font-bold text-xl">$40M Portfolio Oversight</h3>
+ <p class="text-neutral-300 text-sm mt-2">PMP-certified program director with direct accountability for multi-million dollar technology portfolios, cross-functional team leadership, and C-suite stakeholder management across regulated industries.</p>
+ </div>
+ </div>
+ </section>
+
+ <!-- DECISION MATRIX -->
+ <section class="mb-28 reveal" id="decision-matrix">
+ <div>
+ <span class="text-amber-400 font-mono text-sm">The Director's Framework</span>
+ <h2 class="text-3xl font-bold mt-1">Choosing the Right Stack for the Business Objective</h2>
+ <p class="text-neutral-400 max-w-2xl mt-2">"I don't start with a model. I start with the constraint. Every architectural decision reflects a business priority, and that distinction separates a strategic AI leader from a developer who knows how to call an API."</p>
+ </div>
+ <div class="matrix-desktop overflow-x-auto mt-8" style="display:block">
+ <table class="min-w-full bg-black/30 border border-white/10 rounded-2xl text-sm">
+ <thead class="border-b border-white/10 font-mono">
+ <tr>
+ <th class="px-5 py-4 text-left text-neutral-500"></th>
+ <th class="px-5 py-4 text-left text-amber-400">Leadership Agent</th>
+ <th class="px-5 py-4 text-left text-blue-400">Intelligence Pulse</th>
+ <th class="px-5 py-4 text-left text-teal-400">SaaS Orchestrator</th>
+ </tr>
+ </thead>
+ <tbody class="divide-y divide-white/5">
+ <tr class="hover:bg-white/[0.02] transition-colors"><td class="px-5 py-3 font-semibold text-neutral-300">Deployment</td><td class="px-5 py-3">Local / On-Prem</td><td class="px-5 py-3">Cloud / Serverless</td><td class="px-5 py-3">Full-Stack SaaS</td></tr>
+ <tr class="hover:bg-white/[0.02] transition-colors"><td class="px-5 py-3 font-semibold text-neutral-300">Primary Value</td><td class="px-5 py-3">Data Sovereignty</td><td class="px-5 py-3">Speed & Insight</td><td class="px-5 py-3">Commercialization</td></tr>
+ <tr class="hover:bg-white/[0.02] transition-colors"><td class="px-5 py-3 font-semibold text-neutral-300">Cost Model</td><td class="px-5 py-3">Near-Zero Marginal</td><td class="px-5 py-3">Per-Token (Scalable)</td><td class="px-5 py-3">Per-Tenant (SaaS)</td></tr>
+ <tr class="hover:bg-white/[0.02] transition-colors"><td class="px-5 py-3 font-semibold text-neutral-300">Security Posture</td><td class="px-5 py-3">Zero-Trust / Air-Gapped</td><td class="px-5 py-3">API-Native + Auth</td><td class="px-5 py-3">RLS + Audit Logging</td></tr>
+ <tr class="hover:bg-white/[0.02] transition-colors"><td class="px-5 py-3 font-semibold text-neutral-300">Compliance Fit</td><td class="px-5 py-3">HIPAA / Federal</td><td class="px-5 py-3">Enterprise Strategy</td><td class="px-5 py-3">Multi-Tenant / ISV</td></tr>
+ <tr class="hover:bg-white/[0.02] transition-colors"><td class="px-5 py-3 font-semibold text-neutral-300">Best For</td><td class="px-5 py-3">Regulated Environments</td><td class="px-5 py-3">Distributed Teams</td><td class="px-5 py-3">Product Companies</td></tr>
+ </tbody>
+ </table>
+ </div>
+ <div class="matrix-mobile grid grid-cols-1 gap-5 mt-8" style="display:none">
+ <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-amber-400 mb-3"><i class="fas fa-microchip mr-2"></i>Leadership Agent</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Local / On-Prem</span><span class="text-neutral-400">Value</span><span>Data Sovereignty</span><span class="text-neutral-400">Cost</span><span>Near-Zero</span><span class="text-neutral-400">Security</span><span>Zero-Trust</span><span class="text-neutral-400">Compliance</span><span>HIPAA / Federal</span></div></div>
+ <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-blue-400 mb-3"><i class="fas fa-cloud mr-2"></i>Intelligence Pulse</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Cloud / Serverless</span><span class="text-neutral-400">Value</span><span>Speed & Insight</span><span class="text-neutral-400">Cost</span><span>Per-Token</span><span class="text-neutral-400">Security</span><span>API-Native</span><span class="text-neutral-400">Compliance</span><span>Enterprise</span></div></div>
+ <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-teal-400 mb-3"><i class="fas fa-globe mr-2"></i>SaaS Orchestrator</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Full-Stack SaaS</span><span class="text-neutral-400">Value</span><span>Commercialization</span><span class="text-neutral-400">Cost</span><span>Per-Tenant</span><span class="text-neutral-400">Security</span><span>RLS + Audit</span><span class="text-neutral-400">Compliance</span><span>Multi-Tenant</span></div></div>
+ </div>
+ </section>
+
+ <!-- TOOLKIT -->
+ <section id="toolkit" class="mb-28 reveal">
+ <div>
+ <span class="text-amber-400 font-mono text-sm">Technical Stack</span>
+ <h2 class="text-3xl font-bold mt-1">The Toolkit</h2>
+ </div>
+ <div class="mt-6">
+ <p class="toolkit-category">AI & Data Engineering</p>
+ <div class="tag-cloud flex flex-wrap gap-3">
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">Agentic Workflows</span>
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">LLM Orchestration (Ollama)</span>
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">RAG / Vector Search</span>
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">ChromaDB</span>
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">Data Fabric</span>
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">SQL / PostgreSQL</span>
+ <span class="bg-amber-500/10 border border-amber-500/20 text-amber-300 px-4 py-2 rounded-full text-sm font-mono">Prompt Engineering</span>
+ </div>
+ <p class="toolkit-category">Product & Program Management</p>
+ <div class="tag-cloud flex flex-wrap gap-3">
+ <span class="bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-mono">PMP Certification</span>
+ <span class="bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-mono">Agile / Scrum</span>
+ <span class="bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-mono">SaaS Architecture</span>
+ <span class="bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-mono">Enterprise MBR / QBR</span>
+ <span class="bg-blue-500/10 border border-blue-500/20 text-blue-300 px-4 py-2 rounded-full text-sm font-mono">$40M Portfolio Oversight</span>
+ </div>
+ <p class="toolkit-category">Infrastructure & Backend</p>
+ <div class="tag-cloud flex flex-wrap gap-3">
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">Linux (Ubuntu)</span>
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">Python</span>
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">FastAPI</span>
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">Supabase</span>
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">RLS / Multi-Tenant</span>
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">Cloud Modernization</span>
+ <span class="bg-teal-500/10 border border-teal-500/20 text-teal-300 px-4 py-2 rounded-full text-sm font-mono">systemd / Cron</span>
+ </div>
+ </div>
+ </section>
+
+ <!-- CONTACT -->
+ <section id="contact" class="mb-28 reveal">
+ <div>
+ <span class="text-amber-400 font-mono text-sm">Contact</span>
+ <h2 class="text-3xl font-bold mt-1">Let's Talk About the Work That Actually Matters</h2>
+ <p class="text-neutral-400 max-w-2xl mt-2">If you are navigating complex systems, scaling data and AI capabilities, or trying to bring structure to how decisions get made, I am open to the conversation.</p>
+ <p class="text-neutral-400 max-w-2xl mt-2">I work across enterprise leadership roles and focused engagements where clarity, execution, and accountability are required.</p>
+ </div>
+ <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-10">
+ <form action="https://formspree.io/f/xvzdzlpb" method="POST" class="space-y-5" id="contact-form" novalidate>
+ <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+ <input type="text" name="name" placeholder="Name *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <input type="email" name="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <input type="text" name="company" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <select name="inquiry_type" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
+ <option value="" disabled selected>Role / How can I help?</option>
+ <option>Leadership role or executive opportunity</option>
+ <option>Data or AI initiatives not delivering expected outcomes</option>
+ <option>Decision-making and execution challenges</option>
+ <option>Architecture or platform strategy review</option>
+ <option>Other</option>
+ </select>
+ <textarea name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all"></textarea>
+ <button type="submit" id="form-submit-btn" class="bg-amber-400 text-black font-bold px-8 py-3 rounded-full hover:bg-amber-300 transition flex items-center gap-2" aria-live="polite">
+ Send Message <i class="fas fa-paper-plane text-sm"></i>
+ </button>
+ <div id="form-success" class="hidden" role="alert" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-left:3px solid #22c55e;border-radius:8px;padding:12px 16px;">
+ <p class="text-green-400 text-sm font-mono">✓ Message sent successfully.</p>
+ <p class="text-neutral-400 text-xs mt-1">I respond to Director-level inquiries within 24 hours.</p>
+ </div>
+ <div id="form-error" class="hidden" role="alert" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-left:3px solid #ef4444;border-radius:8px;padding:12px 16px;">
+ <p id="form-error-msg" class="text-red-400 text-sm font-mono">✗ Submission failed.</p>
+ <p class="text-neutral-400 text-xs mt-1">Please try <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" style="color:#F59E0B;text-decoration:underline;">LinkedIn</a> or email directly.</p>
+ </div>
+ </form>
+ <div class="flex flex-col gap-6">
+ <div class="space-y-4">
+ <div>
+ <p class="text-neutral-300 text-sm">Prefer LinkedIn?</p>
+ <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" class="text-amber-400 inline-flex items-center gap-2 mt-1 hover:underline font-medium">
+ Connect with me directly <i class="fas fa-arrow-right text-xs"></i>
+ </a>
+ </div>
+ <div>
+ <p class="text-neutral-300 text-sm">Direct email?</p>
+ <!-- EMAIL: Replace with your email address -->
+ <a href="mailto:reginal.campbell@gmail.com" class="text-amber-400 inline-flex items-center gap-2 mt-1 hover:underline font-medium">
+ Send me a message <i class="fas fa-envelope text-xs"></i>
+ </a>
+ </div>
+ </div>
+ <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
+ <i class="fas fa-chalkboard-user text-amber-400 text-2xl mb-3"></i>
+ <h3 class="font-semibold text-white">Available for Enterprise Leadership Roles</h3>
+ <p class="text-neutral-400 text-sm mt-2">AI Strategy · Data Platforms · Enterprise Product Development</p>
+ <p class="text-neutral-400 text-sm mt-2">I combine the architecture discipline of a builder with the governance rigor of a program leader, with a track record of delivering in regulated environments where both are required.</p>
+ </div>
+ <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
+ <i class="fas fa-map-marker-alt text-amber-400 text-xl mb-3"></i>
+ <h3 class="font-semibold text-white">Response Time</h3>
+ <p class="text-neutral-400 text-sm mt-2">Director-level inquiries: within 24 hours. Consulting and architecture inquiries: within 48 hours.</p>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- FOOTER -->
+ <footer class="border-t border-white/10 pt-10 pb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+ <div class="text-center md:text-left">
+ <p class="text-sm text-neutral-400">Reginal Campbell · AI Architect · PMP · U.S. Army Veteran</p>
+ </div>
+ <div class="flex flex-wrap justify-center gap-6">
+ <a href="#contact" class="text-sm text-white hover:text-amber-400 transition">Schedule a Strategy Call</a>
+ <!-- RESUME: Replace the href below with your Google Drive or Dropbox PDF link -->
+ <a href="https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view?usp=sharing" target="_blank" class="text-sm text-white hover:text-amber-400 transition" id="resume-link">Download Executive Resume</a>
+ <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" class="text-sm text-white hover:text-amber-400 transition">Connect on LinkedIn →</a>
+ </div>
+ </footer>
+
+ </main>
+
+ <script>
+ // Agent data for pipeline tooltips
+ const agentData = {
+ researcher: { stage: "Stage 1 of 9", name: "Researcher", detail: "Runs on a cron schedule three times daily (6am, noon, 6pm) independently of the main pipeline. Fetches RSS feeds from 25+ curated sources.", input: "→ Input: RSS feed URLs from sources/rss_feeds.txt", output: "→ Output: Raw article list → passed to Gatekeeper" },
+ gatekeeper: { stage: "Stage 2 of 9", name: "Gatekeeper", detail: "LLM-powered brand alignment filter. Evaluates each article against the brand guide before downstream agents are invoked.", input: "→ Input: Raw article list from Researcher", output: "→ Output: Filtered and scored article list → passed to Orchestrator" },
+ orchestrator: { stage: "Stage 3 of 9", name: "Orchestrator", detail: "Selects the highest-scoring article and determines content format (post, article, or both).", input: "→ Input: Scored and filtered article list", output: "→ Output: Selected topic + content plan → passed to Strategist" },
+ strategist: { stage: "Stage 4 of 9", name: "Strategist", detail: "Frames the narrative angle before any writing begins.", input: "→ Input: Selected topic + brand guide themes", output: "→ Output: Narrative angle + structural brief → passed to Writer" },
+ writer: { stage: "Stage 5 of 9", name: "Writer", detail: "Generates the first full draft using the documented author voice.", input: "→ Input: Narrative brief + brand voice examples", output: "→ Output: First draft → passed to Critic" },
+ critic: { stage: "Stage 6 of 9", name: "Critic", detail: "Multi-axis quality validation loop evaluating brand alignment, tone, originality, and structure.", input: "→ Input: First draft from Writer", output: "→ Output: Validated draft + quality notes → passed to Editor" },
+ editor: { stage: "Stage 7 of 9", name: "Editor", detail: "Refines the validated draft with surgical precision.", input: "→ Input: Validated draft + Critic quality notes", output: "→ Output: Polished draft → passed to Formatter" },
+ formatter: { stage: "Stage 8 of 9", name: "Formatter", detail: "Applies LinkedIn-specific structural formatting.", input: "→ Input: Polished draft from Editor", output: "→ Output: Formatted post or article → passed to Publisher QC" },
+ publisherqc: { stage: "Stage 9a of 9", name: "Publisher QC", detail: "The final governance gate before output is delivered.", input: "→ Input: Formatted draft from Formatter", output: "→ Output: QC pass/fail report → triggers Feedback Ingester" },
+ feedback: { stage: "Stage 9b of 9", name: "Feedback Ingester", detail: "The self-improvement engine. Compares agent output against human-edited final.", input: "→ Input: Agent output + human-edited final", output: "→ Output: Pattern log → brand guide updates" }
+ };
+
+ const cloudAgentData = {
+ ingestor: { stage: "Stage 1 of 5", name: "Ingestor", detail: "Scheduled Lambda functions ingest from news APIs, RSS, SEC filings, earnings calls, and social signals.", input: "→ Input: Configured source list", output: "→ Output: Normalized article objects → passed to Embedder" },
+ embedder: { stage: "Stage 2 of 5", name: "Embedder", detail: "Each item is chunked and passed through an embedding model to generate dense vector representations.", input: "→ Input: Normalized items from Ingestor", output: "→ Output: Vector embeddings stored in vector DB" },
+ retriever: { stage: "Stage 3 of 5", name: "Retriever", detail: "Performs semantic similarity search across the vector database based on watchlist queries.", input: "→ Input: Query vector from watchlist trigger", output: "→ Output: Top-ranked relevant content → passed to Synthesizer" },
+ synthesizer: { stage: "Stage 4 of 5", name: "Synthesizer", detail: "Frontier LLM synthesizes retrieved context into structured intelligence briefs.", input: "→ Input: Retrieved content chunks", output: "→ Output: Structured intelligence brief with attribution" },
+ alerter: { stage: "Stage 5 of 5", name: "Alerter", detail: "Delivers intelligence to Slack, email, or webhook based on configured thresholds.", input: "→ Input: Structured brief from Synthesizer", output: "→ Output: Alert to configured destinations" }
+ };
+
+ const saasAgentData = {
+ authlayer: { stage: "Layer 1 of 5", name: "Auth Layer", detail: "Supabase Auth issues ES256 JWT tokens per tenant on login.", input: "→ Input: User credentials", output: "→ Output: Signed ES256 JWT with tenant_id and role claims" },
+ apigateway: { stage: "Layer 2 of 5", name: "API Gateway", detail: "FastAPI endpoint layer with tenant-scoped routes.", input: "→ Input: Authenticated HTTP request with JWT", output: "→ Output: Tenant-scoped API response" },
+ datalayer: { stage: "Layer 3 of 5", name: "Data Layer", detail: "PostgreSQL with Row Level Security policies enforcing tenant isolation.", input: "→ Input: Tenant-scoped query", output: "→ Output: Isolated tenant data" },
+ tenantworkspace: { stage: "Layer 4 of 5", name: "Tenant Workspace", detail: "Isolated workspace per tenant with brand profile and run history.", input: "→ Input: Tenant configuration", output: "→ Output: Isolated workspace state" },
+ pipelinerunner: { stage: "Layer 5 of 5", name: "Pipeline Runner", detail: "Wraps the Python agent pipeline as an API-triggered job.", input: "→ Input: Run request + tenant context", output: "→ Output: Run record, audit trail, artifacts" }
+ };
+
+ let currentArch = null;
+ let resetButtonTimer = null;
+
+ function setActiveArchitecture(arch, scrollToPanel) {
+ if (currentArch === arch) {
+ document.getElementById('panel-' + arch).classList.remove('open');
+ document.body.removeAttribute('data-arch');
+ document.querySelectorAll('[aria-pressed]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+ document.querySelectorAll('[aria-expanded]').forEach(c => c.setAttribute('aria-expanded', 'false'));
+ currentArch = null;
+ return;
+ }
+
+ ['edge','cloud','saas'].forEach(a => {
+ document.getElementById('panel-' + a).classList.remove('open');
+ });
+
+ currentArch = arch;
+ document.body.setAttribute('data-arch', arch);
+
+ document.querySelectorAll('[aria-pressed]').forEach(b => {
+ b.setAttribute('aria-pressed', b.getAttribute('data-arch') === arch ? 'true' : 'false');
+ });
+ document.querySelectorAll('[aria-expanded][data-arch-card]').forEach(c => {
+ c.setAttribute('aria-expanded', c.getAttribute('data-arch-card') === arch ? 'true' : 'false');
+ });
+
+ const panel = document.getElementById('panel-' + arch);
+ panel.classList.add('open');
+
+ if (scrollToPanel) {
+ setTimeout(() => {
+ panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ }, 80);
+ }
+ }
+
+ // Wire up all architecture toggles
+ document.querySelectorAll('.arch-toggle, .arch-toggle-mobile').forEach(btn => {
+ btn.addEventListener('click', (e) => {
+ e.stopPropagation();
+ const arch = btn.getAttribute('data-arch');
+ if (arch) setActiveArchitecture(arch, true);
+ });
+ });
+
+ // Sidebar visibility
+ function updateNavVisibility() {
+ const isDesktop = window.innerWidth >= 1024;
+ const sidebar = document.getElementById('desktop-sidebar');
+ const mobileBar = document.getElementById('mobile-toggle-bar');
+ if (sidebar) sidebar.style.display = isDesktop ? 'flex' : 'none';
+ if (mobileBar) mobileBar.style.display = isDesktop ? 'none' : 'flex';
+ }
+
+ function updateNavOffset() {
+ var nav = document.getElementById("main-nav");
+ var main = document.getElementById("main-content");
+ if (!nav || !main) return;
+ var h = nav.getBoundingClientRect().height;
+ document.documentElement.style.setProperty("--nav-height", h + "px");
+ main.style.paddingTop = h + "px";
+ }
+
+ updateNavOffset();
+ updateNavVisibility();
+ window.addEventListener("resize", () => { updateNavOffset(); updateNavVisibility(); });
+ window.addEventListener("orientationchange", () => setTimeout(updateNavOffset, 150));
+
+ // Back to top button - visible on all devices after scroll
+ const backToTop = document.getElementById("back-to-top");
+ window.addEventListener("scroll", function() {
+ if (window.scrollY > 400) {
+ backToTop.style.display = "flex";
+ } else {
+ backToTop.style.display = "none";
+ }
+ var nav = document.getElementById("main-nav");
+ if (nav) nav.style.boxShadow = window.scrollY > 10 ? "0 2px 20px rgba(0,0,0,0.6)" : "none";
+ });
+
+ // Scroll reveal
+ const revealObserver = new IntersectionObserver((entries) => {
+ entries.forEach(e => {
+ if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+ });
+ }, { threshold: 0.03, rootMargin: "0px 0px -20px 0px" });
+ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+ // Nav active on scroll
+ const navLinks = document.querySelectorAll('.nav-link');
+ const navObserver = new IntersectionObserver((entries) => {
+ entries.forEach(entry => {
+ if (entry.isIntersecting) {
+ const id = entry.target.id;
+ navLinks.forEach(link => {
+ link.classList.remove('nav-active');
+ if (link.getAttribute('data-section') === id) link.classList.add('nav-active');
+ });
+ }
+ });
+ }, { threshold: 0.3 });
+ ['hero','innovation-lab','philosophy','toolkit','contact'].forEach(id => {
+ const el = document.getElementById(id);
+ if (el) navObserver.observe(el);
+ });
+
+ // Code toggles
+ function toggleCode(id) {
+ const el = document.getElementById(id);
+ const btn = document.querySelector(`button[onclick="toggleCode('${id}')"]`);
+ if (el && btn) {
+ el.classList.toggle('open');
+ btn.innerHTML = el.classList.contains('open') 
+ ? btn.innerHTML.replace('↓', '↑').replace('View', 'Hide')
+ : btn.innerHTML.replace('↑', '↓').replace('Hide', 'View');
+ }
+ }
+
+ // Agent detail functions
+ function showAgent(el) {
+ const key = el.getAttribute("data-agent");
+ const data = agentData[key];
+ if (!data) return;
+
+ document.querySelectorAll("[data-agent]").forEach(n => {
+ n.style.boxShadow = "";
+ n.style.transform = "";
+ });
+ el.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.8)";
+ el.style.transform = "scale(1.05)";
+
+ document.getElementById("agent-stage").textContent = data.stage;
+ document.getElementById("agent-name").textContent = data.name;
+ document.getElementById("agent-detail").textContent = data.detail;
+ document.getElementById("agent-input").textContent = data.input;
+ document.getElementById("agent-output").textContent = data.output;
+
+ const card = document.getElementById("agent-detail-card");
+ card.style.display = "block";
+ setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+ }
+
+ function closeAgent() {
+ document.getElementById("agent-detail-card").style.display = "none";
+ document.querySelectorAll("[data-agent]").forEach(n => {
+ n.style.boxShadow = "";
+ n.style.transform = "";
+ });
+ }
+
+ function showCloudAgent(el) {
+ const key = el.getAttribute("data-cloud-agent");
+ const data = cloudAgentData[key];
+ if (!data) return;
+ document.querySelectorAll("[data-cloud-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ el.style.boxShadow = "0 0 0 2px rgba(59,130,246,0.8)";
+ el.style.transform = "scale(1.05)";
+ document.getElementById("cloud-agent-stage").textContent = data.stage;
+ document.getElementById("cloud-agent-name").textContent = data.name;
+ document.getElementById("cloud-agent-detail").textContent = data.detail;
+ document.getElementById("cloud-agent-input").textContent = data.input;
+ document.getElementById("cloud-agent-output").textContent = data.output;
+ const card = document.getElementById("cloud-agent-detail-card");
+ card.style.display = "block";
+ setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+ }
+
+ function closeCloudAgent() {
+ document.getElementById("cloud-agent-detail-card").style.display = "none";
+ document.querySelectorAll("[data-cloud-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ }
+
+ function showSaasAgent(el) {
+ const key = el.getAttribute("data-saas-agent");
+ const data = saasAgentData[key];
+ if (!data) return;
+ document.querySelectorAll("[data-saas-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ el.style.boxShadow = "0 0 0 2px rgba(20,184,166,0.8)";
+ el.style.transform = "scale(1.05)";
+ document.getElementById("saas-agent-stage").textContent = data.stage;
+ document.getElementById("saas-agent-name").textContent = data.name;
+ document.getElementById("saas-agent-detail").textContent = data.detail;
+ document.getElementById("saas-agent-input").textContent = data.input;
+ document.getElementById("saas-agent-output").textContent = data.output;
+ const card = document.getElementById("saas-agent-detail-card");
+ card.style.display = "block";
+ setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+ }
+
+ function closeSaasAgent() {
+ document.getElementById("saas-agent-detail-card").style.display = "none";
+ document.querySelectorAll("[data-saas-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ }
+
+ // Form handling
+ const form = document.getElementById("contact-form");
+ if (form) {
+ form.addEventListener("submit", async function(e) {
+ e.preventDefault();
+ const btn = document.getElementById("form-submit-btn");
+ const successEl = document.getElementById("form-success");
+ const errorEl = document.getElementById("form-error");
+ const honeypot = form.querySelector("input[name=_gotcha]");
+ if (honeypot && honeypot.value) return;
+ if (btn.disabled) return;
+
+ const name = form.querySelector("input[name=name]").value.trim();
+ const email = form.querySelector("input[name=email]").value.trim();
+ const message = form.querySelector("textarea[name=message]").value.trim();
+ const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+ if (!name || !email || !message) {
+ errorEl.querySelector("p").textContent = "✗ Please fill in all required fields.";
+ errorEl.classList.remove("hidden");
+ return;
+ }
+ if (!emailRe.test(email)) {
+ errorEl.querySelector("p").textContent = "✗ Please enter a valid email address.";
+ errorEl.classList.remove("hidden");
+ return;
+ }
+
+ successEl.classList.add("hidden");
+ errorEl.classList.add("hidden");
+ btn.innerHTML = 'Sending… <i class="fas fa-spinner fa-spin text-sm"></i>';
+ btn.disabled = true;
+ btn.style.opacity = "0.7";
+
+ try {
+ const res = await fetch(form.action, {
+ method: "POST",
+ body: new FormData(form),
+ headers: { "Accept": "application/json" }
+ });
+ if (res.ok) {
+ form.reset();
+ successEl.classList.remove("hidden");
+ btn.innerHTML = "Sent ✓";
+ if (resetButtonTimer) clearTimeout(resetButtonTimer);
+ resetButtonTimer = setTimeout(() => {
+ btn.innerHTML = 'Send Message <i class="fas fa-paper-plane text-sm"></i>';
+ btn.disabled = false;
+ btn.style.opacity = "1";
+ resetButtonTimer = null;
+ }, 3000);
+ } else {
+ throw new Error("Server error");
+ }
+ } catch (err) {
+ errorEl.querySelector("p").textContent = "✗ Submission failed.";
+ errorEl.classList.remove("hidden");
+ btn.innerHTML = 'Send Message <i class="fas fa-paper-plane text-sm"></i>';
+ btn.disabled = false;
+ btn.style.opacity = "1";
+ }
+ });
+ }
+
+ // Force reveal any hidden sections after 2s
+ setTimeout(() => {
+ document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+ }, 2000);
+
+ // Initialize with edge panel open
+ setActiveArchitecture('edge', false);
+
+ // Add keyboard handlers for pipeline nodes
+ document.querySelectorAll('.pipeline-node').forEach(node => {
+ node.addEventListener('keydown', (e) => {
+ if (e.key === 'Enter' || e.key === ' ') {
+ e.preventDefault();
+ node.click();
+ }
+ });
+ });
+ </script>
+</body>
+</html>
