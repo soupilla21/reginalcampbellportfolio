@@ -1,0 +1,70 @@
+# Leadership Agent — Central Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+# All runtime parameters are sourced from this file via utils/config_loader.py.
+# The pipeline never hardcodes values — every threshold, model name, and
+# timeout is overridable here without touching agent code.
+
+models:
+  reasoning: "qwen2.5:7b"   # Ollama model for gatekeeper, critic, strategist
+  writing:   "qwen2.5:7b"   # Ollama model for writer, editor, formatter
+  embedding: "mxbai-embed-large"  # Used by similarity filter + ChromaDB
+
+tokens:
+  post_max:     1200   # Max tokens for post generation
+  article_max:  2500   # Max tokens for article generation
+  strategist:    300   # Max tokens for content plan output
+  critic_light:  200   # Critic fast-pass check
+  critic_full:   600   # Critic full evaluation
+
+temperature:
+  reasoning: 0.0   # Deterministic for gatekeeper/critic/strategist
+  writing:   0.7   # Creative variance for writer/editor
+
+# ── Critic quality thresholds ─────────────────────────────────────────────────
+# Each axis is scored 1–10 by the Critic agent. A draft must meet all axis
+# thresholds AND the min_average_score to pass. Failures trigger a rewrite loop.
+critic:
+  max_retries: 3
+  min_average_score: 7.0
+  axis_thresholds:
+    hook_strength:       7   # Opening line must stop the scroll
+    specificity:         7   # No vague generalities — concrete claims only
+    voice_match:         7   # Must match the operator/PMP brand voice
+    argument_coherence:  6   # Logic and structure must hold
+    novelty:             6   # Must offer a non-obvious angle
+    cta_quality:         7   # Engagement question must be substantive
+    brand_compliance:    8   # Highest bar — no banned phrases, no fluff
+
+# ── Word count guardrails ─────────────────────────────────────────────────────
+word_count:
+  post_min:          180
+  post_max:          300
+  post_target_min:   200
+  post_target_max:   260
+  article_min:       500
+  article_max:      1000
+  article_target_min: 600
+  article_target_max: 900
+
+# ── Deduplication settings ────────────────────────────────────────────────────
+# Prevents the same source article or thematic angle from being reused.
+deduplication:
+  item_block_days:        30    # Block a source URL for this many days after use
+  theme_block_days:        5    # Block a content theme (e.g., "AI Governance") for N days
+  similarity_threshold:   0.88  # ChromaDB cosine similarity cutoff
+  similarity_block_days:   5    # Block near-duplicate content for N days
+
+# ── Gatekeeper cache ──────────────────────────────────────────────────────────
+cache:
+  gatekeeper_ttl_days: 7   # Cache LLM gatekeeper verdicts to avoid re-processing
+  score_ttl_days:      7   # Cache semantic scores
+
+gatekeeper:
+  batch_size:       5    # Articles processed per LLM call (batching reduces latency)
+  max_items_to_keep: 40  # Maximum items passed to scorer after gatekeeper filtering
+
+# ── Resilience / circuit breaker ──────────────────────────────────────────────
+resilience:
+  max_retries:               3   # LLM call retry attempts before failing
+  base_delay_s:              2   # Exponential backoff base (seconds)
+  circuit_breaker_threshold: 5   # Consecutive failures before circuit opens
