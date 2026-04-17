@@ -220,9 +220,48 @@
  .pipeline-node { transition: none !important; }
  }
 
- /* code toggle */
- .code-content { display: none; }
- .code-content.open { display: block; }
+ /* section dividers */
+ .section-divider {
+ position: relative;
+ height: 2px;
+ margin: 0 0 56px 0;
+ background: linear-gradient(90deg, transparent 0%, rgba(245,158,11,0.0) 0%, rgba(245,158,11,0.25) 30%, rgba(245,158,11,0.4) 50%, rgba(245,158,11,0.25) 70%, transparent 100%);
+ }
+ .section-divider::before {
+ content: '';
+ position: absolute;
+ top: -20px;
+ left: 0; right: 0;
+ height: 40px;
+ background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(245,158,11,0.06) 0%, transparent 100%);
+ pointer-events: none;
+ }
+ .section-divider-label {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background: #050505;
+ padding: 0 16px;
+ font-family: 'JetBrains Mono', monospace;
+ font-size: 9px;
+ letter-spacing: 0.2em;
+ color: rgba(245,158,11,0.45);
+ text-transform: uppercase;
+ white-space: nowrap;
+ }
+
+ /* background texture alternation for sections */
+ #case-study { background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(245,158,11,0.04) 0%, transparent 70%); border-radius: 24px; padding: 40px 32px; margin-left: -32px; margin-right: -32px; }
+ #philosophy { background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(59,130,246,0.03) 0%, transparent 70%); border-radius: 24px; padding: 40px 32px; margin-left: -32px; margin-right: -32px; }
+ @media (max-width: 640px) {
+ #case-study, #philosophy { margin-left: -16px; margin-right: -16px; padding: 32px 16px; }
+ }
+
+ /* SVG node hover */
+ .pipeline-node-svg { transition: fill 0.2s, stroke 0.2s; }
+
+
 
  /* Mobile toggle labels */
  .mobile-toggle-label {
@@ -390,6 +429,7 @@
  </section>
 
  <!-- CASE STUDY -->
+ <div class="section-divider"><span class="section-divider-label">Enterprise Delivery Record</span></div>
  <section id="case-study" class="mb-28 reveal">
  <div class="text-center md:text-left">
  <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Enterprise Delivery</span>
@@ -463,6 +503,7 @@
  </section>
 
  <!-- PHILOSOPHY -->
+ <div class="section-divider"><span class="section-divider-label">Execution Philosophy</span></div>
  <section id="philosophy" class="mb-28 reveal">
  <div>
  <span class="text-amber-400 font-mono text-sm">Philosophy</span>
@@ -503,6 +544,7 @@
  </section>
 
 <!-- INNOVATION LAB -->
+ <div class="section-divider"><span class="section-divider-label">Innovation Lab</span></div>
  <section id="innovation-lab" class="mb-28 reveal">
  <div class="text-center md:text-left">
  <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">The Innovation Lab</span>
@@ -624,33 +666,181 @@
  </div>
  </div>
 
- <!-- Pipeline diagram — unchanged -->
+ <!-- Pipeline diagram — SVG visual -->
  <div>
  <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">9-Stage Pipeline Architecture</h4>
  <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any agent to learn what it does.</p>
- <div class="pipeline-scroll-outer pb-2 space-y-3">
- <div class="pipeline-row flex items-start gap-2">
- <div class="pipeline-node amber" data-agent="researcher" role="button" tabindex="0" aria-label="Learn about researcher agent" onclick="showAgent(this)"><span class="node-title amber">Researcher</span><span class="node-desc">Fetches &amp; scores<br>25+ RSS sources</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="gatekeeper" role="button" tabindex="0" aria-label="Learn about gatekeeper agent" onclick="showAgent(this)"><span class="node-title amber">Gatekeeper</span><span class="node-desc">Brand alignment<br>filter &amp; cache</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="orchestrator" role="button" tabindex="0" aria-label="Learn about orchestrator agent" onclick="showAgent(this)"><span class="node-title amber">Orchestrator</span><span class="node-desc">Topic &amp; format<br>decision</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="strategist" role="button" tabindex="0" aria-label="Learn about strategist agent" onclick="showAgent(this)"><span class="node-title amber">Strategist</span><span class="node-desc">Narrative angle<br>&amp; theme framing</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="writer" role="button" tabindex="0" aria-label="Learn about writer agent" onclick="showAgent(this)"><span class="node-title amber">Writer</span><span class="node-desc">First draft in<br>author&#39;s voice</span></div>
+
+ <!-- SVG Diagram -->
+ <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid rgba(245,158,11,0.15);background:rgba(0,0,0,0.4);">
+ <svg viewBox="0 0 960 280" xmlns="http://www.w3.org/2000/svg" style="min-width:720px;width:100%;display:block;font-family:'JetBrains Mono',monospace;">
+ <defs>
+ <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+ <path d="M0,0 L0,6 L8,3 z" fill="rgba(245,158,11,0.7)"/>
+ </marker>
+ <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+ <path d="M0,0 L0,6 L8,3 z" fill="rgba(20,184,166,0.7)"/>
+ </marker>
+ <marker id="arrow-feedback" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+ <path d="M0,0 L0,6 L8,3 z" fill="rgba(20,184,166,0.5)"/>
+ </marker>
+ <!-- Phase label backgrounds -->
+ <linearGradient id="phase1-grad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stop-color="rgba(245,158,11,0.12)"/>
+ <stop offset="100%" stop-color="rgba(245,158,11,0.03)"/>
+ </linearGradient>
+ <linearGradient id="phase2-grad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stop-color="rgba(59,130,246,0.1)"/>
+ <stop offset="100%" stop-color="rgba(59,130,246,0.02)"/>
+ </linearGradient>
+ <linearGradient id="phase3-grad" x1="0" y1="0" x2="0" y2="1">
+ <stop offset="0%" stop-color="rgba(20,184,166,0.1)"/>
+ <stop offset="100%" stop-color="rgba(20,184,166,0.02)"/>
+ </linearGradient>
+ </defs>
+
+ <!-- Phase background bands -->
+ <rect x="8" y="8" width="290" height="196" rx="10" fill="url(#phase1-grad)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
+ <rect x="306" y="8" width="150" height="196" rx="10" fill="url(#phase2-grad)" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
+ <rect x="464" y="8" width="488" height="196" rx="10" fill="url(#phase3-grad)" stroke="rgba(20,184,166,0.2)" stroke-width="1"/>
+
+ <!-- Phase labels -->
+ <text x="153" y="26" text-anchor="middle" fill="rgba(245,158,11,0.6)" font-size="8" letter-spacing="2" font-weight="600">PHASE 1 · INTELLIGENCE</text>
+ <text x="381" y="26" text-anchor="middle" fill="rgba(59,130,246,0.6)" font-size="8" letter-spacing="2" font-weight="600">PHASE 2 · STRATEGY</text>
+ <text x="708" y="26" text-anchor="middle" fill="rgba(20,184,166,0.6)" font-size="8" letter-spacing="2" font-weight="600">PHASE 3–4 · WRITE · REVIEW · PUBLISH</text>
+
+ <!-- ── NODES ── -->
+ <!-- Researcher -->
+ <g data-agent="researcher" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Researcher agent">
+ <rect x="20" y="40" width="88" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5" class="pipeline-node-svg"/>
+ <text x="64" y="62" text-anchor="middle" fill="#F59E0B" font-size="9.5" font-weight="700" letter-spacing="0.5">RESEARCHER</text>
+ <text x="64" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Fetches 25+ RSS</text>
+ <text x="64" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">sources + scores</text>
+ </g>
+
+ <!-- Arrow 1 -->
+ <line x1="109" y1="70" x2="123" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+ <!-- Gatekeeper -->
+ <g data-agent="gatekeeper" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Gatekeeper agent">
+ <rect x="126" y="40" width="88" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
+ <text x="170" y="62" text-anchor="middle" fill="#F59E0B" font-size="9.5" font-weight="700" letter-spacing="0.5">GATEKEEPER</text>
+ <text x="170" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Brand alignment</text>
+ <text x="170" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">filter + cache</text>
+ </g>
+
+ <!-- Arrow 2 -->
+ <line x1="215" y1="70" x2="229" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+ <!-- Scorer/Orchestrator -->
+ <g data-agent="orchestrator" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Orchestrator agent">
+ <rect x="232" y="40" width="58" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
+ <text x="261" y="62" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="700" letter-spacing="0.5">SCORER</text>
+ <text x="261" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Semantic</text>
+ <text x="261" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">ranking</text>
+ </g>
+
+ <!-- Arrow 3 -->
+ <line x1="291" y1="70" x2="316" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+ <!-- Strategist -->
+ <g data-agent="strategist" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Strategist agent">
+ <rect x="318" y="40" width="120" height="60" rx="8" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.4)" stroke-width="1.5"/>
+ <text x="378" y="62" text-anchor="middle" fill="#60A5FA" font-size="9.5" font-weight="700" letter-spacing="0.5">STRATEGIST</text>
+ <text x="378" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Narrative angle</text>
+ <text x="378" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">+ format select</text>
+ </g>
+
+ <!-- Arrow 4 -->
+ <line x1="439" y1="70" x2="474" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+ <!-- Writer -->
+ <g data-agent="writer" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Writer agent">
+ <rect x="476" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
+ <text x="516" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">WRITER</text>
+ <text x="516" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">First draft in</text>
+ <text x="516" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">author's voice</text>
+ </g>
+
+ <!-- Arrow 5 -->
+ <line x1="557" y1="70" x2="571" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+ <!-- Critic -->
+ <g data-agent="critic" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Critic agent">
+ <rect x="573" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
+ <text x="613" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">CRITIC</text>
+ <text x="613" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">7-axis quality</text>
+ <text x="613" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">validation</text>
+ </g>
+
+ <!-- Critic rewrite loop arrow -->
+ <path d="M613,101 Q613,130 516,130 Q480,130 480,101" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-amber)"/>
+ <text x="548" y="144" text-anchor="middle" fill="rgba(245,158,11,0.45)" font-size="7" letter-spacing="0.5">rewrite loop (max 3x)</text>
+
+ <!-- Arrow 6 -->
+ <line x1="654" y1="70" x2="668" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+ <!-- Editor -->
+ <g data-agent="editor" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Editor agent">
+ <rect x="670" y="40" width="76" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
+ <text x="708" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">EDITOR</text>
+ <text x="708" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Clarity, hook</text>
+ <text x="708" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">+ brand polish</text>
+ </g>
+
+ <!-- Arrow 7 -->
+ <line x1="747" y1="70" x2="761" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+ <!-- Publisher QC -->
+ <g data-agent="publisherqc" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Publisher QC agent">
+ <rect x="763" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
+ <text x="803" y="58" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">PUBLISHER</text>
+ <text x="803" y="70" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">QC</text>
+ <text x="803" y="83" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Brand rules</text>
+ <text x="803" y="94" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">+ audit log</text>
+ </g>
+
+ <!-- Arrow 8 -->
+ <line x1="844" y1="70" x2="858" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
+
+ <!-- Feedback Ingester -->
+ <g data-agent="feedback" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Feedback Ingester agent">
+ <rect x="860" y="40" width="88" height="60" rx="8" fill="rgba(20,184,166,0.12)" stroke="rgba(20,184,166,0.6)" stroke-width="1.5"/>
+ <text x="904" y="58" text-anchor="middle" fill="#2DD4BF" font-size="9" font-weight="700" letter-spacing="0.5">FEEDBACK</text>
+ <text x="904" y="70" text-anchor="middle" fill="#2DD4BF" font-size="9" font-weight="700" letter-spacing="0.5">INGESTER</text>
+ <text x="904" y="83" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Learns from</text>
+ <text x="904" y="94" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">human edits</text>
+ </g>
+
+ <!-- Feedback loop back arrow (bottom arc) -->
+ <path d="M904,101 Q904,180 64,180 Q20,180 20,155 L20,101" fill="none" stroke="rgba(20,184,166,0.25)" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow-feedback)"/>
+ <text x="708" y="190" text-anchor="middle" fill="rgba(20,184,166,0.4)" font-size="7" letter-spacing="1">continuous learning loop</text>
+ <text x="708" y="200" text-anchor="middle" fill="rgba(20,184,166,0.4)" font-size="7" letter-spacing="1">promotes patterns into brand guide</text>
+
+ <!-- Legend -->
+ <rect x="20" y="218" width="10" height="10" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.5)" stroke-width="1"/>
+ <text x="34" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Intelligence &amp; Strategy</text>
+ <rect x="160" y="218" width="10" height="10" rx="2" fill="rgba(20,184,166,0.15)" stroke="rgba(20,184,166,0.5)" stroke-width="1"/>
+ <text x="174" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Write, Review &amp; Publish</text>
+ <line x1="320" y1="223" x2="345" y2="223" stroke="rgba(245,158,11,0.4)" stroke-width="1" stroke-dasharray="4,3"/>
+ <text x="350" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Rewrite loop</text>
+ <line x1="440" y1="223" x2="465" y2="223" stroke="rgba(20,184,166,0.3)" stroke-width="1" stroke-dasharray="5,4"/>
+ <text x="470" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Learning loop</text>
+ </svg>
  </div>
- <div class="pipeline-row flex items-start gap-2">
- <div class="pipeline-node amber" data-agent="critic" role="button" tabindex="0" aria-label="Learn about critic agent" onclick="showAgent(this)"><span class="node-title amber">Critic</span><span class="node-desc">Multi-axis quality<br>validation loop</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="editor" role="button" tabindex="0" aria-label="Learn about editor agent" onclick="showAgent(this)"><span class="node-title amber">Editor</span><span class="node-desc">Clarity, hook<br>&amp; brand polish</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="formatter" role="button" tabindex="0" aria-label="Learn about formatter agent" onclick="showAgent(this)"><span class="node-title amber">Formatter</span><span class="node-desc">LinkedIn-ready<br>structure</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node amber" data-agent="publisherqc" role="button" tabindex="0" aria-label="Learn about publisherqc agent" onclick="showAgent(this)"><span class="node-title amber">Publisher QC</span><span class="node-desc">Brand rules gate<br>&amp; audit logging</span></div>
- <span class="pipeline-arrow amber mt-4">&#8594;</span>
- <div class="pipeline-node teal" data-agent="feedback" role="button" tabindex="0" aria-label="Learn about feedback agent" onclick="showAgent(this)"><span class="node-title teal">Feedback Ingester</span><span class="node-desc">Learns from edits<br>&#8594; updates brand guide</span></div>
- </div>
+
+ <!-- Hidden nodes for click interaction - keep existing agent data wired up -->
+ <div style="display:none">
+ <div class="pipeline-node amber" data-agent="researcher" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="gatekeeper" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="orchestrator" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="strategist" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="writer" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="critic" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="editor" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="formatter" onclick="showAgent(this)"></div>
+ <div class="pipeline-node amber" data-agent="publisherqc" onclick="showAgent(this)"></div>
+ <div class="pipeline-node teal" data-agent="feedback" onclick="showAgent(this)"></div>
  </div>
  <!-- Agent detail card -->
  <div id="agent-detail-card" style="display:none;margin-top:16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.3);border-left:3px solid #F59E0B;border-radius:12px;padding:16px 20px;">
