@@ -56,7 +56,7 @@
  /* scroll-margin-top - set via CSS variable updated by JS to match actual nav height */
  :root { --nav-height: 72px; }
  #main-content { padding-top: var(--nav-height) !important; }
- section, #hero, #innovation-lab, #case-study, #philosophy, #toolkit, #contact, #decision-matrix {
+ section, #hero, #ai-systems, #point-of-view, #governance, #innovation-lab, #case-study, #philosophy, #toolkit, #contact, #decision-matrix {
  scroll-margin-top: calc(var(--nav-height) + 12px);
  }
 
@@ -214,6 +214,28 @@
  .matrix-mobile { display: none !important; }
  }
 
+ /* Desktop sidebar - hidden by default, shown only in innovation lab */
+ #desktop-sidebar {
+   display: none !important;
+   transition: opacity 0.3s ease;
+ }
+ body.in-innovation-lab #desktop-sidebar {
+   display: flex !important;
+ }
+
+ /* Mobile toggle - hidden by default, shown only in innovation lab */
+ #mobile-toggle-bar {
+   display: none !important;
+ }
+ body.in-innovation-lab #mobile-toggle-bar {
+   display: flex !important;
+ }
+
+ /* Ensure new sections don't overflow */
+ #ai-systems, #point-of-view, #governance {
+   overflow-x: hidden;
+ }
+
  /* prefers-reduced-motion - respect user accessibility preferences */
  @media (prefers-reduced-motion: reduce) {
  *, *::before, *::after {
@@ -360,7 +382,7 @@
  </aside>
 
  <!-- Mobile toggle - bottom right -->
- <div id="mobile-toggle-bar" class="flex gap-2 rounded-full p-2 border border-white/15 shadow-xl" style="position:fixed;bottom:24px;right:24px;z-index:50;background:rgba(5,5,5,0.97)">
+ <div id="mobile-toggle-bar" class="flex gap-2 rounded-full p-2 border border-white/15 shadow-xl" style="display:none;position:fixed;bottom:24px;right:24px;z-index:50;background:rgba(5,5,5,0.97)">
  <button data-arch="edge" aria-pressed="true" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-amber-400 bg-neutral-800/70 transition-all">
  <i class="fas fa-microchip text-sm"></i>
  <span class="mobile-toggle-label text-[8px]">Edge</span>
@@ -392,10 +414,10 @@
  <span class="hidden md:inline text-sm font-mono text-neutral-400">AI and Data Strategy & Architecture</span>
  </div>
  <div class="flex gap-6 text-sm font-medium mt-3 md:mt-0" style="list-style:none">
- <a href="#innovation-lab" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="innovation-lab">Work</a>
- <a href="#case-study" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="case-study">Case Study</a>
- <a href="#philosophy" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="philosophy">Philosophy</a>
- <a href="#toolkit" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="toolkit">Expertise</a>
+ <a href="#ai-systems" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="ai-systems">AI Systems</a>
+ <a href="#point-of-view" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="point-of-view">Point of View</a>
+ <a href="#governance" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="governance">Governance</a>
+ <a href="#innovation-lab" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="innovation-lab">Experience</a>
  <a href="#contact" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="contact">Contact</a>
  </div>
  </div>
@@ -404,14 +426,17 @@
  <!-- HERO -->
  <section id="hero" class="mb-20 reveal">
  <h1 class="text-3xl md:text-6xl font-bold leading-tight tracking-tight max-w-4xl break-words">
- I Build the Systems That Make Decisions Possible.
+ Most AI Systems Don't Fail at the Model. They Fail at the Foundation.
  </h1>
  <p class="text-neutral-400 text-lg md:text-xl mt-6 max-w-3xl">
- I've spent 15+ years leading $40M+ programs in federal healthcare, financial platforms, and high-stakes data environments. What I do well is cut through the noise: get the data layer solid, get stakeholders aligned, and ship work that outlasts the project.
+ And the governance frameworks that keep them working. After 15+ years managing the data layer that AI depends on, across federal healthcare, national data exchanges, and enterprise platforms, I know exactly where these systems break. It is almost never the model.
  </p>
  <p class="text-neutral-500 text-base md:text-lg mt-4 max-w-2xl">
- Most programs don't fail from bad technology. They fail because no one owns the decision. That's the problem I fix.
+ Most AI failures are data infrastructure failures in disguise. That's the problem I fix.
  </p>
+ <div class="mt-6 inline-block">
+   <p class="text-white font-semibold text-base md:text-lg border-l-2 border-amber-500 pl-4 max-w-2xl">I design and deliver AI platforms and production infrastructure that operate reliably in regulated, high-stakes environments.</p>
+ </div>
  <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-12 bg-black/40 border border-white/5 rounded-2xl p-6 glass-panel">
  <div class="flex flex-col items-center sm:items-start">
  <span class="font-mono text-3xl font-bold text-white">2B+</span>
@@ -427,8 +452,11 @@
  </div>
  </div>
  <div class="flex flex-wrap gap-5 mt-10">
- <a href="#innovation-lab" class="px-7 py-3 rounded-full border border-white/20 bg-transparent text-white font-medium hover:bg-white/5 transition flex items-center gap-2">
- View the Innovation Lab <i class="fas fa-arrow-right text-sm"></i>
+ <a href="#ai-systems" class="px-7 py-3 rounded-full border border-white/20 bg-transparent text-white font-medium hover:bg-white/5 transition flex items-center gap-2">
+ See the AI System <i class="fas fa-arrow-right text-sm"></i>
+ </a>
+ <a href="#point-of-view" class="px-7 py-3 rounded-full border border-amber-500/30 bg-transparent text-amber-400 font-medium hover:bg-amber-500/10 transition flex items-center gap-2">
+ Read the POV Articles <i class="fas fa-pen text-sm"></i>
  </a>
  </div>
  </section>
@@ -552,16 +580,6 @@
 
  </section>
 
- <!-- CTA AFTER CASE STUDY -->
- <div class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-black/50 border border-white/8 rounded-2xl px-8 py-6 mb-16 reveal">
- <div>
- <p class="text-white font-semibold text-lg">Ready to discuss a high-stakes program?</p>
- <p class="text-neutral-400 text-sm mt-1">Inquiries responded to within 24 hours.</p>
- </div>
- <a href="#contact" class="flex-shrink-0 text-amber-400 font-medium hover:underline transition flex items-center gap-2 whitespace-nowrap">
- Get in touch <i class="fas fa-arrow-right text-sm"></i>
- </a>
- </div>
 
  <!-- PHILOSOPHY -->
  <div class="section-divider"><span class="section-divider-label">Execution Philosophy</span></div>
@@ -604,8 +622,240 @@
  </div>
  </section>
 
+<!-- AI SYSTEMS SECTION -->
+<div class="section-divider"><span class="section-divider-label">AI Systems & Platform Architecture</span></div>
+<section id="ai-systems" class="mb-28 reveal">
+  <div>
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Product Case Study</span>
+    <h2 class="text-3xl md:text-4xl font-bold mt-2">The Leadership Agent: AI Platform Design in Practice</h2>
+    <p class="text-neutral-400 max-w-3xl mt-3">A production AI platform - not a demo, not a notebook. A 9-agent autonomous pipeline with a governed data layer, feedback loops, and a multi-tenant SaaS backend. Built to solve a real problem in a compliance-constrained environment. Every design decision was made against a constraint, not a preference.</p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-5 mt-10">
+    <div class="bg-neutral-900/40 rounded-2xl border border-amber-500/20 p-6">
+      <span class="text-amber-400 font-mono text-xs uppercase tracking-widest">Outcomes</span>
+      <ul class="mt-3 space-y-2">
+        <li class="text-neutral-300 text-sm leading-relaxed flex items-start gap-2"><span class="text-amber-400 mt-0.5 flex-shrink-0">→</span>Eliminated dependency on third-party APIs - zero external data exposure in a compliance-constrained environment</li>
+        <li class="text-neutral-300 text-sm leading-relaxed flex items-start gap-2"><span class="text-amber-400 mt-0.5 flex-shrink-0">→</span>Reduced manual editorial intervention by ~40% over 90 days through automated brand pattern promotion</li>
+        <li class="text-neutral-300 text-sm leading-relaxed flex items-start gap-2"><span class="text-amber-400 mt-0.5 flex-shrink-0">→</span>Enabled consistent publishing cadence at near-zero marginal cost, replacing a $10K/month ghostwriting dependency</li>
+      </ul>
+    </div>
+    <div class="bg-neutral-900/40 rounded-2xl border border-amber-500/20 p-6">
+      <span class="text-amber-400 font-mono text-xs uppercase tracking-widest">Tradeoffs I Chose</span>
+      <ul class="mt-3 space-y-2">
+        <li class="text-neutral-300 text-sm leading-relaxed flex items-start gap-2"><span class="text-amber-400 mt-0.5 flex-shrink-0">→</span><strong class="text-white">Local vs. cloud:</strong> Chose local inference to eliminate compliance risk, accepting higher hardware cost and lower model ceiling</li>
+        <li class="text-neutral-300 text-sm leading-relaxed flex items-start gap-2"><span class="text-amber-400 mt-0.5 flex-shrink-0">→</span><strong class="text-white">Multi-agent vs. single model:</strong> Discrete agents with explicit I/O make failures traceable and stages independently improvable</li>
+        <li class="text-neutral-300 text-sm leading-relaxed flex items-start gap-2"><span class="text-amber-400 mt-0.5 flex-shrink-0">→</span><strong class="text-white">Governance gate vs. speed:</strong> Added Publisher QC as a mandatory final gate, accepting latency to ensure auditability</li>
+      </ul>
+    </div>
+    <div class="bg-neutral-900/40 rounded-2xl border border-amber-500/20 p-6">
+      <span class="text-amber-400 font-mono text-xs uppercase tracking-widest">Enterprise Pattern</span>
+      <p class="text-neutral-300 text-sm leading-relaxed mt-3">This architecture applies directly to any regulated AI workflow that requires data sovereignty, auditability, and continuous improvement without external dependencies:</p>
+      <ul class="mt-3 space-y-1">
+        <li class="text-neutral-400 text-sm flex items-start gap-2"><span class="text-amber-400 flex-shrink-0">·</span>Internal research and synthesis pipelines</li>
+        <li class="text-neutral-400 text-sm flex items-start gap-2"><span class="text-amber-400 flex-shrink-0">·</span>Decision support and intelligence briefing systems</li>
+        <li class="text-neutral-400 text-sm flex items-start gap-2"><span class="text-amber-400 flex-shrink-0">·</span>Compliant internal AI copilots for regulated industries</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-10 bg-black/40 border border-amber-500/15 rounded-2xl p-6 md:p-8">
+    <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">What I Learned the Hard Way</h4>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="border-l-2 border-amber-500/40 pl-4">
+        <p class="text-white text-sm font-semibold mb-2">Timeout failures are silent failures</p>
+        <p class="text-neutral-400 text-sm leading-relaxed">The Writer and Editor agents require 180s+ timeouts for complex content. At 90s, they silently dropped runs - no error, just missing output. The system looked healthy. It wasn't. Silent failures are the most dangerous kind.</p>
+      </div>
+      <div class="border-l-2 border-amber-500/40 pl-4">
+        <p class="text-white text-sm font-semibold mb-2">URL canonicalization is a data contract</p>
+        <p class="text-neutral-400 text-sm leading-relaxed">UTM-suffixed RSS URLs created duplicate scored items and theme repetition downstream. Stripping tracking params at ingest - not at deduplication - was the fix. The lesson: data contracts must be enforced at the boundary, not cleaned up after the fact.</p>
+      </div>
+      <div class="border-l-2 border-amber-500/40 pl-4">
+        <p class="text-white text-sm font-semibold mb-2">Fragile queries fail under real conditions</p>
+        <p class="text-neutral-400 text-sm leading-relaxed">Supabase <code class="text-amber-400 text-xs">.single()</code> calls produced 500 errors on not-found queries. Replacing them with <code class="text-amber-400 text-xs">.execute()</code> plus explicit data checks eliminated the failures. Production systems need to handle the empty case gracefully - always.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
+    <div class="flex items-start gap-3">
+      <i class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+      <div>
+        <p class="text-base italic font-light text-neutral-100 leading-relaxed">"This is what AI Factory thinking looks like in practice: a system of coordinated agents with explicit data contracts, governance gates, and feedback loops - not a model wrapped in a for-loop. The gap between a working AI pipeline and a production AI system is the same gap between a proof-of-concept and something a compliance team can approve."</p>
+        <p class="text-neutral-400 text-sm mt-3">- <a href="#point-of-view" class="text-amber-400 hover:underline">Read the full argument in the POV articles</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-8 flex flex-wrap gap-4">
+    <a href="#innovation-lab" class="px-6 py-2.5 rounded-full border border-amber-500/30 text-amber-400 text-sm font-mono hover:bg-amber-500/10 transition flex items-center gap-2">
+      Explore the Full Architecture <i class="fas fa-arrow-right text-xs"></i>
+    </a>
+    <a href="https://github.com/soupilla21/reginalcampbellportfolio" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 rounded-full border border-white/10 text-neutral-400 text-sm font-mono hover:border-white/30 transition flex items-center gap-2">
+      <i class="fab fa-github text-xs"></i> View on GitHub
+    </a>
+  </div>
+</section>
+
+<!-- POINT OF VIEW -->
+<div class="section-divider"><span class="section-divider-label">Point of View</span></div>
+<section id="point-of-view" class="mb-28 reveal">
+  <div>
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">POV Articles</span>
+    <h2 class="text-3xl md:text-4xl font-bold mt-2">Three Arguments Worth Making.</h2>
+    <p class="text-neutral-400 max-w-2xl mt-3">Not conference slides. Not LinkedIn platitudes. Arguments built from 15 years in the data layer - where AI systems actually break.</p>
+    <div class="mt-6 grid md:grid-cols-3 gap-4">
+      <div class="bg-neutral-900/30 border border-white/8 rounded-xl p-4">
+        <p class="text-white text-sm font-medium leading-snug">"AI tools are not your strategy. They are your exposure - until the data layer underneath them is governed."</p>
+      </div>
+      <div class="bg-neutral-900/30 border border-white/8 rounded-xl p-4">
+        <p class="text-white text-sm font-medium leading-snug">"Most AI governance frameworks are written after the risk shows up. By then, you're managing the incident, not the architecture."</p>
+      </div>
+      <div class="bg-neutral-900/30 border border-white/8 rounded-xl p-4">
+        <p class="text-white text-sm font-medium leading-snug">"If your AI system cannot be audited end-to-end, it is not enterprise-ready. It's a prototype with production traffic."</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 space-y-6" id="pov-articles">
+
+    <!-- Article 1 -->
+    <div class="bg-neutral-900/40 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="p-6 md:p-8">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <span class="text-amber-400 font-mono text-xs uppercase tracking-widest">The Flagship Argument</span>
+            <h3 class="text-xl md:text-2xl font-bold mt-2">AI Doesn't Fail at Models. It Fails at Systems.</h3>
+            <p class="text-neutral-400 text-sm mt-2 max-w-2xl">Most AI failures aren't model failures. They are system failures. The model gets blamed because it's the visible output. The real failure almost always sits upstream in the infrastructure that feeds it.</p>
+          </div>
+          <button onclick="toggleArticle('article1')" class="flex-shrink-0 text-sm font-mono text-amber-400 border border-amber-500/30 px-4 py-2 rounded-lg hover:bg-amber-500/10 transition" id="article1-btn">Read Article ↓</button>
+        </div>
+        <div id="article1" class="article-content mt-6 hidden">
+          <div class="space-y-4 border-t border-white/8 pt-6">
+            <p class="text-neutral-300 leading-relaxed">Models don't operate in a vacuum. They are downstream artifacts of pipelines, contracts, and assumptions. When those things break, the model doesn't "fail" in any meaningful sense. Instead, it behaves exactly as the system allows it to.</p>
+            <h4 class="text-white font-semibold mt-6">The Downstream Trap</h4>
+            <p class="text-neutral-300 leading-relaxed">Think about data pipelines. In theory, they are deterministic. In practice, they tend to degrade silently. A schema change in a source system might drop a column, or a timestamp might shift from UTC to local time. Perhaps a late-arriving dataset gets truncated by a job with a hard cutoff. Nothing crashes. Dashboards still render and the model still scores, but the signal has shifted. No one notices until the real-world outcomes begin to drift.</p>
+            <h4 class="text-white font-semibold mt-6">When Systems Stop Agreeing</h4>
+            <p class="text-neutral-300 leading-relaxed">I've seen production models trained on one definition of an "active customer" while the data being served used another. This didn't happen because of a bad modeling decision. It happened because two pipelines, owned by different teams, evolved independently. The model didn't fail; the system simply stopped agreeing with itself.</p>
+            <p class="text-neutral-300 leading-relaxed">Then we have integration seams - the most fragile parts of any AI system. Every handoff is a compression point where context is lost. Features get re-encoded, null handling changes, and business logic gets reimplemented just slightly differently. By the time data reaches the model, it's often a distorted version of what was originally intended. Yet most teams still treat these seams as simple plumbing rather than critical control surfaces.</p>
+            <h4 class="text-white font-semibold mt-6">The Missing Loop</h4>
+            <p class="text-neutral-300 leading-relaxed">The biggest gap is feedback. Very few organizations engineer a closed loop where outputs are validated against real-world outcomes and traced back to specific data conditions. Instead, they monitor accuracy in isolation. When performance drops, they retrain or swap architectures. All the while, the underlying issue - a broken join, a stale feature store, or a misaligned aggregation window - remains untouched.</p>
+            <h4 class="text-white font-semibold mt-6">The Reality of System Integrity</h4>
+            <p class="text-neutral-300 leading-relaxed">We have reached a point where precision at the model layer is a lie if the system feeding it is a black box. You aren't managing an AI; you are managing a high-speed engine with a failing fuel pump. Stop tuning the engine and fix the intake.</p>
+            <p class="text-neutral-300 leading-relaxed font-medium">Production AI isn't about model sophistication. It's about system integrity. If your architecture allows for silent drift, your AI is already compromised. Not eventually. Right now.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article 2 -->
+    <div class="bg-neutral-900/40 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="p-6 md:p-8">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <span class="text-blue-400 font-mono text-xs uppercase tracking-widest">The Execution Argument</span>
+            <h3 class="text-xl md:text-2xl font-bold mt-2">The "Almost Ready" Trap: Why AI Platforms Stall</h3>
+            <p class="text-neutral-400 text-sm mt-2 max-w-2xl">Most AI platforms don't fail in production. They stall long before they ever get there. The stall happens in the data layer, and it happens in ways that were never properly scoped.</p>
+          </div>
+          <button onclick="toggleArticle('article2')" class="flex-shrink-0 text-sm font-mono text-blue-400 border border-blue-500/30 px-4 py-2 rounded-lg hover:bg-blue-500/10 transition" id="article2-btn">Read Article ↓</button>
+        </div>
+        <div id="article2" class="article-content mt-6 hidden">
+          <div class="space-y-4 border-t border-white/8 pt-6">
+            <p class="text-neutral-300 leading-relaxed">From the outside, it looks like a modeling problem. Teams assume the algorithms need improvement, the features need tuning, or the use case needs refinement. But from where I sit on the delivery and data platform side, the pattern is consistent. The stall happens in the data layer.</p>
+            <h4 class="text-white font-semibold mt-6">1. Integration Is a System, Not a Task</h4>
+            <p class="text-neutral-300 leading-relaxed">Early plans assume data integration is straightforward: identify sources, map fields, and move data. In practice, integration is where legacy systems and modern ambitions collide. During my time at Accenture, I saw how often "connecting three systems" was underestimated. Source systems rarely agree on definitions, identifiers don't reconcile cleanly, and latency varies wildly. Every integration point becomes a negotiation between systems that were never designed to speak the same language. What was scoped as a simple connection becomes a multi-month effort in identity resolution and schema alignment. None of this is visible in early demos because those run on curated datasets. The platform doesn't fail here; it just never stabilizes enough to move forward.</p>
+            <h4 class="text-white font-semibold mt-6">2. The Collapse of Data Quality Under Load</h4>
+            <p class="text-neutral-300 leading-relaxed">In pre-production, data looks clean because it is sampled, filtered, and often manually corrected. But production introduces volume, variability, and endless edge cases that no sandbox can replicate. Validation rules that passed in testing are often bypassed for the sake of a "performance win." You aren't optimizing when you do this; you are mortgaging your future reliability. I've seen feature pipelines that produced stable outputs in staging become unusable in production within weeks. Once a team stops trusting the data, deployment stops immediately.</p>
+            <h4 class="text-white font-semibold mt-6">3. The Missing Reality Loop</h4>
+            <p class="text-neutral-300 leading-relaxed">Most AI platforms are built as one-way streets. They ingest data, generate predictions, and deliver outputs. What's missing is a structured feedback loop that answers a simple question: was the system right? I've seen platforms where the only feedback loop was a quarterly review meeting where stakeholders complained about inaccurate outputs from three months prior. By then, the trail is cold. Errors aren't traceable and drift isn't diagnosable.</p>
+            <p class="text-neutral-300 leading-relaxed font-medium">Most platforms don't fail. They sit in a permanent state of "almost ready" until funding or executive patience runs out. If you don't have a closed loop, you don't have a production platform. You have a prototype that hasn't met reality yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Article 3 -->
+    <div class="bg-neutral-900/40 rounded-2xl border border-white/8 overflow-hidden">
+      <div class="p-6 md:p-8">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <span class="text-teal-400 font-mono text-xs uppercase tracking-widest">The Control Argument</span>
+            <h3 class="text-xl md:text-2xl font-bold mt-2">AI Governance is Theater (Unless it's Architecture)</h3>
+            <p class="text-neutral-400 text-sm mt-2 max-w-2xl">Most enterprise AI governance conversations are happening at the wrong layer. You cannot govern an AI system without first governing the data that feeds it. Most enterprises haven't done that work yet.</p>
+          </div>
+          <button onclick="toggleArticle('article3')" class="flex-shrink-0 text-sm font-mono text-teal-400 border border-teal-500/30 px-4 py-2 rounded-lg hover:bg-teal-500/10 transition" id="article3-btn">Read Article ↓</button>
+        </div>
+        <div id="article3" class="article-content mt-6 hidden">
+          <div class="space-y-4 border-t border-white/8 pt-6">
+            <p class="text-neutral-300 leading-relaxed">Organizations are investing heavily in model risk frameworks and review boards, but these programs are often theater because they operate downstream of the real risk.</p>
+            <h4 class="text-white font-semibold mt-6">Lessons from High-Stakes Environments</h4>
+            <p class="text-neutral-300 leading-relaxed">Before focusing on AI, I spent years in federal healthcare and national data exchange environments where data quality was never theoretical. At the Department of Veterans Affairs, we managed records tied directly to care delivery and benefits decisions. In that world, a duplicate patient record wasn't just a reporting error. It could delay care, misroute a referral, or create dangerous gaps in a veteran's treatment history.</p>
+            <p class="text-neutral-300 leading-relaxed">I remember a case where fragmented records across systems led to inconsistent views of a patient's status. Nothing was "broken" in isolation. Each system held its own version of the truth. However, without strong identity resolution and data contracts, the aggregate view was simply wrong. Downstream systems then made decisions based on that inconsistency.</p>
+            <p class="text-neutral-300 leading-relaxed">I've watched that same pattern play out in every AI initiative since. We treat governance as a program - a set of policies, stewardship roles, and review boards - rather than as an engineered layer of the platform itself.</p>
+            <h4 class="text-white font-semibold mt-6">Governance as Architecture</h4>
+            <p class="text-neutral-300 leading-relaxed">Governance at scale cannot work as a manual process. It has to work as architecture. That means enforceable data contracts at system boundaries, not informal agreements. It means technical lineage that is traceable in the code, not something reconstructed by hand during an audit. It means schema validation, identity resolution, and quality checks embedded directly in the pipelines. It also means that when data deviates, the system must fail loudly.</p>
+            <p class="text-neutral-300 leading-relaxed">If you are sitting in a review board meeting discussing "bias" while your data pipelines are silently diverging, you aren't governing. You are performing. Real governance isn't a checklist; it's an engineering constraint.</p>
+            <p class="text-neutral-300 leading-relaxed font-medium">Leaders who trust a model without evidence-based data contracts aren't leading. They are gambling.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GOVERNANCE SECTION -->
+<div class="section-divider"><span class="section-divider-label">Governance as a Product Capability</span></div>
+<section id="governance" class="mb-28 reveal">
+  <div>
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Differentiator</span>
+    <h2 class="text-3xl md:text-4xl font-bold mt-2">Governance Isn't Compliance. It's the Feature That Makes AI Trustworthy.</h2>
+    <p class="text-neutral-400 max-w-3xl mt-3">AI-native candidates understand models. Few understand what it takes to make AI governable, auditable, and trusted at scale in high-stakes environments. That's where 15 years in federal healthcare and national data platforms becomes a real differentiator.</p>
+  </div>
+
+  <div class="mt-10 grid md:grid-cols-2 gap-8">
+    <div class="space-y-6">
+      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">1</span>
+          <h4 class="text-white font-semibold">Model validation depends on data you trust</h4>
+        </div>
+        <p class="text-neutral-400 text-sm leading-relaxed">Every serious AI governance requirement - model validation, attestation, periodic revalidation - rests on one core question: do you trust the data this model was trained on and is currently consuming? If you can't answer that with evidence, everything built on top of it is conditional. This is the bridge between data governance and AI model governance that most frameworks miss.</p>
+      </div>
+      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">2</span>
+          <h4 class="text-white font-semibold">Governance must be engineered, not documented</h4>
+        </div>
+        <p class="text-neutral-400 text-sm leading-relaxed">In the SaaS Orchestrator I built, Row Level Security is enforced at the PostgreSQL level - not in application logic. A misconfigured route cannot leak tenant data. Audit logging captures every run, stage, and QC outcome. The governance isn't a policy document; it's an engineering constraint. That distinction is the difference between governance that holds under audit and governance that fails when someone finds the edge case.</p>
+      </div>
+    </div>
+    <div class="space-y-6">
+      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">3</span>
+          <h4 class="text-white font-semibold">High-stakes environments are where governance is learned</h4>
+        </div>
+        <p class="text-neutral-400 text-sm leading-relaxed">VA systems processing 1M+ veteran records. National healthcare data exchanges handling 2B+ monthly transactions. Federal platforms under compliance review with defined remediation timelines. In these environments, a governance gap isn't a documentation issue - it's a liability. You learn to build governance correctly when the cost of getting it wrong is measured in patient outcomes, not sprint velocity.</p>
+      </div>
+      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">4</span>
+          <h4 class="text-white font-semibold">The Leadership Agent has a governance layer too</h4>
+        </div>
+        <p class="text-neutral-400 text-sm leading-relaxed">Publisher QC is the final gate - every output is checked for word count thresholds, banned phrases, structural compliance, and CTA presence before anything reaches a human. Failures are logged with specific reasons, not silently dropped. The Feedback Ingester closes the loop: patterns promoted automatically into the brand guide after three appearances. Governance as architecture, applied at the 1/1000th the scale of a federal platform - same principle, different stakes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
+    <p class="text-amber-400 font-mono text-xs uppercase tracking-widest mb-3">The Differentiator</p>
+    <p class="text-neutral-100 text-base leading-relaxed">AI-native product candidates understand training pipelines and model evaluation. What they often lack is the scar tissue from environments where governance wasn't optional - where an ungoverned data layer had consequences measured in delayed veteran care, compliance findings, and failed federal audits. That combination of AI system building and high-stakes governance experience is genuinely rare. It's what makes the argument that governance is a product capability, not a compliance burden, land differently when it comes from someone who's lived it.</p>
+  </div>
+</section>
+
 <!-- INNOVATION LAB -->
- <div class="section-divider"><span class="section-divider-label">Innovation Lab</span></div>
+<div class="section-divider"><span class="section-divider-label">Experience & Architecture</span></div>
  <section id="innovation-lab" class="mb-28 reveal">
  <div class="text-center md:text-left">
  <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">The Innovation Lab</span>
@@ -1282,33 +1532,37 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
  </section>
 
- <!-- DATA STRATEGY -->
- <section class="mb-28 reveal">
+ <!-- DATA STRATEGY / EXPERIENCE -->
+ <section class="mb-28 reveal" id="experience-foundation">
  <div class="text-center md:text-left">
- <span class="text-amber-400 font-mono text-sm">Before the Agents</span>
- <h2 class="text-3xl md:text-4xl font-bold mt-2">The Platforms That Had to Work</h2>
- <p class="text-neutral-400 max-w-2xl mt-2">Agents break when the data layer isn't solid. I've seen it happen. Here's the foundation work that came first: programs where the data couldn't fail, the compliance couldn't slip, and the system had to keep running while we modernized it.</p>
+ <span class="text-amber-400 font-mono text-sm">The Foundation</span>
+ <h2 class="text-3xl md:text-4xl font-bold mt-2">Environments Where Failure Matters</h2>
+ <p class="text-neutral-400 max-w-2xl mt-2">Before the agents, there were the platforms. High-stakes data environments where governance wasn't a preference and failure wasn't an option - and where I learned exactly what AI systems depend on to survive contact with reality.</p>
  </div>
  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-amber-500/60">
  <i class="fas fa-database text-amber-400 text-xl mb-3"></i>
  <h3 class="font-bold text-xl">National Healthcare Data Fabric</h3>
- <p class="text-neutral-300 text-sm mt-2">Led implementation of a Data Fabric architecture for national healthcare exchanges, enabling federated data access across siloed systems without breaking HIPAA compliance across organizational boundaries. The hard part wasn't the architecture. It was getting organizations that didn't trust each other to share data through a governed layer they could both audit.</p>
+ <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Ungoverned Federated Data</p>
+ <p class="text-neutral-300 text-sm mt-2">Led data fabric implementation for national healthcare exchanges. The failure mode I learned here: when organizations share data through ungoverned integration layers, every downstream AI system consuming that data inherits the inconsistency. Federated access without federated governance produces AI that can't be trusted across organizational boundaries - which is most of enterprise AI.</p>
  </div>
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-blue-500/60">
  <i class="fas fa-chart-line text-blue-400 text-xl mb-3"></i>
- <h3 class="font-bold text-xl">2B+ Monthly Transactions</h3>
- <p class="text-neutral-300 text-sm mt-2">Managed data strategy for ecosystems processing over 2 billion transactions monthly. At that volume, latency and auditability aren't nice-to-haves; they're the baseline. The constraint that kept me honest: every transaction had to be traceable, and the system couldn't go down to fix it.</p>
+ <h3 class="font-bold text-xl">2B+ Monthly Transaction Platform</h3>
+ <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Scale Breaks What POC Hid</p>
+ <p class="text-neutral-300 text-sm mt-2">Managed data strategy for platforms processing 2B+ monthly transactions. What I learned: data quality problems that are invisible at proof-of-concept scale become load-bearing failures at production volume. Latency spikes, silent drops, and trace gaps don't show up in demos. They show up when the system is running at speed and nobody is watching the right metric.</p>
  </div>
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-teal-500/60">
  <i class="fas fa-notes-medical text-teal-400 text-xl mb-3"></i>
- <h3 class="font-bold text-xl">Veteran Records Modernization</h3>
- <p class="text-neutral-300 text-sm mt-2">Directed modernization of legacy systems handling 1M+ veteran records with $40M in program risk. The challenge was keeping the existing system operational while we replaced it; the records couldn't be unavailable, and the federal compliance requirements didn't pause for the migration schedule.</p>
+ <h3 class="font-bold text-xl">VA Veteran Records Modernization</h3>
+ <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Legacy Data as AI Training Input</p>
+ <p class="text-neutral-300 text-sm mt-2">Directed modernization of legacy systems handling 1M+ veteran records. The lesson here is one that applies directly to AI model governance: legacy data is not clean data. When AI systems are trained on or consume records from legacy environments, they inherit decades of inconsistency, duplicate identities, and missing fields. Cleaning the model doesn't fix this. Cleaning the source does.</p>
  </div>
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-white/30">
- <i class="fas fa-chart-simple text-white/70 text-xl mb-3"></i>
- <h3 class="font-bold text-xl">$40M Portfolio Oversight</h3>
- <p class="text-neutral-300 text-sm mt-2">PMP-certified program director with direct accountability across multi-million dollar technology portfolios in regulated industries. C-suite stakeholder management in environments where a missed commitment is measured in compliance exposure, not just missed deadlines.</p>
+ <i class="fas fa-shield-alt text-white/70 text-xl mb-3"></i>
+ <h3 class="font-bold text-xl">Federal Compliance-Driven Delivery</h3>
+ <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Governance Bolted On Too Late</p>
+ <p class="text-neutral-300 text-sm mt-2">PMP-certified program director across $40M+ technology portfolios under federal compliance obligation. What you learn delivering under audit is that governance bolted on after the architecture is set costs ten times more than governance built in from the start - and it still doesn't hold under real scrutiny. That applies to AI platforms as much as any federal system.</p>
  </div>
  </div>
  </section>
@@ -1544,11 +1798,8 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
  // Sidebar visibility
  function updateNavVisibility() {
- const isDesktop = window.innerWidth >= 1024;
- const sidebar = document.getElementById('desktop-sidebar');
- const mobileBar = document.getElementById('mobile-toggle-bar');
- if (sidebar) sidebar.style.display = isDesktop ? 'flex' : 'none';
- if (mobileBar) mobileBar.style.display = isDesktop ? 'none' : 'flex';
+   // Sidebar and mobile bar controlled via CSS body.in-innovation-lab class
+   // This function kept for resize hook compatibility
  }
 
  function updateNavOffset() {
@@ -1598,12 +1849,27 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  }
  });
  }, { threshold: 0.3 });
- ['hero','innovation-lab','case-study','philosophy','toolkit','contact'].forEach(id => {
+ ['hero','ai-systems','point-of-view','governance','innovation-lab','case-study','philosophy','toolkit','contact'].forEach(id => {
  const el = document.getElementById(id);
  if (el) navObserver.observe(el);
  });
 
  // Code toggles
+ // Article toggles (POV section)
+ function toggleArticle(id) {
+   const el = document.getElementById(id);
+   const btn = document.getElementById(id + '-btn');
+   if (!el || !btn) return;
+   const isHidden = el.classList.contains('hidden');
+   el.classList.toggle('hidden');
+   btn.innerHTML = isHidden
+     ? btn.innerHTML.replace('↓', '↑').replace('Read Article', 'Close Article')
+     : btn.innerHTML.replace('↑', '↓').replace('Close Article', 'Read Article');
+   if (isHidden) {
+     setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+   }
+ }
+
  function toggleCode(id) {
  const el = document.getElementById(id);
  const btn = document.querySelector(`button[onclick="toggleCode('${id}')"]`);
@@ -1753,6 +2019,21 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  btn.style.opacity = "1";
  }
  });
+ }
+
+ // Innovation Lab sidebar: show/hide via body class when section is in view
+ const labSection = document.getElementById('innovation-lab');
+ if (labSection) {
+   const labObserver = new IntersectionObserver((entries) => {
+     entries.forEach(entry => {
+       if (entry.isIntersecting) {
+         document.body.classList.add('in-innovation-lab');
+       } else {
+         document.body.classList.remove('in-innovation-lab');
+       }
+     });
+   }, { threshold: 0.05 });
+   labObserver.observe(labSection);
  }
 
  // Force reveal any hidden sections after 2s
