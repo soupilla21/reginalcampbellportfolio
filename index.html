@@ -12,7 +12,7 @@
  <meta charset="UTF-8">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
  <title>Reginal Campbell | Enterprise AI & Data Strategy</title>
- <meta name="description" content="PMP-certified enterprise leader with 15+ years managing $40M+ portfolios. Driving strategy through data, AI, and execution. Available for Director-level roles in AI Strategy, Data Platforms, and Enterprise Product Development.">
+ <meta name="description" content="PMP-certified enterprise leader with 15+ years managing $40M+ portfolios. Driving strategy through data, AI, and execution. Available for roles in AI Strategy, Data Platforms, and Enterprise Product Development.">
  <meta name="author" content="Reginal Campbell">
  <meta property="og:title" content="Reginal Campbell | Enterprise AI & Data Strategy">
  <meta property="og:description" content="PMP-certified enterprise leader driving strategy through data, AI, and execution. 15+ years, $40M+ portfolios, 2B+ monthly transactions managed.">
@@ -126,6 +126,14 @@
  .arch-panel.open {
  display: block;
  animation: panelSlideDown 0.4s ease forwards;
+ }
+
+ /* ── CODE DETAIL PANELS ── */
+ .code-content {
+   display: none;
+ }
+ .code-content.open {
+   display: block;
  }
  @keyframes panelSlideDown {
  from { opacity: 0; transform: translateY(-12px); }
@@ -381,7 +389,7 @@
  <div class="flex items-center gap-2">
  <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">REGINAL CAMPBELL</span>
  <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>
- <span class="hidden md:inline text-sm font-mono text-neutral-400">AI Strategy & Architecture</span>
+ <span class="hidden md:inline text-sm font-mono text-neutral-400">AI and Data Strategy & Architecture</span>
  </div>
  <div class="flex gap-6 text-sm font-medium mt-3 md:mt-0" style="list-style:none">
  <a href="#innovation-lab" class="nav-link transition" style="color:#d4d4d4;text-decoration:none" data-section="innovation-lab">Work</a>
@@ -421,9 +429,6 @@
  <div class="flex flex-wrap gap-5 mt-10">
  <a href="#innovation-lab" class="px-7 py-3 rounded-full border border-white/20 bg-transparent text-white font-medium hover:bg-white/5 transition flex items-center gap-2">
  View the Innovation Lab <i class="fas fa-arrow-right text-sm"></i>
- </a>
- <a href="#contact" class="px-8 py-3 rounded-full bg-amber-400 text-black font-bold shadow-lg hover:bg-amber-300 transition flex items-center gap-2">
- Schedule a Strategy Call <i class="fas fa-calendar-alt"></i>
  </a>
  </div>
  </section>
@@ -551,10 +556,10 @@
  <div class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-black/50 border border-white/8 rounded-2xl px-8 py-6 mb-16 reveal">
  <div>
  <p class="text-white font-semibold text-lg">Ready to discuss a high-stakes program?</p>
- <p class="text-neutral-400 text-sm mt-1">Director-level and leadership inquiries responded to within 24 hours.</p>
+ <p class="text-neutral-400 text-sm mt-1">Inquiries responded to within 24 hours.</p>
  </div>
- <a href="#contact" class="flex-shrink-0 px-8 py-3 rounded-full bg-amber-400 text-black font-bold shadow-lg hover:bg-amber-300 transition flex items-center gap-2 whitespace-nowrap">
- Schedule a Strategy Call <i class="fas fa-calendar-alt"></i>
+ <a href="#contact" class="flex-shrink-0 text-amber-400 font-medium hover:underline transition flex items-center gap-2 whitespace-nowrap">
+ Get in touch <i class="fas fa-arrow-right text-sm"></i>
  </a>
  </div>
 
@@ -981,16 +986,6 @@
 
     </section><!-- end innovation lab -->
 
- <!-- CTA AFTER INNOVATION LAB -->
- <div class="flex flex-col sm:flex-row items-center justify-between gap-6 bg-black/50 border border-white/8 rounded-2xl px-8 py-6 mb-16 reveal">
- <div>
- <p class="text-white font-semibold text-lg">Seen enough to have a conversation?</p>
- <p class="text-neutral-400 text-sm mt-1">Available for Director-level roles, strategic engagements, and architecture reviews.</p>
- </div>
- <a href="#contact" class="flex-shrink-0 px-8 py-3 rounded-full bg-amber-400 text-black font-bold shadow-lg hover:bg-amber-300 transition flex items-center gap-2 whitespace-nowrap">
- Schedule a Strategy Call <i class="fas fa-calendar-alt"></i>
- </a>
- </div>
 
 <!-- ═══════════════════════════════════════════════════
  ARCH PANEL - CLOUD NATIVE (cloud)
@@ -1251,7 +1246,7 @@
  </div>
 
  <div>
- <button onclick="toggleCode('saas-code')" class="text-sm font-mono text-teal-400 border border-teal-500/30 px-4 py-2 rounded-lg hover:bg-teal-500/10 transition">
+ <button onclick="toggleCode('saas-code')" class="text-sm font-mono text-teal-400 border border-teal-500/30 px-4 py-2 rounded-lg hover:bg-teal-500/10 transition" id="saas-code-btn">
  View Technical Deep Dive ↓
  </button>
  <div id="saas-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
@@ -1396,7 +1391,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <span class="text-amber-400 font-mono text-sm">Contact</span>
  <h2 class="text-3xl font-bold mt-1">Let's Talk About the Work That Actually Matters</h2>
  <p class="text-neutral-400 max-w-2xl mt-2">If you're navigating federal or healthcare data environments, trying to get AI initiatives to actually ship, or dealing with the gap between what leadership thinks is happening and what the data shows, I'm open to the conversation.</p>
- <p class="text-neutral-400 max-w-2xl mt-2">I work best in environments where governance isn't optional, complexity is real, and the expectation is that you own the outcome. Director-level and leadership inquiries responded to within 24 hours.</p>
+ <p class="text-neutral-400 max-w-2xl mt-2">I work best in environments where governance isn't optional, complexity is real, and the expectation is that you own the outcome. Inquiries responded to within 24 hours.</p>
  </div>
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-10">
  <form action="https://formspree.io/f/xvzdzlpb" method="POST" class="space-y-5" id="contact-form" novalidate>
@@ -1418,7 +1413,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </button>
  <div id="form-success" class="hidden" role="alert" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-left:3px solid #22c55e;border-radius:8px;padding:12px 16px;">
  <p class="text-green-400 text-sm font-mono">✓ Message sent successfully.</p>
- <p class="text-neutral-400 text-xs mt-1">I respond to Director-level inquiries within 24 hours.</p>
+ <p class="text-neutral-400 text-xs mt-1">I respond to inquiries within 24 hours.</p>
  </div>
  <div id="form-error" class="hidden" role="alert" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-left:3px solid #ef4444;border-radius:8px;padding:12px 16px;">
  <p id="form-error-msg" class="text-red-400 text-sm font-mono">✗ Submission failed.</p>
@@ -1443,14 +1438,14 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </div>
  <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
  <i class="fas fa-chalkboard-user text-amber-400 text-2xl mb-3"></i>
- <h3 class="font-semibold text-white">Open to Director-Level Roles</h3>
+ <h3 class="font-semibold text-white">Open to AI & Data Leadership Roles</h3>
  <p class="text-neutral-400 text-sm mt-2">AI Strategy · Data Platforms · Enterprise Product Development</p>
  <p class="text-neutral-400 text-sm mt-2">I'm specifically interested in organizations working in regulated industries: healthcare, federal, financial services, where governance isn't an afterthought and the complexity is real. If you're building something that has to hold up under audit, that's the kind of problem I want to work on.</p>
  </div>
  <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
  <i class="fas fa-map-marker-alt text-amber-400 text-xl mb-3"></i>
  <h3 class="font-semibold text-white">Response Time</h3>
- <p class="text-neutral-400 text-sm mt-2">Enterprise leadership inquiries: within 24 hours. Consulting and architecture inquiries: within 48 hours.</p>
+ <p class="text-neutral-400 text-sm mt-2">Inquiries: within 24 hours.</p>
  </div>
  </div>
  </div>
@@ -1462,7 +1457,6 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <p class="text-sm text-neutral-400">Reginal Campbell · Enterprise Transformation Leader · PMP · U.S. Army Veteran</p>
  </div>
  <div class="flex flex-wrap justify-center gap-6">
- <a href="#contact" class="text-sm text-white hover:text-amber-400 transition">Schedule a Call</a>
  <!-- RESUME: Replace the href below with your Google Drive or Dropbox PDF link -->
  <a href="https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view?usp=sharing" target="_blank" class="text-sm text-white hover:text-amber-400 transition" id="resume-link">Download Executive Resume</a>
  <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" class="text-sm text-white hover:text-amber-400 transition">Connect on LinkedIn →</a>
