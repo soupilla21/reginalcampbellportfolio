@@ -144,7 +144,7 @@
   @media (min-width: 640px) { #main-content { padding-left: 2rem; padding-right: 2rem; } }
   section { margin-bottom: 7rem; }
   @media (max-width: 640px) { section { margin-bottom: 4.5rem; } }
-  section, #hero, #executive-summary, #case-study, #philosophy, #ai-systems,
+  section, #hero, #executive-summary, #case-study, #delivery-portfolio, #philosophy, #ai-systems,
   #point-of-view, #governance, #innovation-lab, #experience-foundation,
   #decision-matrix, #contact {
     scroll-margin-top: calc(var(--nav-height) + 12px);
@@ -541,6 +541,7 @@
      </div>
      <div class="flex items-center gap-5 text-sm font-medium flex-shrink-0">
        <a href="#case-study" class="nav-link" data-section="case-study">Work</a>
+       <a href="#delivery-portfolio" class="nav-link" data-section="delivery-portfolio">Portfolio</a>
        <a href="#governance" class="nav-link" data-section="governance">Governance</a>
        <a href="#innovation-lab" class="nav-link" data-section="innovation-lab">Lab</a>
        <a href="#point-of-view" class="nav-link" data-section="point-of-view">POV</a>
@@ -737,6 +738,59 @@
  </div>
  </div>
 
+ </section>
+
+   <!-- ══════════════════════════════════════
+        DELIVERY PORTFOLIO  (added: downloadable case studies)
+   ══════════════════════════════════════ -->
+   <div class="section-divider"><span class="section-divider-label">Documented Delivery Portfolio</span></div>
+ <section id="delivery-portfolio" class="mb-28 reveal">
+   <div>
+     <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Delivery Portfolio</span>
+     <h2 class="text-3xl md:text-4xl font-bold mt-2">Documented Case Studies</h2>
+     <p class="text-neutral-400 max-w-3xl mt-3">Downloadable delivery artifacts: a real on-premises system I built and operated, plus illustrative reference scenarios that show how I frame and govern a regulated enterprise program.</p>
+   </div>
+
+   <div class="mt-10 grid md:grid-cols-3 gap-5 items-stretch">
+
+     <div class="relative overflow-hidden bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
+       <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
+       <div class="flex items-center justify-between gap-2 mb-3">
+         <span class="text-amber-400 font-mono text-[11px] uppercase tracking-widest">Real System / On-Premises</span>
+         <span class="bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-mono px-2 py-0.5 rounded-full uppercase tracking-wider">Lead</span>
+       </div>
+       <h3 class="text-xl font-bold text-white">Leadership Agent</h3>
+       <p class="text-neutral-500 text-xs font-mono mt-1 mb-4">Autonomous Content Operations Pipeline</p>
+       <p class="text-neutral-300 text-sm leading-relaxed flex-grow">A nine-stage, on-premises AI content pipeline I designed, built, and operated. Local-first inference, vector-based deduplication, a seven-axis quality critic, and a human-feedback learning loop. Real integration points, real failure modes, real governance decisions.</p>
+       <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Full lifecycle delivery, integration management, risk and issue control, quality governance.</p>
+       <a href="case-studies/Leadership_Agent_Case_Study.pdf" target="_blank" rel="noopener" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-amber-500 text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg shadow-amber-500/10" aria-label="Download the Leadership Agent case study PDF">
+         <span>Download Case Study</span><i class="fas fa-file-pdf"></i>
+       </a>
+     </div>
+
+     <div class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
+       <span class="text-amber-400 font-mono text-[11px] uppercase tracking-widest mb-3 block">Illustrative Reference Scenario</span>
+       <h3 class="text-xl font-bold text-white">Project Helios: Case Study</h3>
+       <p class="text-neutral-500 text-xs font-mono mt-1 mb-4">Legacy Loan Platform Migration, $90B+ Private Credit</p>
+       <p class="text-neutral-300 text-sm leading-relaxed flex-grow">A reference scenario demonstrating program framing for a regulated financial-services platform migration. Phased cutover with parallel run, reconciliation gates, and rollback.</p>
+       <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Full lifecycle program delivery, vendor and integration management, cutover strategy.</p>
+       <a href="case-studies/Project_Helios_Case_Study.pdf" target="_blank" rel="noopener" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios case study PDF">
+         <span>Download Case Study</span><i class="fas fa-file-pdf text-neutral-400"></i>
+       </a>
+     </div>
+
+     <div class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
+       <span class="text-amber-400 font-mono text-[11px] uppercase tracking-widest mb-3 block">Illustrative Reference Scenario</span>
+       <h3 class="text-xl font-bold text-white">Project Helios: Delivery Governance</h3>
+       <p class="text-neutral-500 text-xs font-mono mt-1 mb-4">Governance Model, RACI, Risk Register, Cutover Protocol</p>
+       <p class="text-neutral-300 text-sm leading-relaxed flex-grow">The delivery governance artifact for the Helios scenario. Steering and PMO structure, a full RACI, a scored enterprise risk register, and a go/no-go cutover framework.</p>
+       <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Governance design, risk and issue control, decision and escalation control.</p>
+       <a href="case-studies/Project_Helios_Delivery_Governance.pdf" target="_blank" rel="noopener" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios delivery governance PDF">
+         <span>Download Blueprint</span><i class="fas fa-file-pdf text-neutral-400"></i>
+       </a>
+     </div>
+
+   </div>
  </section>
 
    <!-- ══════════════════════════════════════
