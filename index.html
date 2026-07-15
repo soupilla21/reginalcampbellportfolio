@@ -2849,6 +2849,17 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
    }
  }
 
+ // Auto-expand an article if the page loads with its id as the URL fragment
+ // (e.g. a provenance chip linking to /#article2 from the Portfolio Intelligence
+ // System). Without this, the fragment scrolls to the collapsed section but the
+ // article text stays hidden until a visitor manually clicks "Read Article."
+ document.addEventListener('DOMContentLoaded', () => {
+   const hash = window.location.hash.slice(1);
+   if (['article1', 'article2', 'article3'].includes(hash)) {
+     toggleArticle(hash);
+   }
+ });
+
  function toggleCode(id) {
  const el = document.getElementById(id);
  const btn = document.querySelector(`button[onclick="toggleCode('${id}')"]`);
