@@ -3031,8 +3031,15 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
  }, 2000);
 
- // Initialize with edge panel open
- setActiveArchitecture('edge', false);
+ // Initialize with edge panel open, unless the URL requests a different one
+ // (e.g. a provenance chip linking to /#panel-saas from the Portfolio
+ // Intelligence System). Falls back to edge for a bare page load, matching
+ // the prior default exactly.
+ const archHash = window.location.hash.slice(1);
+ const archFromHash = ['panel-edge', 'panel-cloud', 'panel-saas'].includes(archHash)
+   ? archHash.replace('panel-', '')
+   : 'edge';
+ setActiveArchitecture(archFromHash, archFromHash !== 'edge');
 
  // Add keyboard handlers for pipeline nodes
  document.querySelectorAll('.pipeline-node').forEach(node => {
