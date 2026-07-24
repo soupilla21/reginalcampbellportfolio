@@ -113,7 +113,15 @@
   }
   @media (max-width: 480px) {
     #main-nav .inner { padding: 0.6rem 1rem; flex-wrap: wrap; min-height: auto; gap: 0.5rem; }
-    #main-nav .inner > div:last-child { gap: 1rem !important; }
+    #main-nav .inner > div:last-child {
+      gap: 0.85rem !important;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-bottom: 0.35rem;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    #main-nav .inner > div:last-child::-webkit-scrollbar { display: none; }
   }
   .nav-link {
     position: relative;
@@ -375,13 +383,17 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
   }
-  body.in-innovation-lab #desktop-sidebar { display: flex !important; }
+  body.in-innovation-lab #desktop-sidebar { display: none !important; }
   #mobile-toggle-bar {
     display: none !important;
     background: rgba(5,5,5,0.97);
     border-color: rgba(255,255,255,0.12) !important;
   }
   body.in-innovation-lab #mobile-toggle-bar { display: flex !important; }
+  @media (min-width: 768px) {
+    body.in-innovation-lab #desktop-sidebar { display: flex !important; }
+    body.in-innovation-lab #mobile-toggle-bar { display: none !important; }
+  }
 
   /* ── PIPELINE NODES ── */
   .pipeline-node {
@@ -633,6 +645,8 @@
          </div>
 
        </div>
+
+       </div>
    </section>
 
    <!-- ══════════════════════════════════════
@@ -757,7 +771,7 @@
 
    <div class="mt-10 grid md:grid-cols-3 gap-5 items-stretch">
 
-     <div class="relative overflow-hidden bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
+     <div data-case-study-card="Leadership Agent" data-asset-type="case_study_pdf" class="relative overflow-hidden bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
        <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"></div>
        <div class="flex items-center justify-between gap-2 mb-3">
          <span class="text-amber-400 font-mono text-[11px] uppercase tracking-widest">Real System / On-Premises</span>
@@ -767,29 +781,29 @@
        <p class="text-neutral-500 text-xs font-mono mt-1 mb-4">Autonomous Content Operations Pipeline</p>
        <p class="text-neutral-300 text-sm leading-relaxed flex-grow">A nine-stage, on-premises AI content pipeline I designed, built, and operated. Local-first inference, vector-based deduplication, a seven-axis quality critic, and a human-feedback learning loop. Real integration points, real failure modes, real governance decisions.</p>
        <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Full lifecycle delivery, integration management, risk and issue control, quality governance.</p>
-       <a href="case-studies/Leadership_Agent_Case_Study.pdf" target="_blank" rel="noopener" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-amber-500 text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg shadow-amber-500/10" aria-label="Download the Leadership Agent case study PDF">
+       <a href="case-studies/Leadership_Agent_Case_Study.pdf" target="_blank" rel="noopener" data-case-study-download="Leadership Agent" data-asset-type="case_study_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-amber-500 text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg shadow-amber-500/10" aria-label="Download the Leadership Agent case study PDF">
          <span>Download Case Study</span><i class="fas fa-file-pdf"></i>
        </a>
      </div>
 
-     <div class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
+     <div data-case-study-card="Project Helios" data-asset-type="case_study_pdf" class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
        <span class="text-amber-400 font-mono text-[11px] uppercase tracking-widest mb-3 block">Illustrative Reference Scenario</span>
        <h3 class="text-xl font-bold text-white">Project Helios: Case Study</h3>
        <p class="text-neutral-500 text-xs font-mono mt-1 mb-4">Legacy Loan Platform Migration, $90B+ Private Credit</p>
        <p class="text-neutral-300 text-sm leading-relaxed flex-grow">A reference scenario demonstrating program framing for a regulated financial-services platform migration. Phased cutover with parallel run, reconciliation gates, and rollback.</p>
        <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Full lifecycle program delivery, vendor and integration management, cutover strategy.</p>
-       <a href="case-studies/Project_Helios_Case_Study.pdf" target="_blank" rel="noopener" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios case study PDF">
+       <a href="case-studies/Project_Helios_Case_Study.pdf" target="_blank" rel="noopener" data-case-study-download="Project Helios" data-asset-type="case_study_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios case study PDF">
          <span>Download Case Study</span><i class="fas fa-file-pdf text-neutral-400"></i>
        </a>
      </div>
 
-     <div class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
+     <div data-case-study-card="Project Helios" data-asset-type="delivery_governance_pdf" class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
        <span class="text-amber-400 font-mono text-[11px] uppercase tracking-widest mb-3 block">Illustrative Reference Scenario</span>
        <h3 class="text-xl font-bold text-white">Project Helios: Delivery Governance</h3>
        <p class="text-neutral-500 text-xs font-mono mt-1 mb-4">Governance Model, RACI, Risk Register, Cutover Protocol</p>
        <p class="text-neutral-300 text-sm leading-relaxed flex-grow">The delivery governance artifact for the Helios scenario. Steering and PMO structure, a full RACI, a scored enterprise risk register, and a go/no-go cutover framework.</p>
        <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Governance design, risk and issue control, decision and escalation control.</p>
-       <a href="case-studies/Project_Helios_Delivery_Governance.pdf" target="_blank" rel="noopener" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios delivery governance PDF">
+       <a href="case-studies/Project_Helios_Delivery_Governance.pdf" target="_blank" rel="noopener" data-case-study-download="Project Helios" data-asset-type="delivery_governance_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios delivery governance PDF">
          <span>Download Blueprint</span><i class="fas fa-file-pdf text-neutral-400"></i>
        </a>
      </div>
@@ -1276,10 +1290,6 @@
  </div>
 
 
-    </section><!-- end innovation lab -->
-
-
-
      <!-- ═══════════════════════════════════════════════════
  ARCH PANEL - CLOUD NATIVE (cloud)
  ═══════════════════════════════════════════════════ -->
@@ -1574,10 +1584,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </div>
  </div>
 
- </section>
-
- 
-   </section>
+ </section><!-- end innovation lab -->
 
    <!-- ══════════════════════════════════════
         AI SYSTEMS SECTION
@@ -1767,731 +1774,6 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
   </div>
 </section>
 
-<!-- GOVERNANCE SECTION -->
-<section id="governance" class="mb-28 reveal">
-  <div>
-    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Differentiator</span>
-    <h2 class="text-3xl md:text-4xl font-bold mt-2">Governance Isn't Compliance. It's the Feature That Makes AI Trustworthy.</h2>
-    <p class="text-neutral-400 max-w-3xl mt-3">AI-native candidates understand models. Few understand what it takes to make AI governable, auditable, and trusted at scale in high-stakes environments. That's where 15 years in federal healthcare and national data platforms becomes a real differentiator.</p>
-  </div>
-
-  <div class="mt-10 grid md:grid-cols-2 gap-8">
-    <div class="space-y-6">
-      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">1</span>
-          <h4 class="text-white font-semibold">Model validation depends on data you trust</h4>
-        </div>
-        <p class="text-neutral-400 text-sm leading-relaxed">Every serious AI governance requirement - model validation, attestation, periodic revalidation - rests on one core question: do you trust the data this model was trained on and is currently consuming? If you can't answer that with evidence, everything built on top of it is conditional. This is the bridge between data governance and AI model governance that most frameworks miss.</p>
-      </div>
-      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">2</span>
-          <h4 class="text-white font-semibold">Governance must be engineered, not documented</h4>
-        </div>
-        <p class="text-neutral-400 text-sm leading-relaxed">In the SaaS Orchestrator I built, Row Level Security is enforced at the PostgreSQL level - not in application logic. A misconfigured route cannot leak tenant data. Audit logging captures every run, stage, and QC outcome. The governance isn't a policy document; it's an engineering constraint. That distinction is the difference between governance that holds under audit and governance that fails when someone finds the edge case.</p>
-      </div>
-    </div>
-    <div class="space-y-6">
-      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">3</span>
-          <h4 class="text-white font-semibold">High-stakes environments are where governance is learned</h4>
-        </div>
-        <p class="text-neutral-400 text-sm leading-relaxed">VA systems processing 1M+ veteran records. National healthcare data exchanges handling 2B+ monthly transactions. Federal platforms under compliance review with defined remediation timelines. In these environments, a governance gap isn't a documentation issue - it's a liability. You learn to build governance correctly when the cost of getting it wrong is measured in patient outcomes, not sprint velocity.</p>
-      </div>
-      <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
-        <div class="flex items-center gap-3 mb-3">
-          <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">4</span>
-          <h4 class="text-white font-semibold">The Leadership Agent has a governance layer too</h4>
-        </div>
-        <p class="text-neutral-400 text-sm leading-relaxed">Publisher QC is the final gate - every output is checked for word count thresholds, banned phrases, structural compliance, and CTA presence before anything reaches a human. Failures are logged with specific reasons, not silently dropped. The Feedback Ingester closes the loop: patterns promoted automatically into the brand guide after three appearances. Governance as architecture, applied at the 1/1000th the scale of a federal platform - same principle, different stakes.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="mt-10 bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
-    <p class="text-amber-400 font-mono text-xs uppercase tracking-widest mb-3">The Differentiator</p>
-    <p class="text-neutral-100 text-base leading-relaxed">AI-native product candidates understand training pipelines and model evaluation. What they often lack is the scar tissue from environments where governance wasn't optional - where an ungoverned data layer had consequences measured in delayed veteran care, compliance findings, and failed federal audits. That combination of AI system building and high-stakes governance experience is genuinely rare. It's what makes the argument that governance is a product capability, not a compliance burden, land differently when it comes from someone who's lived it.</p>
-  </div>
-</section>
-
-<!-- INNOVATION LAB -->
- <section id="innovation-lab" class="mb-28 reveal">
- <div class="text-center md:text-left">
- <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">The Innovation Lab</span>
- <h2 class="text-3xl md:text-4xl font-bold mt-2">Three Architectures. One Point of View.</h2>
- <p class="text-neutral-400 max-w-2xl mt-3">I don't start with a model. I start with the constraint. Each of these systems reflects a different business problem that required a completely different answer. Same engineering mindset, completely different stacks. Select an architecture to see how the decisions were made.</p>
- </div>
-
- <!-- Cards - Order: edge, cloud, saas (matching sidebar) -->
- <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-12" id="portfolio-grid">
-
- <!-- CARD A - edge (Leadership Agent) -->
- <div data-arch-card="edge" role="button" tabindex="0" aria-controls="panel-edge" aria-expanded="true" class="card-item bg-neutral-900/60 rounded-2xl border border-white/5 p-6 transition-all duration-300 hover:border-amber-500/30 flex flex-col cursor-pointer" onclick="setActiveArchitecture('edge', true)" onkeydown="if(event.key==='Enter'||event.key===' '){setActiveArchitecture('edge',true)}">
- <div class="flex justify-between items-start flex-wrap gap-2">
- <span class="bg-amber-500/20 text-amber-300 text-xs font-mono px-3 py-1 rounded-full">Operational Efficiency</span>
- <span class="text-xs font-mono text-amber-400/80 border border-amber-500/30 px-2 py-0.5 rounded">Local Edge</span>
- </div>
- <h3 class="text-xl font-bold mt-4">The Leadership Agent</h3>
- <p class="text-neutral-300 text-sm mt-2 flex-1">9 agents running on a local Ubuntu server. No API keys, no vendor dependency, no per-token billing. Built because executives with the most to say publish the least, and I wanted to close that gap without the compliance risk of sending content data to external APIs.</p>
- <div class="mt-4 text-sm text-neutral-400 border-l-2 border-amber-500/50 pl-3">Local-first on Ubuntu + Ollama. Every byte stays on-prem.</div>
- <div class="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-neutral-300">
- <span>✔ 9-stage pipeline</span><span>✔ Gatekeeper filter</span><span>✔ Feedback ingester</span>
- </div>
- <span class="inline-flex items-center gap-1 text-amber-400 text-sm font-medium mt-5">Explore this architecture ↓</span>
- </div>
-
- <!-- CARD B - cloud (Competitive Intelligence Pulse) -->
- <div data-arch-card="cloud" role="button" tabindex="0" aria-controls="panel-cloud" aria-expanded="false" class="card-item bg-neutral-900/60 rounded-2xl border border-white/5 p-6 transition-all duration-300 hover:border-blue-500/30 flex flex-col cursor-pointer" onclick="setActiveArchitecture('cloud', true)" onkeydown="if(event.key==='Enter'||event.key===' '){setActiveArchitecture('cloud',true)}">
- <div class="flex justify-between items-start flex-wrap gap-2">
- <span class="bg-blue-500/20 text-blue-300 text-xs font-mono px-3 py-1 rounded-full">Strategic Intelligence</span>
- <span class="text-xs font-mono text-blue-400/80 border border-blue-500/30 px-2 py-0.5 rounded">Cloud Native</span>
- </div>
- <div class="mt-3">
- <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/50 px-2 py-0.5 rounded-full">
- <i class="fas fa-drafting-compass mr-1 text-[10px]"></i>Architecture Design · In Development
- </span>
- </div>
- <h3 class="text-xl font-bold mt-3">Competitive Intelligence Pulse</h3>
- <p class="text-neutral-300 text-sm mt-2 flex-1">Leadership teams spend 20+ hours a week on manual competitive research that arrives too late to matter. This replaces that with automated, real-time signal processing. The data is public, so privacy isn't the constraint speed is. Different problem, different stack.</p>
- <div class="mt-4 text-sm text-neutral-400 border-l-2 border-blue-500/50 pl-3">Serverless. RAG vector search. Scales to zero between runs.</div>
- <div class="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-neutral-300">
- <span>✔ Serverless / Lambda</span><span>✔ RAG pipelines</span><span>✔ Trend forecasting</span>
- </div>
- <span class="inline-flex items-center gap-1 text-blue-400 text-sm font-medium mt-5">Explore this architecture ↓</span>
- </div>
-
- <!-- CARD C - saas (SaaS Orchestrator) -->
- <div data-arch-card="saas" role="button" tabindex="0" aria-controls="panel-saas" aria-expanded="false" class="card-item bg-neutral-900/60 rounded-2xl border border-white/5 p-6 transition-all duration-300 hover:border-teal-500/30 flex flex-col cursor-pointer" onclick="setActiveArchitecture('saas', true)" onkeydown="if(event.key==='Enter'||event.key===' '){setActiveArchitecture('saas',true)}">
- <div class="flex justify-between items-start flex-wrap gap-2">
- <span class="bg-teal-500/20 text-teal-300 text-xs font-mono px-3 py-1 rounded-full">Scalable Infrastructure</span>
- <span class="text-xs font-mono text-teal-400/80 border border-teal-500/30 px-2 py-0.5 rounded">SaaS / Web</span>
- </div>
- <h3 class="text-xl font-bold mt-4">The SaaS Orchestrator</h3>
- <p class="text-neutral-300 text-sm mt-2 flex-1">The gap between "a working AI pipeline" and "an enterprise AI product" is governance and multi-tenancy. Anyone can wrap a for-loop around an LLM call. This is the layer that makes it auditable, permissioned, and ready for a compliance team to review.</p>
- <div class="mt-4 text-sm text-neutral-400 border-l-2 border-teal-500/50 pl-3">FastAPI + Supabase. Tenant isolation enforced at the database level.</div>
- <div class="mt-5 flex flex-wrap gap-x-3 gap-y-1 text-xs font-mono text-neutral-300">
- <span>✔ Multi-tenant RLS</span><span>✔ RBAC roles</span><span>✔ SOC2 ready</span>
- </div>
- <span class="inline-flex items-center gap-1 text-teal-400 text-sm font-medium mt-5">Explore this architecture ↓</span>
- </div>
- </div>
-
- <!-- ═══════════════════════════════════════════════════
- ARCH PANEL - LOCAL EDGE (edge)
- ═══════════════════════════════════════════════════ -->
- <div id="panel-edge" class="arch-panel mt-8 rounded-2xl border border-amber-500/20 bg-black/40 overflow-hidden">
- <div class="border-b border-amber-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
- <div class="flex items-center gap-3 flex-wrap">
- <i class="fas fa-microchip text-amber-400 text-lg"></i>
- <span class="font-mono font-semibold text-amber-400">Local Edge: The Leadership Agent</span>
- <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i class="fas fa-circle text-[8px] mr-1"></i>Production · Active</span>
- <a href="https://github.com/soupilla21/reginalcampbellportfolio" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-neutral-400 border border-white/10 px-2 py-0.5 rounded hover:border-amber-500/40 hover:text-amber-400 transition-all flex items-center gap-1.5">
- <i class="fab fa-github text-[11px]"></i> View on GitHub
- </a>
- </div>
- <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
- <span>Ubuntu</span><span>·</span><span>Ollama</span><span>·</span><span>Python</span><span>·</span><span>ChromaDB</span><span>·</span><span>FastAPI</span><span>·</span><span>Supabase</span>
- </div>
- </div>
- <div style="background:rgba(245,158,11,0.06);border-bottom:1px solid rgba(245,158,11,0.15);padding:14px 24px 14px 24px;">
- <p style="font-size:11px;font-family:monospace;color:#F59E0B;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px 0;">Executive Summary</p>
- <p style="font-size:14px;color:#e5e5e5;line-height:1.6;margin:0;"><strong style="color:#fff;">The constraint:</strong> Healthcare and federal clients cannot send operational data to third-party APIs. <strong style="color:#fff;">The decision:</strong> Local LLMs on-premises, zero external exposure. <strong style="color:#fff;">The result:</strong> A 9-agent autonomous pipeline that produces publish-ready executive content at near-zero marginal cost with full auditability.</p>
- </div>
- <div class="p-4 md:p-8 space-y-8">
-
- <!-- Architectural narrative -->
- <div class="max-w-3xl">
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">Why I Built This</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">I watched executives with deep, legitimate expertise publish almost nothing on LinkedIn, while expensive ghostwriters churned out content that didn't sound like them at all. The gap between real insight and consistent visibility is a genuine problem, and most tools for closing it require sending content derived from sensitive operational context to external APIs. In healthcare and federal environments, that's a non-starter.</p>
- <p class="text-neutral-300 text-sm leading-relaxed mt-3">So I built the infrastructure myself. 9 specialized agents running locally on Ubuntu hardware, using Ollama and Qwen2.5 for inference. The system pulls from 26 RSS sources, scores content for brand relevance, writes in a calibrated voice, and gates output through publisher QC before anything reaches a human. Near-zero marginal cost, full auditability, zero external exposure.</p>
- </div>
-
- <!-- Business problem + strategic moat -->
- <div class="grid md:grid-cols-2 gap-8">
- <div>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">The Actual Problem</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Ghostwriters charge $10,000/month and produce content that doesn't sound like the executive. The people with the most authoritative, hard-won knowledge publish the least, because the infrastructure for consistent, high-quality thought leadership hasn't existed in regulated spaces. That's the gap.</p>
- </div>
- <div>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">Why Local-First Isn't Optional Here</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">For healthcare and federal clients operating under strict data sovereignty requirements, sending operationally-derived content to a third-party API isn't a preference question; it's a compliance question. Local inference eliminates that risk entirely. No shadow AI, no per-token billing, no vendor dependency. The system runs on commodity hardware I own.</p>
- </div>
- </div>
- <!-- Updated technical highlights -->
- <div>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">Technical Highlights</h4>
- <div class="grid md:grid-cols-3 gap-4">
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-amber-500/15">
- <p class="text-amber-400 font-mono text-xs font-semibold mb-2">State-Managed Pipeline</p>
- <p class="text-neutral-300 text-xs leading-relaxed">9 discrete agent states with automated retry logic and context persistence across the full run. When Qwen2.5 times out (and at this volume, it occasionally does), the orchestrator handles it gracefully instead of silently dropping the run.</p>
- </div>
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-amber-500/15">
- <p class="text-amber-400 font-mono text-xs font-semibold mb-2">Brand-Calibrated Quality Gate</p>
- <p class="text-neutral-300 text-xs leading-relaxed">The Critic/Editor loop scores output across six axes: tone, vocabulary, contrarian angle, structural compliance, and more, before anything passes. Anything below 90% brand alignment gets recycled. Every failure is logged with a specific reason, not silently dropped.</p>
- </div>
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-amber-500/15">
- <p class="text-amber-400 font-mono text-xs font-semibold mb-2">Local Inference, Zero External Calls</p>
- <p class="text-neutral-300 text-xs leading-relaxed">Qwen2.5 and mxbai-embed-large run entirely through local Ollama. No tokens leave the machine. In a federal or healthcare context, that's not a feature it's the baseline requirement for deploying this at all.</p>
- </div>
- </div>
- </div>
-
- <!-- Pipeline diagram SVG visual -->
- <div>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">9-Stage Pipeline Architecture</h4>
- <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any agent to learn what it does.</p>
-
- <!-- SVG Diagram -->
- <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid rgba(245,158,11,0.15);background:rgba(0,0,0,0.4);">
- <svg viewBox="0 0 960 280" xmlns="http://www.w3.org/2000/svg" style="min-width:640px;width:100%;display:block;font-family:'JetBrains Mono',monospace;">
- <defs>
- <marker id="arrow-amber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
- <path d="M0,0 L0,6 L8,3 z" fill="rgba(245,158,11,0.7)"/>
- </marker>
- <marker id="arrow-teal" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
- <path d="M0,0 L0,6 L8,3 z" fill="rgba(20,184,166,0.7)"/>
- </marker>
- <marker id="arrow-feedback" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
- <path d="M0,0 L0,6 L8,3 z" fill="rgba(20,184,166,0.5)"/>
- </marker>
- <!-- Phase label backgrounds -->
- <linearGradient id="phase1-grad" x1="0" y1="0" x2="0" y2="1">
- <stop offset="0%" stop-color="rgba(245,158,11,0.12)"/>
- <stop offset="100%" stop-color="rgba(245,158,11,0.03)"/>
- </linearGradient>
- <linearGradient id="phase2-grad" x1="0" y1="0" x2="0" y2="1">
- <stop offset="0%" stop-color="rgba(59,130,246,0.1)"/>
- <stop offset="100%" stop-color="rgba(59,130,246,0.02)"/>
- </linearGradient>
- <linearGradient id="phase3-grad" x1="0" y1="0" x2="0" y2="1">
- <stop offset="0%" stop-color="rgba(20,184,166,0.1)"/>
- <stop offset="100%" stop-color="rgba(20,184,166,0.02)"/>
- </linearGradient>
- </defs>
-
- <!-- Phase background bands -->
- <rect x="8" y="8" width="290" height="196" rx="10" fill="url(#phase1-grad)" stroke="rgba(245,158,11,0.2)" stroke-width="1"/>
- <rect x="306" y="8" width="150" height="196" rx="10" fill="url(#phase2-grad)" stroke="rgba(59,130,246,0.2)" stroke-width="1"/>
- <rect x="464" y="8" width="488" height="196" rx="10" fill="url(#phase3-grad)" stroke="rgba(20,184,166,0.2)" stroke-width="1"/>
-
- <!-- Phase labels -->
- <text x="153" y="26" text-anchor="middle" fill="rgba(245,158,11,0.6)" font-size="8" letter-spacing="2" font-weight="600">PHASE 1 · INTELLIGENCE</text>
- <text x="381" y="26" text-anchor="middle" fill="rgba(59,130,246,0.6)" font-size="8" letter-spacing="2" font-weight="600">PHASE 2 · STRATEGY</text>
- <text x="708" y="26" text-anchor="middle" fill="rgba(20,184,166,0.6)" font-size="8" letter-spacing="2" font-weight="600">PHASE 3–4 · WRITE · REVIEW · PUBLISH</text>
-
- <!-- ── NODES ── -->
- <!-- Researcher -->
- <g data-agent="researcher" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Researcher agent">
- <rect x="20" y="40" width="88" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5" class="pipeline-node-svg"/>
- <text x="64" y="62" text-anchor="middle" fill="#F59E0B" font-size="9.5" font-weight="700" letter-spacing="0.5">RESEARCHER</text>
- <text x="64" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Fetches 25+ RSS</text>
- <text x="64" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">sources + scores</text>
- </g>
-
- <!-- Arrow 1 -->
- <line x1="109" y1="70" x2="123" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
-
- <!-- Gatekeeper -->
- <g data-agent="gatekeeper" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Gatekeeper agent">
- <rect x="126" y="40" width="88" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
- <text x="170" y="62" text-anchor="middle" fill="#F59E0B" font-size="9.5" font-weight="700" letter-spacing="0.5">GATEKEEPER</text>
- <text x="170" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Brand alignment</text>
- <text x="170" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">filter + cache</text>
- </g>
-
- <!-- Arrow 2 -->
- <line x1="215" y1="70" x2="229" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
-
- <!-- Scorer/Orchestrator -->
- <g data-agent="orchestrator" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Orchestrator agent">
- <rect x="232" y="40" width="58" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
- <text x="261" y="62" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="700" letter-spacing="0.5">SCORER</text>
- <text x="261" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Semantic</text>
- <text x="261" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">ranking</text>
- </g>
-
- <!-- Arrow 3 -->
- <line x1="291" y1="70" x2="316" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
-
- <!-- Strategist -->
- <g data-agent="strategist" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Strategist agent">
- <rect x="318" y="40" width="120" height="60" rx="8" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.4)" stroke-width="1.5"/>
- <text x="378" y="62" text-anchor="middle" fill="#60A5FA" font-size="9.5" font-weight="700" letter-spacing="0.5">STRATEGIST</text>
- <text x="378" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Narrative angle</text>
- <text x="378" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">+ format select</text>
- </g>
-
- <!-- Arrow 4 -->
- <line x1="439" y1="70" x2="474" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
-
- <!-- Writer -->
- <g data-agent="writer" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Writer agent">
- <rect x="476" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
- <text x="516" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">WRITER</text>
- <text x="516" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">First draft in</text>
- <text x="516" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">author's voice</text>
- </g>
-
- <!-- Arrow 5 -->
- <line x1="557" y1="70" x2="571" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
-
- <!-- Critic -->
- <g data-agent="critic" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Critic agent">
- <rect x="573" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
- <text x="613" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">CRITIC</text>
- <text x="613" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">7-axis quality</text>
- <text x="613" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">validation</text>
- </g>
-
- <!-- Critic rewrite loop arrow -->
- <path d="M613,101 Q613,130 516,130 Q480,130 480,101" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow-amber)"/>
- <text x="548" y="144" text-anchor="middle" fill="rgba(245,158,11,0.45)" font-size="7" letter-spacing="0.5">rewrite loop (max 3x)</text>
-
- <!-- Arrow 6 -->
- <line x1="654" y1="70" x2="668" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
-
- <!-- Editor -->
- <g data-agent="editor" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Editor agent">
- <rect x="670" y="40" width="76" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
- <text x="708" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">EDITOR</text>
- <text x="708" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Clarity, hook</text>
- <text x="708" y="87" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">+ brand polish</text>
- </g>
-
- <!-- Arrow 7 -->
- <line x1="747" y1="70" x2="761" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
-
- <!-- Publisher QC -->
- <g data-agent="publisherqc" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Publisher QC agent">
- <rect x="763" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
- <text x="803" y="58" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">PUBLISHER</text>
- <text x="803" y="70" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">QC</text>
- <text x="803" y="83" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Brand rules</text>
- <text x="803" y="94" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">+ audit log</text>
- </g>
-
- <!-- Arrow 8 -->
- <line x1="844" y1="70" x2="858" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
-
- <!-- Feedback Ingester -->
- <g data-agent="feedback" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Feedback Ingester agent">
- <rect x="860" y="40" width="88" height="60" rx="8" fill="rgba(20,184,166,0.12)" stroke="rgba(20,184,166,0.6)" stroke-width="1.5"/>
- <text x="904" y="58" text-anchor="middle" fill="#2DD4BF" font-size="9" font-weight="700" letter-spacing="0.5">FEEDBACK</text>
- <text x="904" y="70" text-anchor="middle" fill="#2DD4BF" font-size="9" font-weight="700" letter-spacing="0.5">INGESTER</text>
- <text x="904" y="83" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Learns from</text>
- <text x="904" y="94" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">human edits</text>
- </g>
-
- <!-- Feedback loop back arrow (bottom arc) -->
- <path d="M904,101 Q904,180 64,180 Q20,180 20,155 L20,101" fill="none" stroke="rgba(20,184,166,0.25)" stroke-width="1" stroke-dasharray="5,4" marker-end="url(#arrow-feedback)"/>
- <text x="708" y="190" text-anchor="middle" fill="rgba(20,184,166,0.4)" font-size="7" letter-spacing="1">continuous learning loop</text>
- <text x="708" y="200" text-anchor="middle" fill="rgba(20,184,166,0.4)" font-size="7" letter-spacing="1">promotes patterns into brand guide</text>
-
- <!-- Legend -->
- <rect x="20" y="218" width="10" height="10" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.5)" stroke-width="1"/>
- <text x="34" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Intelligence &amp; Strategy</text>
- <rect x="160" y="218" width="10" height="10" rx="2" fill="rgba(20,184,166,0.15)" stroke="rgba(20,184,166,0.5)" stroke-width="1"/>
- <text x="174" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Write, Review &amp; Publish</text>
- <line x1="320" y1="223" x2="345" y2="223" stroke="rgba(245,158,11,0.4)" stroke-width="1" stroke-dasharray="4,3"/>
- <text x="350" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Rewrite loop</text>
- <line x1="440" y1="223" x2="465" y2="223" stroke="rgba(20,184,166,0.3)" stroke-width="1" stroke-dasharray="5,4"/>
- <text x="470" y="227" fill="rgba(180,180,180,0.6)" font-size="7.5">Learning loop</text>
- </svg>
- </div>
-
- <!-- Hidden nodes for click interaction - keep existing agent data wired up -->
- <div style="display:none">
- <div class="pipeline-node amber" data-agent="researcher" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="gatekeeper" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="orchestrator" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="strategist" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="writer" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="critic" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="editor" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="formatter" onclick="showAgent(this)"></div>
- <div class="pipeline-node amber" data-agent="publisherqc" onclick="showAgent(this)"></div>
- <div class="pipeline-node teal" data-agent="feedback" onclick="showAgent(this)"></div>
- </div>
- <!-- Agent detail card -->
- <div id="agent-detail-card" style="display:none;margin-top:16px;background:rgba(245,158,11,0.06);border:1px solid rgba(245,158,11,0.3);border-left:3px solid #F59E0B;border-radius:12px;padding:16px 20px;">
- <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
- <div style="flex:1">
- <p id="agent-stage" style="font-size:10px;font-family:monospace;color:#F59E0B;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 5px 0;"></p>
- <p id="agent-name" style="font-size:15px;font-weight:600;color:#ffffff;margin:0 0 8px 0;"></p>
- <p id="agent-detail" style="font-size:13px;color:#d4d4d4;line-height:1.65;margin:0 0 10px 0;"></p>
- <p id="agent-input" style="font-size:12px;color:#9ca3af;margin:0 0 3px 0;"></p>
- <p id="agent-output" style="font-size:12px;color:#9ca3af;margin:0;"></p>
- </div>
- <button onclick="closeAgent()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0;" aria-label="Close">&#10005;</button>
- </div>
- </div>
- </div>
-
- <!-- Governance + Vision -->
- <div class="grid md:grid-cols-2 gap-8">
- <div>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">Governance Layer</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Every output passes through Publisher QC before delivery. Checks include word count thresholds, banned phrase detection, signature concept density, CTA presence, and structural compliance. Failures are logged with specific remediation notes and not silently dropped.</p>
- <p class="text-neutral-300 text-sm leading-relaxed mt-3">The Feedback Ingester closes the self-improvement loop: human editorial changes are analyzed, logged, and patterns appearing 3 or more times are automatically promoted into the brand guide. The system improves without manual prompt re-engineering.</p>
- </div>
- <div>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-3">The Vision</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Currently single-tenant. The SaaS Orchestrator is the productization layer: multi-tenant deployment, per-client brand workspaces, role-based access, and billable usage tracking. At enterprise scale, this becomes a governed content intelligence platform that compliance-conscious teams in regulated industries have been slow to adopt, not because the need isn't there, but because the governance layer is hard to build correctly.</p>
- </div>
- </div>
-
- <!-- Feedback Ingester technical innovation callout -->
- <div style="background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.25);border-left:4px solid #14B8A6;border-radius:12px;padding:20px 24px;">
- <p style="font-size:10px;font-family:monospace;color:#2DD4BF;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 8px 0;">Notes from the Build: Automated Brand Evolution</p>
- <p class="text-neutral-200 text-sm leading-relaxed">I kept editing the pipeline's output after every run tightening sentences, adjusting tone, rewording openings. After a few weeks of that, I realized I was making the same corrections repeatedly. So I built the Feedback Ingester to do it for me. It performs a diff between what the system produced and what I actually published. When a pattern shows up three or more times, it gets promoted into the brand guide automatically. Measured by tracking manual guide edits per 10-run batch, that intervention rate dropped roughly 40% in the first 90 days from about 8 manual edits per batch to under 5. That's the kind of problem I like solving.</p>
- </div>
-
- <!-- Trade-off quote -->
- <div class="bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
- <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
- <div>
- <p class="text-base italic font-light text-neutral-100 leading-relaxed">"I chose local LLMs over third-party APIs because in a federal or healthcare context, sending content derived from sensitive operational data to an external API isn't a preference; it's a compliance question. The answer is no. Local-first architecture solves both the privacy constraint and the cost model at the same time."</p>
- <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why this matters at volume:</strong> High-frequency pipelines compound per-token API costs fast. Running locally on commodity hardware means near-zero marginal cost per run, with every byte staying inside the organization's control boundary. That's not a workaround; that's the right architecture for this problem.</p>
- </div>
- </div>
- </div>
-
- <!-- Orchestrator code sample replaces gatekeeper snippet -->
- <div>
- <button onclick="toggleCode('edge-code')" class="text-sm font-mono text-amber-400 border border-amber-500/30 px-4 py-2 rounded-lg hover:bg-amber-500/10 transition" id="edge-code-btn">
- View Technical Deep Dive &#8595;
- </button>
- <div id="edge-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
- <p class="text-xs font-mono text-neutral-500 mb-3"># agents/orchestrator.py: Strategic State &amp; Workflow Management</p>
- <pre class="text-xs font-mono text-green-400 leading-relaxed whitespace-pre" style="min-width:max-content;font-size:11px;"><code>async def execute_content_pipeline(topic: str, context: dict):
- """
- Orchestrates the 9-agent lifecycle using a state-machine pattern.
- Manages transitions, retries, and cross-agent context injection.
- """
- # PHASE 1: INTELLIGENCE GATHERING
- raw_signals = await researcher.fetch_sources(topic)
- # Gatekeeper prevents downstream resource waste by filtering early
- valid_signals = await gatekeeper.validate_alignment(raw_signals)
-
- # PHASE 2: CREATIVE SYNTHESIS
- narrative_arc = await strategist.define_angle(valid_signals, context)
- draft = await writer.generate_initial_content(narrative_arc)
-
- # PHASE 3: ITERATIVE QUALITY LOOP
- # Critic triggers a recursive refinement loop if score is below 0.85
- review = await critic.evaluate(draft)
- if review.action_required:
-     draft = await editor.apply_revisions(draft, review.feedback)
-
- # PHASE 4: FINAL COMPLIANCE AND GOVERNANCE
- return await publisher_qc.signoff(draft)</code></pre>
- </div>
- </div>
-
- </div>
- </div>
-
-
-    </section><!-- end innovation lab -->
-
-
-<!-- ═══════════════════════════════════════════════════
- ARCH PANEL - CLOUD NATIVE (cloud)
- ═══════════════════════════════════════════════════ -->
- <div id="panel-cloud" class="arch-panel mt-8 rounded-2xl border border-blue-500/20 bg-black/40 overflow-hidden">
- <div class="border-b border-blue-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
- <div class="flex items-center gap-3">
- <i class="fas fa-cloud-upload-alt text-blue-400 text-lg"></i>
- <span class="font-mono font-semibold text-blue-400">Cloud Native: Competitive Intelligence Pulse</span>
- <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/40 px-2 py-0.5 rounded-full"><i class="fas fa-drafting-compass mr-1 text-[9px]"></i>Architecture Design · In Development</span>
- </div>
- <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
- <span>AWS Lambda</span><span>·</span><span>Pinecone / pgvector</span><span>·</span><span>Python</span><span>·</span><span>Frontier LLM APIs</span>
- </div>
- </div>
- <div style="background:rgba(59,130,246,0.06);border-bottom:1px solid rgba(59,130,246,0.15);padding:14px 24px 14px 24px;">
- <p style="font-size:11px;font-family:monospace;color:#60A5FA;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px 0;">Executive Summary</p>
- <p style="font-size:14px;color:#e5e5e5;line-height:1.6;margin:0;"><strong style="color:#fff;">The constraint:</strong> Leadership teams waste 20+ hours weekly on manual competitive research that arrives too late to matter. <strong style="color:#fff;">The decision:</strong> Serverless RAG pipeline with no idle infrastructure cost, elastic scale, and frontier model reasoning on public web data. <strong style="color:#fff;">The result:</strong> Real-time intelligence alerts that replace the analyst's Monday morning summary.</p>
- </div>
- <div class="p-4 md:p-8 space-y-8">
-
- <!-- Architectural narrative -->
- <div class="max-w-3xl">
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">Why This Stack, Not the Local One</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">The Leadership Agent runs local because the data can't leave the building. This one is the opposite: the data is public competitive intelligence, the constraint is speed, and the workload is bursty. Serverless with frontier model APIs is the right answer here: same engineering mindset, completely different stack because the business problem is different.</p>
- </div>
-
- <!-- Business problem + strategic moat -->
- <div class="grid md:grid-cols-2 gap-8">
- <div>
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">The Actual Problem</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Leadership teams I've worked with spend 20+ hours a week manually tracking competitor moves, regulatory shifts, and market signals, then packaging them into slide decks that arrive too late to change a decision. That's organizational theater. It's expensive, slow, and systematically wrong about what actually matters.</p>
- </div>
- <div>
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">Why Serverless Here</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Ingestion workloads are bursty: heavy during market hours, quiet overnight. Lambda scales to zero between runs. Frontier APIs are appropriate here because the data is non-sensitive public competitive intelligence, and maximum reasoning quality matters more than cost-per-token at this volume. The architecture is a direct response to the problem.</p>
- </div>
- </div>
-
- <!-- Technical highlights -->
- <div>
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-4">Technical Highlights</h4>
- <div class="grid md:grid-cols-3 gap-4">
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-blue-500/15">
- <p class="text-blue-400 font-mono text-xs font-semibold mb-2">Serverless RAG Pipeline</p>
- <p class="text-neutral-300 text-xs leading-relaxed">AWS Lambda + Pinecone. The ingestion workload is bursty by nature; scaling to zero between runs means you're not paying for idle infrastructure waiting for something to happen.</p>
- </div>
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-blue-500/15">
- <p class="text-blue-400 font-mono text-xs font-semibold mb-2">LLM Output Guardrails</p>
- <p class="text-neutral-300 text-xs leading-relaxed">Middleware validates frontier model output for groundedness before it reaches an executive report. Hallucinated competitive intelligence is worse than no intelligence at all.</p>
- </div>
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-blue-500/15">
- <p class="text-blue-400 font-mono text-xs font-semibold mb-2">Signal Noise Filtering</p>
- <p class="text-neutral-300 text-xs leading-relaxed">Semantic weighting surfaces the top 3% of high-impact signals. The goal isn't to ingest everything; it's to make sure the right 3% actually gets to the people who need to act on it.</p>
- </div>
- </div>
- </div>
-
- <!-- Architecture flow diagram preserved with clickable nodes -->
- <div>
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-4">Architecture Flow</h4>
- <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any node to learn what it does.</p>
- <div class="pipeline-scroll-outer pb-2">
- <div class="pipeline-row flex items-start gap-2">
- <div class="pipeline-node blue" data-cloud-agent="ingestor" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about ingestor" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Ingestor</span><span class="node-desc">Multi-source<br>data ingestion</span></div>
- <span class="pipeline-arrow blue mt-4">&#8594;</span>
- <div class="pipeline-node blue" data-cloud-agent="embedder" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about embedder" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Embedder</span><span class="node-desc">Vector encoding<br>&amp; storage</span></div>
- <span class="pipeline-arrow blue mt-4">&#8594;</span>
- <div class="pipeline-node blue" data-cloud-agent="retriever" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about retriever" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Retriever</span><span class="node-desc">RAG semantic<br>search</span></div>
- <span class="pipeline-arrow blue mt-4">&#8594;</span>
- <div class="pipeline-node blue" data-cloud-agent="synthesizer" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about synthesizer" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Synthesizer</span><span class="node-desc">LLM synthesis<br>&amp; trend scoring</span></div>
- <span class="pipeline-arrow blue mt-4">&#8594;</span>
- <div class="pipeline-node blue" data-cloud-agent="alerter" onclick="showCloudAgent(this)" role="button" tabindex="0" aria-label="Learn about alerter" onkeydown="if(event.key==='Enter'||event.key===' '){showCloudAgent(this)}"><span class="node-title blue">Alerter</span><span class="node-desc">Threshold alerts<br>&amp; delivery</span></div>
- </div>
- </div>
- <!-- Cloud agent detail card -->
- <div id="cloud-agent-detail-card" style="display:none;margin-top:16px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.3);border-left:3px solid #3B82F6;border-radius:12px;padding:16px 20px;">
- <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
- <div style="flex:1">
- <p id="cloud-agent-stage" style="font-size:10px;font-family:monospace;color:#60A5FA;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 5px 0;"></p>
- <p id="cloud-agent-name" style="font-size:15px;font-weight:600;color:#ffffff;margin:0 0 8px 0;"></p>
- <p id="cloud-agent-detail" style="font-size:13px;color:#d4d4d4;line-height:1.65;margin:0 0 10px 0;"></p>
- <p id="cloud-agent-input" style="font-size:12px;color:#9ca3af;margin:0 0 3px 0;"></p>
- <p id="cloud-agent-output" style="font-size:12px;color:#9ca3af;margin:0;"></p>
- </div>
- <button onclick="closeCloudAgent()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0;" aria-label="Close">&#10005;</button>
- </div>
- </div>
- </div>
-
- <!-- Governance + Vision -->
- <div class="grid md:grid-cols-2 gap-8">
- <div>
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">Governance Layer</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Source credibility scoring filters low-quality signals before synthesis. Prompt guardrails prevent hallucinated attribution. All intelligence outputs carry source provenance metadata. The system shows its work, not just its conclusions.</p>
- </div>
- <div>
- <h4 class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-3">The Vision</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Full build targeting configurable watchlists per business unit, real-time Slack integration, and a weekly AI-generated competitive briefing that replaces the analyst's Monday morning summary. Designed to plug directly into the SaaS Orchestrator's multi-tenant backend.</p>
- </div>
- </div>
-
- <!-- Governance Gateway innovation callout -->
- <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);border-left:4px solid #3B82F6;border-radius:12px;padding:20px 24px;">
- <p style="font-size:10px;font-family:monospace;color:#60A5FA;letter-spacing:0.12em;text-transform:uppercase;margin:0 0 8px 0;">Notes from the Build: The Governance Gateway</p>
- <p class="text-neutral-200 text-sm leading-relaxed">One of the early design questions was how to scale AI adoption across multiple teams without creating budget exposure or data leakage risk. The answer was a centralized AI Gateway that intercepts all cloud LLM calls before they reach third-party APIs. PII redaction happens at this layer. Prompt injection shields are enforced here. Token quotas are tracked per team. The governance doesn't live in the application; it lives in the infrastructure. That's the layer that earns enterprise trust, and it's also the layer most AI implementations skip until something breaks.</p>
- </div>
-
- <!-- Trade-off callout -->
- <div class="bg-black/50 border border-blue-500/25 border-l-4 border-l-blue-500 rounded-2xl p-6">
- <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-blue-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
- <div>
- <p class="text-base italic font-light text-neutral-100 leading-relaxed">"For competitive intelligence, the data is public and the constraint is speed. That's the opposite of the Leadership Agent's context. So the architecture flips: serverless for elasticity, frontier APIs for reasoning quality, vector DB for semantic breadth. Same mindset, completely different stack because the business problem is different."</p>
- <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">The actual tradeoff:</strong> Lambda scales to zero overnight when markets are quiet, and spins back up fast when they're not. A persistent local process would be the wrong call here: the cost model doesn't work, and the privacy constraint that justified local-first in the Leadership Agent doesn't exist for public competitive data.</p>
- </div>
- </div>
- </div>
-
- <!-- Serverless code sample -->
- <div>
- <button onclick="toggleCode('cloud-code')" class="text-sm font-mono text-blue-400 border border-blue-500/30 px-4 py-2 rounded-lg hover:bg-blue-500/10 transition" id="cloud-code-btn">
- View Technical Deep Dive &#8595;
- </button>
- <div id="cloud-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
- <p class="text-xs font-mono text-neutral-500 mb-3"># signals/processor.py: Cloud-Native Event Orchestration</p>
- <pre class="text-xs font-mono text-green-400 leading-relaxed whitespace-pre" style="min-width:max-content;font-size:11px;"><code>async def process_market_signal(event: dict):
- """
- AWS Lambda handler for real-time competitive signal ingestion.
- Scales horizontally to process 10k+ concurrent market events.
- """
- # 1. EVENT DECODING AND NORMALIZATION
- signal = signal_parser.extract(event['body'])
-
- # 2. SEMANTIC SEARCH (Cloud-Native Vector DB)
- # Queries signal against 10M+ historical data points in Pinecone
- relevant_context = await vector_store.query(
-     vector=signal.embedding,
-     top_k=5,
-     namespace="competitive-intel-2026"
- )
-
- # 3. FRONTIER MODEL SYNTHESIS
- # Leverages high-reasoning models with custom Prompt Guardrails
- analysis = await high_reasoning_llm.analyze(
-     input=signal.text,
-     context=relevant_context,
-     guardrail_profile="executive_strategy_v4"
- )
-
- # 4. DOWNSTREAM ALERTING AND DISPATCH
- return await alert_manager.dispatch(analysis)</code></pre>
- </div>
- </div>
-
- </div>
- </div>
-
- <!-- ═══════════════════════════════════════════════════
- ARCH PANEL - SAAS / WEB (saas)
- ═══════════════════════════════════════════════════ -->
- <div id="panel-saas" class="arch-panel mt-8 rounded-2xl border border-teal-500/20 bg-black/40 overflow-hidden">
- <div class="border-b border-teal-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
- <div class="flex items-center gap-3">
- <i class="fas fa-globe text-teal-400 text-lg"></i>
- <span class="font-mono font-semibold text-teal-400">SaaS / Web: The SaaS Orchestrator</span>
- <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i class="fas fa-circle text-[8px] mr-1"></i>Backend Production · Active</span>
- </div>
- <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
- <span>FastAPI</span><span>·</span><span>Supabase</span><span>·</span><span>PostgreSQL + RLS</span><span>·</span><span>ES256 / JWKS</span>
- </div>
- </div>
- <div style="background:rgba(20,184,166,0.06);border-bottom:1px solid rgba(20,184,166,0.15);padding:14px 24px 14px 24px;">
- <p style="font-size:11px;font-family:monospace;color:#2DD4BF;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 6px 0;">Executive Summary</p>
- <p style="font-size:14px;color:#e5e5e5;line-height:1.6;margin:0;"><strong style="color:#fff;">The constraint:</strong> AI pipelines fail in enterprise contexts without proper isolation, authentication, and auditability. <strong style="color:#fff;">The decision:</strong> Build a full-stack multi-tenant backend using FastAPI, Supabase, and PostgreSQL RLS, not just a script. <strong style="color:#fff;">The result:</strong> A production-grade SaaS platform a compliance officer can approve on day one.</p>
- </div>
- <div class="p-4 md:p-8 space-y-8">
-
- <div class="grid md:grid-cols-2 gap-8">
- <div>
- <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">The Gap Nobody Builds</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Most AI workflows live and die as single-user scripts. They can't be sold, audited, permissioned, or handed to a second team member without breaking. The gap between "a working AI pipeline" and "an enterprise AI product" is multi-tenancy and governance, and most builders skip it because it's harder than the model work. That's the gap I built for.</p>
- </div>
- <div>
- <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">Why Not a Managed Platform</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Managed AI platforms abstract the security layer away, which works fine for prototypes. In regulated enterprise deployments, the compliance team needs to read the actual policy, not trust a SaaS vendor's word for it. Row Level Security enforced at PostgreSQL means tenant isolation is explicit, auditable, and independent of application logic. That's the architecture a compliance officer approves on first review.</p>
- </div>
- </div>
-
-  <!-- Technical highlights -->
- <div>
- <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-4">Technical Highlights</h4>
- <div class="grid md:grid-cols-3 gap-4">
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-teal-500/15">
- <p class="text-teal-400 font-mono text-xs font-semibold mb-2">Multi-Tenant Isolation</p>
- <p class="text-neutral-300 text-xs leading-relaxed">Row Level Security enforced at the PostgreSQL level ensures zero cross-tenant data leakage regardless of application logic.</p>
- </div>
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-teal-500/15">
- <p class="text-teal-400 font-mono text-xs font-semibold mb-2">Zero-Trust Authentication</p>
- <p class="text-neutral-300 text-xs leading-relaxed">ES256/JWKS token verification with role-based access control across platform_admin, tenant_admin, editor, and viewer tiers.</p>
- </div>
- <div class="bg-neutral-900/40 rounded-xl p-4 border border-teal-500/15">
- <p class="text-teal-400 font-mono text-xs font-semibold mb-2">API-First Architecture</p>
- <p class="text-neutral-300 text-xs leading-relaxed">FastAPI backend with full audit logging per run, stage, and QC result. Every action is traceable and exportable for compliance review.</p>
- </div>
- </div>
- </div>
-
- <div>
- <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-4">Platform Architecture</h4>
- <p class="text-neutral-500 text-xs font-mono mb-4">Tap or click any node to learn what it does.</p>
- <div class="pipeline-scroll-outer pb-2">
- <div class="pipeline-row flex items-start gap-2">
- <div class="pipeline-node teal" data-saas-agent="authlayer" role="button" tabindex="0" aria-label="Learn about authlayer" onclick="showSaasAgent(this)"><span class="node-title teal">Auth Layer</span><span class="node-desc">ES256/JWKS<br>RBAC roles</span></div>
- <span class="pipeline-arrow teal mt-4">&#8594;</span>
- <div class="pipeline-node teal" data-saas-agent="apigateway" role="button" tabindex="0" aria-label="Learn about apigateway" onclick="showSaasAgent(this)"><span class="node-title teal">API Gateway</span><span class="node-desc">FastAPI<br>tenant-scoped</span></div>
- <span class="pipeline-arrow teal mt-4">&#8594;</span>
- <div class="pipeline-node teal" data-saas-agent="datalayer" role="button" tabindex="0" aria-label="Learn about datalayer" onclick="showSaasAgent(this)"><span class="node-title teal">Data Layer</span><span class="node-desc">PostgreSQL + RLS<br>enforced isolation</span></div>
- <span class="pipeline-arrow teal mt-4">&#8594;</span>
- <div class="pipeline-node teal" data-saas-agent="tenantworkspace" role="button" tabindex="0" aria-label="Learn about tenantworkspace" onclick="showSaasAgent(this)"><span class="node-title teal">Tenant Workspace</span><span class="node-desc">Brand config<br>&amp; content pool</span></div>
- <span class="pipeline-arrow teal mt-4">&#8594;</span>
- <div class="pipeline-node teal" data-saas-agent="pipelinerunner" role="button" tabindex="0" aria-label="Learn about pipelinerunner" onclick="showSaasAgent(this)"><span class="node-title teal">Pipeline Runner</span><span class="node-desc">Agent orchestration<br>&amp; run tracking</span></div>
- </div>
- </div>
- <div id="saas-agent-detail-card" style="display:none;margin-top:16px;background:rgba(20,184,166,0.06);border:1px solid rgba(20,184,166,0.3);border-left:3px solid #14B8A6;border-radius:12px;padding:16px 20px;">
- <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
- <div style="flex:1">
- <p id="saas-agent-stage" style="font-size:10px;font-family:monospace;color:#2DD4BF;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 5px 0;"></p>
- <p id="saas-agent-name" style="font-size:15px;font-weight:600;color:#ffffff;margin:0 0 8px 0;"></p>
- <p id="saas-agent-detail" style="font-size:13px;color:#d4d4d4;line-height:1.65;margin:0 0 10px 0;"></p>
- <p id="saas-agent-input" style="font-size:12px;color:#9ca3af;margin:0 0 3px 0;"></p>
- <p id="saas-agent-output" style="font-size:12px;color:#9ca3af;margin:0;"></p>
- </div>
- <button onclick="closeSaasAgent()" style="background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:2px 6px;line-height:1;flex-shrink:0;" aria-label="Close">&#10005;</button>
- </div>
- </div>
- </div>
-
- <div class="grid md:grid-cols-2 gap-8">
- <div>
- <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">Governance Layer</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">RLS policies are defined per table and enforced at the PostgreSQL level. A misconfigured application route cannot leak tenant data. Audit logging captures every run, stage result, and QC outcome. Role-based access means a viewer can't trigger a pipeline run. A tenant_admin can't touch another tenant's data. Enterprise controls, not application-level trust.</p>
- </div>
- <div>
- <h4 class="text-xs font-mono text-teal-400 uppercase tracking-widest mb-3">The Vision</h4>
- <p class="text-neutral-300 text-sm leading-relaxed">Phase 5 adds Stripe billing integration, usage metering per tenant, and a self-serve onboarding flow. The platform becomes a true ISV product: a company buys a seat, configures their brand workspace, and gets a governed AI content pipeline without touching a line of code. That's the commercialization path.</p>
- </div>
- </div>
-
- <div class="bg-black/50 border border-teal-500/25 border-l-4 border-l-teal-500 rounded-2xl p-6">
- <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-teal-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
- <div>
- <p class="text-base italic font-light text-neutral-100 leading-relaxed">"The difference between a script and a product is governance. Anyone can wrap a for-loop around an LLM call. What enterprises actually need is data isolation they can audit, authentication they can revoke, and role boundaries a compliance team can map. I built the SaaS layer to prove I understand how AI gets deployed in production, not just how it gets built in a notebook."</p>
- <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why Supabase + FastAPI over a managed platform:</strong> Full control over the RLS schema means the compliance posture is explicit and readable. Managed AI platforms hide this, which is fine for prototypes. Not for regulated deployments where the security team needs to see the actual policy.</p>
- </div>
- </div>
- </div>
-
- <div>
- <button onclick="toggleCode('saas-code')" class="text-sm font-mono text-teal-400 border border-teal-500/30 px-4 py-2 rounded-lg hover:bg-teal-500/10 transition" id="saas-code-btn">
- View Technical Deep Dive ↓
- </button>
- <div id="saas-code" class="code-content mt-4 bg-neutral-950 border border-white/10 rounded-xl p-4 overflow-x-auto" style="-webkit-overflow-scrolling:touch; max-width:100%">
- <p class="text-xs font-mono text-neutral-500 mb-3"># RLS policy example: PostgreSQL (Supabase)</p>
- <pre class="text-xs font-mono text-green-400 leading-relaxed whitespace-pre" style="min-width:max-content;font-size:11px;"><code>-- Tenants can only read their own content items
-CREATE POLICY "tenant_isolation_content_items"
- ON content_items
- FOR ALL
- USING (tenant_id = auth.jwt() ->> 'tenant_id');
-
--- Editors can insert; viewers are read-only
-CREATE POLICY "editor_insert_runs"
- ON runs
- FOR INSERT
- WITH CHECK (
- tenant_id = auth.jwt() ->> 'tenant_id'
- AND auth.jwt() ->> 'role' IN ('tenant_admin', 'editor')
- );
-
--- FastAPI dependency: validates ES256 token + injects tenant context
-async def get_current_tenant(token: str = Depends(oauth2_scheme)):
- payload = jwt.decode(token, jwks_client.get_signing_key_from_jwt(token).key,
- algorithms=["ES256"])
- return TenantContext(
- tenant_id=payload["tenant_id"],
- role=payload["role"]
- )</code></pre>
- </div>
- </div>
-
- </div>
- </div>
-
- </section>
 
    <!-- ══════════════════════════════════════
         EXPERIENCE FOUNDATION + DECISION MATRIX
@@ -2632,10 +1914,14 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mt-10">
  <form action="https://formspree.io/f/xvzdzlpb" method="POST" class="space-y-5" id="contact-form" novalidate>
  <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
- <input type="text" name="name" placeholder="Name *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
- <input type="email" name="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
- <input type="text" name="company" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
- <select name="inquiry_type" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
+ <label for="contact-name" class="sr-only">Name</label>
+ <input id="contact-name" type="text" name="name" autocomplete="name" placeholder="Name *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <label for="contact-email" class="sr-only">Email</label>
+ <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <label for="contact-company" class="sr-only">Company</label>
+ <input id="contact-company" type="text" name="company" autocomplete="organization" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <label for="contact-inquiry-type" class="sr-only">Role / How can I help?</label>
+ <select id="contact-inquiry-type" name="inquiry_type" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
  <option value="" disabled selected>Role / How can I help?</option>
  <option>Leadership role or executive opportunity</option>
  <option>Data or AI initiatives not delivering expected outcomes</option>
@@ -2643,7 +1929,8 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <option>Architecture or platform strategy review</option>
  <option>Other</option>
  </select>
- <textarea name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all"></textarea>
+ <label for="contact-message" class="sr-only">Message</label>
+ <textarea id="contact-message" name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all"></textarea>
  <button type="submit" id="form-submit-btn" class="bg-amber-400 text-black font-bold px-8 py-3 rounded-full hover:bg-amber-300 transition flex items-center gap-2" aria-live="polite">
  Send Message <i class="fas fa-paper-plane text-sm"></i>
  </button>
@@ -2653,14 +1940,14 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </div>
  <div id="form-error" class="hidden" role="alert" style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-left:3px solid #ef4444;border-radius:8px;padding:12px 16px;">
  <p id="form-error-msg" class="text-red-400 text-sm font-mono">✗ Submission failed.</p>
- <p class="text-neutral-400 text-xs mt-1">Please try <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" style="color:#F59E0B;text-decoration:underline;">LinkedIn</a> or email directly.</p>
+ <p class="text-neutral-400 text-xs mt-1">Please try <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" rel="noopener noreferrer" style="color:#F59E0B;text-decoration:underline;">LinkedIn</a> or email directly.</p>
  </div>
  </form>
  <div class="flex flex-col gap-6">
  <div class="space-y-4">
  <div>
  <p class="text-neutral-300 text-sm">Prefer LinkedIn?</p>
- <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" class="text-amber-400 inline-flex items-center gap-2 mt-1 hover:underline font-medium">
+ <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" rel="noopener noreferrer" class="text-amber-400 inline-flex items-center gap-2 mt-1 hover:underline font-medium">
  Connect with me directly <i class="fas fa-arrow-right text-xs"></i>
  </a>
  </div>
@@ -2696,8 +1983,8 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </div>
  <div class="flex flex-wrap justify-center gap-6">
  <!-- RESUME: Replace the href below with your Google Drive or Dropbox PDF link -->
- <a href="https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view?usp=sharing" target="_blank" class="text-sm text-white hover:text-amber-400 transition" id="resume-link">Download Executive Resume</a>
- <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" class="text-sm text-white hover:text-amber-400 transition">Connect on LinkedIn →</a>
+ <a href="https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sm text-white hover:text-amber-400 transition" id="resume-link">Download Executive Resume</a>
+ <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" rel="noopener noreferrer" class="text-sm text-white hover:text-amber-400 transition">Connect on LinkedIn →</a>
  </div>
  </footer>
 
@@ -2737,7 +2024,31 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  let currentArch = null;
  let resetButtonTimer = null;
 
- function setActiveArchitecture(arch, scrollToPanel) {
+ // ── CASE STUDY VIEW TRACKING (GA4) ──
+ // Fires a `view_case_study` event any time a visitor genuinely engages with one of
+ // the case-study narratives, whether by scrolling to it, downloading its PDF, or
+ // clicking into its interactive architecture panel. `case_study_name` is the
+ // dimension to slice by in GA4 to see which story actually holds attention.
+ const _firedCaseStudyEvents = new Set();
+ function trackCaseStudyView(caseStudyName, interactionType, contentArea, extraParams) {
+   if (typeof gtag !== 'function' || !caseStudyName) return;
+   // De-dupe passive scroll views per section per pageview so re-scrolling past
+   // a section doesn't spam events. Clicks/downloads are real actions each time
+   // and are always sent.
+   const dedupeKey = caseStudyName + '|' + interactionType + '|' + contentArea;
+   if (interactionType === 'scroll_view') {
+     if (_firedCaseStudyEvents.has(dedupeKey)) return;
+     _firedCaseStudyEvents.add(dedupeKey);
+   }
+   gtag('event', 'view_case_study', Object.assign({
+     case_study_name: caseStudyName,
+     interaction_type: interactionType, // 'scroll_view' | 'click_download' | 'click_explore'
+     content_area: contentArea          // e.g. 'case_study_section', 'delivery_portfolio_card', 'ai_systems_section', 'innovation_lab_panel'
+   }, extraParams || {}));
+ }
+
+ function setActiveArchitecture(arch, scrollToPanel, isUserAction) {
+ if (isUserAction === undefined) isUserAction = true;
  if (currentArch === arch) {
  document.getElementById('panel-' + arch).classList.remove('open');
  document.body.removeAttribute('data-arch');
@@ -2753,6 +2064,11 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
  currentArch = arch;
  document.body.setAttribute('data-arch', arch);
+
+ if (isUserAction) {
+   const archCaseStudyNames = { edge: 'Leadership Agent', cloud: 'Intelligence Pulse', saas: 'SaaS Orchestrator' };
+   trackCaseStudyView(archCaseStudyNames[arch] || arch, 'click_explore', 'innovation_lab_panel');
+ }
 
  document.querySelectorAll('[aria-pressed]').forEach(b => {
  b.setAttribute('aria-pressed', b.getAttribute('data-arch') === arch ? 'true' : 'false');
@@ -2819,6 +2135,50 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  }, { threshold: 0.03, rootMargin: "0px 0px -20px 0px" });
  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
+ // Case study scroll-view tracking: fires once per section per pageview when at
+ // least half of it has been scrolled into view.
+ const caseStudySections = [
+   { el: document.getElementById('case-study'), name: 'National Healthcare Data Fabric', area: 'case_study_section' },
+   { el: document.getElementById('ai-systems'), name: 'Leadership Agent', area: 'ai_systems_section' }
+ ];
+ const caseStudySectionObserver = new IntersectionObserver((entries) => {
+   entries.forEach(entry => {
+     if (!entry.isIntersecting) return;
+     const match = caseStudySections.find(c => c.el === entry.target);
+     if (match) {
+       trackCaseStudyView(match.name, 'scroll_view', match.area);
+       caseStudySectionObserver.unobserve(entry.target);
+     }
+   });
+ }, { threshold: 0.5 });
+ caseStudySections.forEach(c => { if (c.el) caseStudySectionObserver.observe(c.el); });
+
+ // Case study scroll-view tracking for the three delivery-portfolio cards
+ // (Leadership Agent / Project Helios case study / Project Helios governance).
+ const caseStudyCardObserver = new IntersectionObserver((entries) => {
+   entries.forEach(entry => {
+     if (!entry.isIntersecting) return;
+     const card = entry.target;
+     const name = card.getAttribute('data-case-study-card');
+     const assetType = card.getAttribute('data-asset-type');
+     trackCaseStudyView(name, 'scroll_view', 'delivery_portfolio_card', { asset_type: assetType });
+     caseStudyCardObserver.unobserve(card);
+   });
+ }, { threshold: 0.5 });
+ document.querySelectorAll('[data-case-study-card]').forEach(card => caseStudyCardObserver.observe(card));
+
+ // Case study PDF download click tracking
+ document.querySelectorAll('[data-case-study-download]').forEach(link => {
+   link.addEventListener('click', () => {
+     const name = link.getAttribute('data-case-study-download');
+     const assetType = link.getAttribute('data-asset-type');
+     trackCaseStudyView(name, 'click_download', 'delivery_portfolio_card', {
+       asset_type: assetType,
+       file_name: link.getAttribute('href')
+     });
+   });
+ });
+
  // Nav active on scroll
  const navLinks = document.querySelectorAll('.nav-link');
  const navObserver = new IntersectionObserver((entries) => {
@@ -2832,7 +2192,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  }
  });
  }, { threshold: 0.3 });
- ['hero','ai-systems','point-of-view','governance','innovation-lab','case-study','philosophy','toolkit','contact'].forEach(id => {
+ ['hero','case-study','delivery-portfolio','philosophy','governance','innovation-lab','ai-systems','point-of-view','toolkit','contact'].forEach(id => {
  const el = document.getElementById(id);
  if (el) navObserver.observe(el);
  });
@@ -3043,7 +2403,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  const archFromHash = ['panel-edge', 'panel-cloud', 'panel-saas'].includes(archHash)
    ? archHash.replace('panel-', '')
    : 'edge';
- setActiveArchitecture(archFromHash, archFromHash !== 'edge');
+ setActiveArchitecture(archFromHash, archFromHash !== 'edge', false);
 
  // Add keyboard handlers for pipeline nodes
  document.querySelectorAll('.pipeline-node').forEach(node => {
