@@ -122,6 +122,16 @@
       -ms-overflow-style: none;
     }
     #main-nav .inner > div:last-child::-webkit-scrollbar { display: none; }
+    /* Fade hint that more links are scrollable to the right */
+    #main-nav .inner { position: relative; }
+    #main-nav .inner::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 32px;
+      background: linear-gradient(90deg, transparent, rgba(6,6,6,0.92));
+      pointer-events: none;
+    }
   }
   .nav-link {
     position: relative;
@@ -456,15 +466,6 @@
 
   /* ── FORM ── */
   .form-input:focus { outline: none; border-color: var(--amber) !important; box-shadow: 0 0 0 2px rgba(245,158,11,0.12); }
-  select.form-input option {
-    background-color: #171717;
-    color: #ffffff;
-  }
-  select.form-input option:checked,
-  select.form-input option:hover {
-    background-color: #262626;
-    color: #ffffff;
-  }
 
   /* ── BACK TO TOP ── */
   #back-to-top {
@@ -502,9 +503,33 @@
   /* ── MOBILE TOGGLE LABELS ── */
   .mobile-toggle-label { font-size: 8px; margin-top: 2px; display: block; }
   @media (min-width: 481px) { .mobile-toggle-label { display: none; } }
- </style>
+ 
+  /* ── SKIP LINK & FOCUS VISIBILITY (a11y) ── */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    background: var(--amber);
+    color: #000;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 0 0 10px 0;
+  }
+  .skip-link:focus {
+    left: 0;
+    position: fixed;
+  }
+  [role="button"]:focus-visible,
+  .nav-link:focus-visible,
+  .skip-link:focus {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+</style>
 </head>
 <body class="antialiased" data-arch="edge">
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
  <!-- SCROLL PROGRESS -->
  <div id="scroll-progress" aria-hidden="true"></div>
@@ -514,19 +539,19 @@
    style="position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:50;">
    <button data-arch="edge" aria-pressed="true" aria-controls="panel-edge"
      class="arch-toggle group flex flex-col items-center gap-1 px-4 py-3 rounded-xl border border-transparent hover:border-amber-500/40 hover:bg-amber-500/5">
-     <i class="fas fa-microchip text-amber-400 text-xl"></i>
+     <i aria-hidden="true" class="fas fa-microchip text-amber-400 text-xl"></i>
      <span class="text-xs font-semibold font-mono tracking-tight">Local Edge</span>
      <span class="text-[10px] text-neutral-400">Data Sovereignty</span>
    </button>
    <button data-arch="cloud" aria-pressed="false" aria-controls="panel-cloud"
      class="arch-toggle group flex flex-col items-center gap-1 px-4 py-3 rounded-xl border border-transparent hover:border-blue-500/40 hover:bg-blue-500/5">
-     <i class="fas fa-cloud-upload-alt text-blue-400 text-xl"></i>
+     <i aria-hidden="true" class="fas fa-cloud-upload-alt text-blue-400 text-xl"></i>
      <span class="text-xs font-semibold font-mono tracking-tight">Cloud Native</span>
      <span class="text-[10px] text-neutral-400">Speed &amp; Scale</span>
    </button>
    <button data-arch="saas" aria-pressed="false" aria-controls="panel-saas"
      class="arch-toggle group flex flex-col items-center gap-1 px-4 py-3 rounded-xl border border-transparent hover:border-teal-500/40 hover:bg-teal-500/5">
-     <i class="fas fa-globe text-teal-400 text-xl"></i>
+     <i aria-hidden="true" class="fas fa-globe text-teal-400 text-xl"></i>
      <span class="text-xs font-semibold font-mono tracking-tight">SaaS / Web</span>
      <span class="text-[10px] text-neutral-400">Commercialization</span>
    </button>
@@ -536,20 +561,20 @@
  <div id="mobile-toggle-bar" class="flex gap-2 rounded-full p-2 border border-white/15 shadow-xl"
    style="position:fixed;bottom:24px;right:24px;z-index:50;">
    <button data-arch="edge" aria-pressed="true" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-amber-400 bg-neutral-800/70">
-     <i class="fas fa-microchip text-sm"></i><span class="mobile-toggle-label">Edge</span>
+     <i aria-hidden="true" class="fas fa-microchip text-sm"></i><span class="mobile-toggle-label">Edge</span>
    </button>
    <button data-arch="cloud" aria-pressed="false" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-blue-400 bg-neutral-800/70">
-     <i class="fas fa-cloud-upload-alt text-sm"></i><span class="mobile-toggle-label">Cloud</span>
+     <i aria-hidden="true" class="fas fa-cloud-upload-alt text-sm"></i><span class="mobile-toggle-label">Cloud</span>
    </button>
    <button data-arch="saas" aria-pressed="false" class="arch-toggle-mobile w-12 h-12 rounded-full flex flex-col items-center justify-center text-teal-400 bg-neutral-800/70">
-     <i class="fas fa-globe text-sm"></i><span class="mobile-toggle-label">SaaS</span>
+     <i aria-hidden="true" class="fas fa-globe text-sm"></i><span class="mobile-toggle-label">SaaS</span>
    </button>
  </div>
 
  <!-- Back to top -->
  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"
    style="display:none;position:fixed;bottom:100px;right:24px;z-index:49;width:44px;height:44px;border-radius:50%;background:rgba(245,158,11,0.14);border:1px solid rgba(245,158,11,0.35);color:#F59E0B;font-size:18px;cursor:pointer;align-items:center;justify-content:center;">
-   <i class="fas fa-arrow-up"></i>
+   <i aria-hidden="true" class="fas fa-arrow-up"></i>
  </button>
 
  <!-- NAV -->
@@ -594,13 +619,13 @@
          </div>
          <div class="flex flex-wrap gap-4 mt-8">
            <a href="#contact" class="px-8 py-3 rounded-full bg-amber-400 text-black font-bold shadow-lg hover:bg-amber-300 transition flex items-center gap-2">
-             Work With Me <i class="fas fa-arrow-right text-sm"></i>
+             Work With Me <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
            <a href="#case-study" class="px-7 py-3 rounded-full border border-white/20 bg-transparent text-white font-medium hover:bg-white/5 transition flex items-center gap-2">
-             See the Work <i class="fas fa-arrow-right text-sm"></i>
+             See the Work <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
            <a href="https://briefing.reginalcampbell.com" class="px-7 py-3 rounded-full border border-amber-400/40 bg-amber-400/10 text-amber-300 font-medium hover:bg-amber-400/20 transition flex items-center gap-2">
-             Ask the AI <i class="fas fa-arrow-right text-sm"></i>
+             Ask the AI <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
          </div>
        </div>
@@ -641,15 +666,15 @@
          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;width:min(272px,88vw);">
            <div style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0.6rem 0.25rem;text-align:center;">
              <span style="font-family:'JetBrains Mono',monospace;font-size:clamp(1rem,3.5vw,1.5rem);font-weight:700;color:#fff;display:block;">2B+</span>
-             <span style="color:#737373;font-size:10px;margin-top:3px;display:block;line-height:1.3;">Txns/mo</span>
+             <span style="color:#A3A3A3;font-size:11px;margin-top:3px;display:block;line-height:1.3;">Txns/mo</span>
            </div>
            <div style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0.6rem 0.25rem;text-align:center;">
              <span style="font-family:'JetBrains Mono',monospace;font-size:clamp(1rem,3.5vw,1.5rem);font-weight:700;color:#fff;display:block;">15+</span>
-             <span style="color:#737373;font-size:10px;margin-top:3px;display:block;line-height:1.3;">Yrs delivered</span>
+             <span style="color:#A3A3A3;font-size:11px;margin-top:3px;display:block;line-height:1.3;">Yrs delivered</span>
            </div>
            <div style="background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:0.6rem 0.25rem;text-align:center;">
              <span style="font-family:'JetBrains Mono',monospace;font-size:clamp(1rem,3.5vw,1.5rem);font-weight:700;color:#fff;display:block;">$40M</span>
-             <span style="color:#737373;font-size:10px;margin-top:3px;display:block;line-height:1.3;">Portfolio led</span>
+             <span style="color:#A3A3A3;font-size:11px;margin-top:3px;display:block;line-height:1.3;">Portfolio led</span>
            </div>
          </div>
 
@@ -668,21 +693,21 @@
      <div class="grid md:grid-cols-3 gap-6">
        <div class="flex flex-col gap-2">
          <div class="flex items-center gap-3">
-           <i class="fas fa-shield-halved text-amber-400 text-lg flex-shrink-0"></i>
+           <i aria-hidden="true" class="fas fa-shield-halved text-amber-400 text-lg flex-shrink-0"></i>
            <p class="text-white text-sm font-semibold">I make AI systems governable.</p>
          </div>
          <p class="text-neutral-400 text-sm leading-relaxed pl-7">Not compliant on paper. Actually auditable, traceable, and trusted in environments where the alternative is a federal finding.</p>
        </div>
        <div class="flex flex-col gap-2">
          <div class="flex items-center gap-3">
-           <i class="fas fa-terminal text-amber-400 text-lg flex-shrink-0"></i>
+           <i aria-hidden="true" class="fas fa-terminal text-amber-400 text-lg flex-shrink-0"></i>
            <p class="text-white text-sm font-semibold">I build systems that survive production.</p>
          </div>
          <p class="text-neutral-400 text-sm leading-relaxed pl-7">Not demos. Not notebooks. AI platforms that handle real volume, real failures, and real handoffs to teams who weren't in the room.</p>
        </div>
        <div class="flex flex-col gap-2">
          <div class="flex items-center gap-3">
-           <i class="fas fa-bullseye text-amber-400 text-lg flex-shrink-0"></i>
+           <i aria-hidden="true" class="fas fa-bullseye text-amber-400 text-lg flex-shrink-0"></i>
            <p class="text-white text-sm font-semibold">I own the outcome.</p>
          </div>
          <p class="text-neutral-400 text-sm leading-relaxed pl-7">PMP-certified, Army-trained. In the room when plans broke. Accountable for fixing them. I don't produce slide decks when decisions are what's needed.</p>
@@ -726,7 +751,7 @@
  <div>
  <div class="flex items-center gap-2 mb-4">
  <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-mono text-xs flex items-center justify-center font-bold">1</span>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest">What We Were Walking Into</h4>
+ <h3 class="text-xs font-mono text-amber-400 uppercase tracking-widest">What We Were Walking Into</h3>
  </div>
  <p class="text-neutral-300 text-sm leading-relaxed">A federal healthcare agency was processing billions of monthly transactions across claims adjudication, eligibility verification, and patient data exchange through a patchwork of manual processes and disconnected legacy systems. An audit finding exposed what had been building for years: the environment lacked the governance controls, data lineage, and interoperability required for a platform operating at this scale under federal compliance obligations.</p>
  <p class="text-neutral-300 text-sm leading-relaxed mt-3">The pressure wasn't just operational. It was regulatory. The organization needed to demonstrate remediation on a defined timeline with evidence of progress at every stage not eventually.</p>
@@ -736,7 +761,7 @@
  <div>
  <div class="flex items-center gap-2 mb-4">
  <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-mono text-xs flex items-center justify-center font-bold">2</span>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest">Why We Didn't Take the Quick Fix</h4>
+ <h3 class="text-xs font-mono text-amber-400 uppercase tracking-widest">Why We Didn't Take the Quick Fix</h3>
  </div>
  <p class="text-neutral-300 text-sm leading-relaxed">I led the program across a multi-disciplinary architecture team, owning delivery accountability, stakeholder alignment, and scope management across a $40M+ portfolio. Leadership initially pushed for a targeted patch. Understandable given the timeline pressure. But the audit findings were a symptom. I've seen what happens when you patch the symptom: you pass the next review and fail the one after that.</p>
  <p class="text-neutral-300 text-sm leading-relaxed mt-3">The work centered on two core technical challenges: resolving interoperability across disparate legacy systems that had never been designed to communicate, and making deliberate real-time versus batch processing decisions at a transaction volume where the wrong call had direct cost and compliance consequences. Every architectural decision was documented against the constraint that drove it.</p>
@@ -746,7 +771,7 @@
  <div>
  <div class="flex items-center gap-2 mb-4">
  <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-mono text-xs flex items-center justify-center font-bold">3</span>
- <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest">What Actually Shipped</h4>
+ <h3 class="text-xs font-mono text-amber-400 uppercase tracking-widest">What Actually Shipped</h3>
  </div>
  <p class="text-neutral-300 text-sm leading-relaxed">The program delivered across all three dimensions the audit demanded: improved compliance posture with audit-ready data lineage and governance controls, measurable processing speed gains through strategic automation of high-volume batch workflows, and cost reduction by eliminating redundant manual processes that had accumulated across disconnected systems.</p>
  <p class="text-neutral-300 text-sm leading-relaxed mt-3">More importantly, the platform was built to outlast the engagement. Documentation, role boundaries, and governance layers were designed for the teams that would inherit and extend it, not optimized for a clean handoff slide deck.</p>
@@ -757,7 +782,7 @@
  <!-- Callout -->
  <div class="mt-10 bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
  <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <i aria-hidden="true" class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
  <div>
  <p class="text-base italic font-light text-neutral-100 leading-relaxed">"The audit finding wasn't the problem. It was the evidence of a problem that had been building for years. You can patch the finding and fail the next audit, or you can fix the architecture and close the exposure for good. We chose the architecture. That added timeline pressure in the short term. It eliminated a category of risk permanently."</p>
  <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why it matters at this scale:</strong> At 2B+ monthly transactions, a governance gap isn't a documentation issue; it's a liability. The standard for federal healthcare data isn't best effort. It's auditability, traceability, and demonstrated control at every layer of the stack.</p>
@@ -791,7 +816,7 @@
        <p class="text-neutral-300 text-sm leading-relaxed flex-grow">A nine-stage, on-premises AI content pipeline I designed, built, and operated. Local-first inference, vector-based deduplication, a seven-axis quality critic, and a human-feedback learning loop. Real integration points, real failure modes, real governance decisions.</p>
        <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Full lifecycle delivery, integration management, risk and issue control, quality governance.</p>
        <a href="case-studies/Leadership_Agent_Case_Study.pdf" target="_blank" rel="noopener" data-case-study-download="Leadership Agent" data-asset-type="case_study_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-amber-500 text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg shadow-amber-500/10" aria-label="Download the Leadership Agent case study PDF">
-         <span>Download Case Study</span><i class="fas fa-file-pdf"></i>
+         <span>Download Case Study</span><i aria-hidden="true" class="fas fa-file-pdf"></i>
        </a>
      </div>
 
@@ -802,7 +827,7 @@
        <p class="text-neutral-300 text-sm leading-relaxed flex-grow">A reference scenario demonstrating program framing for a regulated financial-services platform migration. Phased cutover with parallel run, reconciliation gates, and rollback.</p>
        <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Full lifecycle program delivery, vendor and integration management, cutover strategy.</p>
        <a href="case-studies/Project_Helios_Case_Study.pdf" target="_blank" rel="noopener" data-case-study-download="Project Helios" data-asset-type="case_study_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios case study PDF">
-         <span>Download Case Study</span><i class="fas fa-file-pdf text-neutral-400"></i>
+         <span>Download Case Study</span><i aria-hidden="true" class="fas fa-file-pdf text-neutral-400"></i>
        </a>
      </div>
 
@@ -813,7 +838,7 @@
        <p class="text-neutral-300 text-sm leading-relaxed flex-grow">The delivery governance artifact for the Helios scenario. Steering and PMO structure, a full RACI, a scored enterprise risk register, and a go/no-go cutover framework.</p>
        <p class="text-neutral-500 text-[11px] font-mono leading-normal border-t border-white/5 mt-5 pt-4 mb-4">Governance design, risk and issue control, decision and escalation control.</p>
        <a href="case-studies/Project_Helios_Delivery_Governance.pdf" target="_blank" rel="noopener" data-case-study-download="Project Helios" data-asset-type="delivery_governance_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios delivery governance PDF">
-         <span>Download Blueprint</span><i class="fas fa-file-pdf text-neutral-400"></i>
+         <span>Download Blueprint</span><i aria-hidden="true" class="fas fa-file-pdf text-neutral-400"></i>
        </a>
      </div>
 
@@ -841,21 +866,21 @@
    </div>
    <div class="space-y-4 mt-6 md:mt-8">
      <div class="bg-neutral-900/40 p-5 rounded-xl border border-amber-500/20 flex gap-4">
-       <i class="fas fa-shield-alt text-amber-400 text-xl flex-shrink-0 mt-1"></i>
+       <i aria-hidden="true" class="fas fa-shield-alt text-amber-400 text-xl flex-shrink-0 mt-1"></i>
        <div>
          <h3 class="font-bold text-white">Governance before automation.</h3>
          <p class="text-neutral-400 text-sm mt-1 leading-relaxed">Automation on top of broken governance doesn't clean up the mess. It scales it. Every system I build has the validation layer in from the start; never bolted on after the fact.</p>
        </div>
      </div>
      <div class="bg-neutral-900/40 p-5 rounded-xl border border-blue-500/20 flex gap-4">
-       <i class="fas fa-cogs text-blue-400 text-xl flex-shrink-0 mt-1"></i>
+       <i aria-hidden="true" class="fas fa-cogs text-blue-400 text-xl flex-shrink-0 mt-1"></i>
        <div>
          <h3 class="font-bold text-white">Constraints drive architecture.</h3>
          <p class="text-neutral-400 text-sm mt-1 leading-relaxed">Data can't leave the building? Build local. Workload is bursty? Go serverless. Compliance team needs to audit it? Build the governance layer first. I've watched the reverse go wrong enough times that it's a rule, not a preference.</p>
        </div>
      </div>
      <div class="bg-neutral-900/40 p-5 rounded-xl border border-teal-500/20 flex gap-4">
-       <i class="fas fa-clock text-teal-400 text-xl flex-shrink-0 mt-1"></i>
+       <i aria-hidden="true" class="fas fa-clock text-teal-400 text-xl flex-shrink-0 mt-1"></i>
        <div>
          <h3 class="font-bold text-white">Systems must outlast the project.</h3>
          <p class="text-neutral-400 text-sm mt-1 leading-relaxed">Good architecture is maintainable, documentable, and transferable. Built so someone who wasn't in the room can inherit it, audit it, and extend it without calling you at midnight.</p>
@@ -881,14 +906,14 @@
       <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
         <div class="flex items-center gap-3 mb-3">
           <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">1</span>
-          <h4 class="text-white font-semibold">Model validation depends on data you trust</h4>
+          <h3 class="text-white font-semibold">Model validation depends on data you trust</h3>
         </div>
         <p class="text-neutral-400 text-sm leading-relaxed">Every serious AI governance requirement - model validation, attestation, periodic revalidation - rests on one core question: do you trust the data this model was trained on and is currently consuming? If you can't answer that with evidence, everything built on top of it is conditional. This is the bridge between data governance and AI model governance that most frameworks miss.</p>
       </div>
       <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
         <div class="flex items-center gap-3 mb-3">
           <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">2</span>
-          <h4 class="text-white font-semibold">Governance must be engineered, not documented</h4>
+          <h3 class="text-white font-semibold">Governance must be engineered, not documented</h3>
         </div>
         <p class="text-neutral-400 text-sm leading-relaxed">In the SaaS Orchestrator I built, Row Level Security is enforced at the PostgreSQL level - not in application logic. A misconfigured route cannot leak tenant data. Audit logging captures every run, stage, and QC outcome. The governance isn't a policy document; it's an engineering constraint. That distinction is the difference between governance that holds under audit and governance that fails when someone finds the edge case.</p>
       </div>
@@ -897,14 +922,14 @@
       <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
         <div class="flex items-center gap-3 mb-3">
           <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">3</span>
-          <h4 class="text-white font-semibold">High-stakes environments are where governance is learned</h4>
+          <h3 class="text-white font-semibold">High-stakes environments are where governance is learned</h3>
         </div>
         <p class="text-neutral-400 text-sm leading-relaxed">VA systems processing 1M+ veteran records. National healthcare data exchanges handling 2B+ monthly transactions. Federal platforms under compliance review with defined remediation timelines. In these environments, a governance gap isn't a documentation issue - it's a liability. You learn to build governance correctly when the cost of getting it wrong is measured in patient outcomes, not sprint velocity.</p>
       </div>
       <div class="bg-neutral-900/40 rounded-xl p-6 border border-white/5">
         <div class="flex items-center gap-3 mb-3">
           <span class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-mono text-sm flex items-center justify-center font-bold">4</span>
-          <h4 class="text-white font-semibold">The Leadership Agent has a governance layer too</h4>
+          <h3 class="text-white font-semibold">The Leadership Agent has a governance layer too</h3>
         </div>
         <p class="text-neutral-400 text-sm leading-relaxed">Publisher QC is the final gate - every output is checked for word count thresholds, banned phrases, structural compliance, and CTA presence before anything reaches a human. Failures are logged with specific reasons, not silently dropped. The Feedback Ingester closes the loop: patterns promoted automatically into the brand guide after three appearances. Governance as architecture, applied at the 1/1000th the scale of a federal platform - same principle, different stakes.</p>
       </div>
@@ -954,7 +979,7 @@
  </div>
  <div class="mt-3">
  <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/50 px-2 py-0.5 rounded-full">
- <i class="fas fa-drafting-compass mr-1 text-[10px]"></i>Architecture Design · In Development
+ <i aria-hidden="true" class="fas fa-drafting-compass mr-1 text-[10px]"></i>Architecture Design · In Development
  </span>
  </div>
  <h3 class="text-xl font-bold mt-3">Competitive Intelligence Pulse</h3>
@@ -988,11 +1013,11 @@
  <div id="panel-edge" class="arch-panel mt-8 rounded-2xl border border-amber-500/20 bg-black/40 overflow-hidden">
  <div class="border-b border-amber-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
  <div class="flex items-center gap-3 flex-wrap">
- <i class="fas fa-microchip text-amber-400 text-lg"></i>
+ <i aria-hidden="true" class="fas fa-microchip text-amber-400 text-lg"></i>
  <span class="font-mono font-semibold text-amber-400">Local Edge: The Leadership Agent</span>
- <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i class="fas fa-circle text-[8px] mr-1"></i>Production · Active</span>
+ <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i aria-hidden="true" class="fas fa-circle text-[8px] mr-1"></i>Production · Active</span>
  <a href="https://github.com/soupilla21/reginalcampbellportfolio" target="_blank" rel="noopener noreferrer" class="text-xs font-mono text-neutral-400 border border-white/10 px-2 py-0.5 rounded hover:border-amber-500/40 hover:text-amber-400 transition-all flex items-center gap-1.5">
- <i class="fab fa-github text-[11px]"></i> View on GitHub
+ <i aria-hidden="true" class="fab fa-github text-[11px]"></i> View on GitHub
  </a>
  </div>
  <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
@@ -1087,7 +1112,7 @@
 
  <!-- ── NODES ── -->
  <!-- Researcher -->
- <g data-agent="researcher" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Researcher agent">
+ <g data-agent="researcher" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Researcher agent">
  <rect x="20" y="40" width="88" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5" class="pipeline-node-svg"/>
  <text x="64" y="62" text-anchor="middle" fill="#F59E0B" font-size="9.5" font-weight="700" letter-spacing="0.5">RESEARCHER</text>
  <text x="64" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Fetches 25+ RSS</text>
@@ -1098,7 +1123,7 @@
  <line x1="109" y1="70" x2="123" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
 
  <!-- Gatekeeper -->
- <g data-agent="gatekeeper" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Gatekeeper agent">
+ <g data-agent="gatekeeper" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Gatekeeper agent">
  <rect x="126" y="40" width="88" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
  <text x="170" y="62" text-anchor="middle" fill="#F59E0B" font-size="9.5" font-weight="700" letter-spacing="0.5">GATEKEEPER</text>
  <text x="170" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Brand alignment</text>
@@ -1109,7 +1134,7 @@
  <line x1="215" y1="70" x2="229" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
 
  <!-- Scorer/Orchestrator -->
- <g data-agent="orchestrator" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Orchestrator agent">
+ <g data-agent="orchestrator" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Orchestrator agent">
  <rect x="232" y="40" width="58" height="60" rx="8" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
  <text x="261" y="62" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="700" letter-spacing="0.5">SCORER</text>
  <text x="261" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Semantic</text>
@@ -1120,7 +1145,7 @@
  <line x1="291" y1="70" x2="316" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
 
  <!-- Strategist -->
- <g data-agent="strategist" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Strategist agent">
+ <g data-agent="strategist" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Strategist agent">
  <rect x="318" y="40" width="120" height="60" rx="8" fill="rgba(59,130,246,0.08)" stroke="rgba(59,130,246,0.4)" stroke-width="1.5"/>
  <text x="378" y="62" text-anchor="middle" fill="#60A5FA" font-size="9.5" font-weight="700" letter-spacing="0.5">STRATEGIST</text>
  <text x="378" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Narrative angle</text>
@@ -1131,7 +1156,7 @@
  <line x1="439" y1="70" x2="474" y2="70" stroke="rgba(245,158,11,0.5)" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
 
  <!-- Writer -->
- <g data-agent="writer" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Writer agent">
+ <g data-agent="writer" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Writer agent">
  <rect x="476" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
  <text x="516" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">WRITER</text>
  <text x="516" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">First draft in</text>
@@ -1142,7 +1167,7 @@
  <line x1="557" y1="70" x2="571" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
 
  <!-- Critic -->
- <g data-agent="critic" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Critic agent">
+ <g data-agent="critic" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Critic agent">
  <rect x="573" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
  <text x="613" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">CRITIC</text>
  <text x="613" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">7-axis quality</text>
@@ -1157,7 +1182,7 @@
  <line x1="654" y1="70" x2="668" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
 
  <!-- Editor -->
- <g data-agent="editor" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Editor agent">
+ <g data-agent="editor" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Editor agent">
  <rect x="670" y="40" width="76" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
  <text x="708" y="62" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">EDITOR</text>
  <text x="708" y="76" text-anchor="middle" fill="rgba(212,212,212,0.7)" font-size="7.5">Clarity, hook</text>
@@ -1168,7 +1193,7 @@
  <line x1="747" y1="70" x2="761" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
 
  <!-- Publisher QC -->
- <g data-agent="publisherqc" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Publisher QC agent">
+ <g data-agent="publisherqc" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Publisher QC agent">
  <rect x="763" y="40" width="80" height="60" rx="8" fill="rgba(20,184,166,0.08)" stroke="rgba(20,184,166,0.4)" stroke-width="1.5"/>
  <text x="803" y="58" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">PUBLISHER</text>
  <text x="803" y="70" text-anchor="middle" fill="#2DD4BF" font-size="9.5" font-weight="700" letter-spacing="0.5">QC</text>
@@ -1180,7 +1205,7 @@
  <line x1="844" y1="70" x2="858" y2="70" stroke="rgba(20,184,166,0.5)" stroke-width="1.5" marker-end="url(#arrow-teal)"/>
 
  <!-- Feedback Ingester -->
- <g data-agent="feedback" onclick="showAgent(this)" style="cursor:pointer" role="button" aria-label="Feedback Ingester agent">
+ <g data-agent="feedback" onclick="showAgent(this)" style="cursor:pointer" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAgent(this)}" aria-label="Feedback Ingester agent">
  <rect x="860" y="40" width="88" height="60" rx="8" fill="rgba(20,184,166,0.12)" stroke="rgba(20,184,166,0.6)" stroke-width="1.5"/>
  <text x="904" y="58" text-anchor="middle" fill="#2DD4BF" font-size="9" font-weight="700" letter-spacing="0.5">FEEDBACK</text>
  <text x="904" y="70" text-anchor="middle" fill="#2DD4BF" font-size="9" font-weight="700" letter-spacing="0.5">INGESTER</text>
@@ -1255,7 +1280,7 @@
  <!-- Trade-off quote -->
  <div class="bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
  <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <i aria-hidden="true" class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
  <div>
  <p class="text-base italic font-light text-neutral-100 leading-relaxed">"I chose local LLMs over third-party APIs because in a federal or healthcare context, sending content derived from sensitive operational data to an external API isn't a preference; it's a compliance question. The answer is no. Local-first architecture solves both the privacy constraint and the cost model at the same time."</p>
  <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why this matters at volume:</strong> High-frequency pipelines compound per-token API costs fast. Running locally on commodity hardware means near-zero marginal cost per run, with every byte staying inside the organization's control boundary. That's not a workaround; that's the right architecture for this problem.</p>
@@ -1305,9 +1330,9 @@
  <div id="panel-cloud" class="arch-panel mt-8 rounded-2xl border border-blue-500/20 bg-black/40 overflow-hidden">
  <div class="border-b border-blue-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
  <div class="flex items-center gap-3">
- <i class="fas fa-cloud-upload-alt text-blue-400 text-lg"></i>
+ <i aria-hidden="true" class="fas fa-cloud-upload-alt text-blue-400 text-lg"></i>
  <span class="font-mono font-semibold text-blue-400">Cloud Native: Competitive Intelligence Pulse</span>
- <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/40 px-2 py-0.5 rounded-full"><i class="fas fa-drafting-compass mr-1 text-[9px]"></i>Architecture Design · In Development</span>
+ <span class="text-xs font-mono bg-neutral-800 text-neutral-400 border border-neutral-600/40 px-2 py-0.5 rounded-full"><i aria-hidden="true" class="fas fa-drafting-compass mr-1 text-[9px]"></i>Architecture Design · In Development</span>
  </div>
  <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
  <span>AWS Lambda</span><span>·</span><span>Pinecone / pgvector</span><span>·</span><span>Python</span><span>·</span><span>Frontier LLM APIs</span>
@@ -1409,7 +1434,7 @@
  <!-- Trade-off callout -->
  <div class="bg-black/50 border border-blue-500/25 border-l-4 border-l-blue-500 rounded-2xl p-6">
  <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-blue-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <i aria-hidden="true" class="fas fa-quote-left text-blue-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
  <div>
  <p class="text-base italic font-light text-neutral-100 leading-relaxed">"For competitive intelligence, the data is public and the constraint is speed. That's the opposite of the Leadership Agent's context. So the architecture flips: serverless for elasticity, frontier APIs for reasoning quality, vector DB for semantic breadth. Same mindset, completely different stack because the business problem is different."</p>
  <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">The actual tradeoff:</strong> Lambda scales to zero overnight when markets are quiet, and spins back up fast when they're not. A persistent local process would be the wrong call here: the cost model doesn't work, and the privacy constraint that justified local-first in the Leadership Agent doesn't exist for public competitive data.</p>
@@ -1463,9 +1488,9 @@
  <div id="panel-saas" class="arch-panel mt-8 rounded-2xl border border-teal-500/20 bg-black/40 overflow-hidden">
  <div class="border-b border-teal-500/20 px-6 py-4 flex items-center justify-between flex-wrap gap-3">
  <div class="flex items-center gap-3">
- <i class="fas fa-globe text-teal-400 text-lg"></i>
+ <i aria-hidden="true" class="fas fa-globe text-teal-400 text-lg"></i>
  <span class="font-mono font-semibold text-teal-400">SaaS / Web: The SaaS Orchestrator</span>
- <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i class="fas fa-circle text-[8px] mr-1"></i>Backend Production · Active</span>
+ <span class="text-xs font-mono bg-green-500/15 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full"><i aria-hidden="true" class="fas fa-circle text-[8px] mr-1"></i>Backend Production · Active</span>
  </div>
  <div class="flex flex-wrap gap-2 text-xs font-mono text-neutral-400">
  <span>FastAPI</span><span>·</span><span>Supabase</span><span>·</span><span>PostgreSQL + RLS</span><span>·</span><span>ES256 / JWKS</span>
@@ -1550,7 +1575,7 @@
 
  <div class="bg-black/50 border border-teal-500/25 border-l-4 border-l-teal-500 rounded-2xl p-6">
  <div class="flex items-start gap-3">
- <i class="fas fa-quote-left text-teal-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+ <i aria-hidden="true" class="fas fa-quote-left text-teal-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
  <div>
  <p class="text-base italic font-light text-neutral-100 leading-relaxed">"The difference between a script and a product is governance. Anyone can wrap a for-loop around an LLM call. What enterprises actually need is data isolation they can audit, authentication they can revoke, and role boundaries a compliance team can map. I built the SaaS layer to prove I understand how AI gets deployed in production, not just how it gets built in a notebook."</p>
  <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why Supabase + FastAPI over a managed platform:</strong> Full control over the RLS schema means the compliance posture is explicit and readable. Managed AI platforms hide this, which is fine for prototypes. Not for regulated deployments where the security team needs to see the actual policy.</p>
@@ -1636,7 +1661,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
   </div>
 
   <div class="mt-10 bg-black/40 border border-amber-500/15 rounded-2xl p-6 md:p-8">
-    <h4 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">What I Learned the Hard Way</h4>
+    <h3 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-4">What I Learned the Hard Way</h3>
     <div class="grid md:grid-cols-3 gap-6">
       <div class="border-l-2 border-amber-500/40 pl-4">
         <p class="text-white text-sm font-semibold mb-2">Timeout failures are silent failures</p>
@@ -1655,7 +1680,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
   <div class="mt-8 bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6">
     <div class="flex items-start gap-3">
-      <i class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+      <i aria-hidden="true" class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
       <div>
         <p class="text-base italic font-light text-neutral-100 leading-relaxed">"This is what AI Factory thinking looks like in practice: a system of coordinated agents with explicit data contracts, governance gates, and feedback loops - not a model wrapped in a for-loop. The gap between a working AI pipeline and a production AI system is the same gap between a proof-of-concept and something a compliance team can approve."</p>
         <p class="text-neutral-400 text-sm mt-3">- <a href="#point-of-view" class="text-amber-400 hover:underline">Read the full argument in the POV articles</a></p>
@@ -1665,10 +1690,10 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
   <div class="mt-8 flex flex-wrap gap-4">
     <a href="#innovation-lab" class="px-6 py-2.5 rounded-full border border-amber-500/30 text-amber-400 text-sm font-mono hover:bg-amber-500/10 transition flex items-center gap-2">
-      Explore the Full Architecture <i class="fas fa-arrow-right text-xs"></i>
+      Explore the Full Architecture <i aria-hidden="true" class="fas fa-arrow-right text-xs"></i>
     </a>
     <a href="https://github.com/soupilla21/reginalcampbellportfolio" target="_blank" rel="noopener noreferrer" class="px-6 py-2.5 rounded-full border border-white/10 text-neutral-400 text-sm font-mono hover:border-white/30 transition flex items-center gap-2">
-      <i class="fab fa-github text-xs"></i> View on GitHub
+      <i aria-hidden="true" class="fab fa-github text-xs"></i> View on GitHub
     </a>
   </div>
 </section>
@@ -1796,25 +1821,25 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </div>
  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-amber-500/60">
- <i class="fas fa-database text-amber-400 text-xl mb-3"></i>
+ <i aria-hidden="true" class="fas fa-database text-amber-400 text-xl mb-3"></i>
  <h3 class="font-bold text-xl">National Healthcare Data Fabric</h3>
  <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Ungoverned Federated Data</p>
  <p class="text-neutral-300 text-sm mt-2">Led data fabric implementation for national healthcare exchanges. The failure mode I learned here: when organizations share data through ungoverned integration layers, every downstream AI system consuming that data inherits the inconsistency. Federated access without federated governance produces AI that can't be trusted across organizational boundaries - which is most of enterprise AI.</p>
  </div>
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-blue-500/60">
- <i class="fas fa-chart-line text-blue-400 text-xl mb-3"></i>
+ <i aria-hidden="true" class="fas fa-chart-line text-blue-400 text-xl mb-3"></i>
  <h3 class="font-bold text-xl">2B+ Monthly Transaction Platform</h3>
  <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Scale Breaks What POC Hid</p>
  <p class="text-neutral-300 text-sm mt-2">Managed data strategy for platforms processing 2B+ monthly transactions. What I learned: data quality problems that are invisible at proof-of-concept scale become load-bearing failures at production volume. Latency spikes, silent drops, and trace gaps don't show up in demos. They show up when the system is running at speed and nobody is watching the right metric.</p>
  </div>
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-teal-500/60">
- <i class="fas fa-notes-medical text-teal-400 text-xl mb-3"></i>
+ <i aria-hidden="true" class="fas fa-notes-medical text-teal-400 text-xl mb-3"></i>
  <h3 class="font-bold text-xl">VA Veteran Records Modernization</h3>
  <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Legacy Data as AI Training Input</p>
  <p class="text-neutral-300 text-sm mt-2">Directed modernization of legacy systems handling 1M+ veteran records. The lesson here is one that applies directly to AI model governance: legacy data is not clean data. When AI systems are trained on or consume records from legacy environments, they inherit decades of inconsistency, duplicate identities, and missing fields. Cleaning the model doesn't fix this. Cleaning the source does.</p>
  </div>
  <div class="bg-neutral-900/40 rounded-xl p-6 border-l-4 border-white/30">
- <i class="fas fa-shield-alt text-white/70 text-xl mb-3"></i>
+ <i aria-hidden="true" class="fas fa-shield-alt text-white/70 text-xl mb-3"></i>
  <h3 class="font-bold text-xl">Federal Compliance-Driven Delivery</h3>
  <p class="text-neutral-400 text-xs font-mono uppercase tracking-widest mt-1 mb-3">AI Failure Mode: Governance Bolted On Too Late</p>
  <p class="text-neutral-300 text-sm mt-2">PMP-certified program director across $40M+ technology portfolios under federal compliance obligation. What you learn delivering under audit is that governance bolted on after the architecture is set costs ten times more than governance built in from the start - and it still doesn't hold under real scrutiny. That applies to AI platforms as much as any federal system.</p>
@@ -1850,9 +1875,9 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  </table>
  </div>
  <div class="matrix-mobile grid grid-cols-1 gap-5 mt-8" style="display:none">
- <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-amber-400 mb-3"><i class="fas fa-microchip mr-2"></i>Leadership Agent</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Local / On-Prem</span><span class="text-neutral-400">Value</span><span>Data Sovereignty</span><span class="text-neutral-400">Cost</span><span>Near-Zero</span><span class="text-neutral-400">Security</span><span>Zero-Trust</span><span class="text-neutral-400">Compliance</span><span>HIPAA / Federal</span></div></div>
- <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-blue-400 mb-3"><i class="fas fa-cloud mr-2"></i>Intelligence Pulse</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Cloud / Serverless</span><span class="text-neutral-400">Value</span><span>Speed & Insight</span><span class="text-neutral-400">Cost</span><span>Per-Token</span><span class="text-neutral-400">Security</span><span>API-Native</span><span class="text-neutral-400">Compliance</span><span>Enterprise</span></div></div>
- <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-teal-400 mb-3"><i class="fas fa-globe mr-2"></i>SaaS Orchestrator</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Full-Stack SaaS</span><span class="text-neutral-400">Value</span><span>Commercialization</span><span class="text-neutral-400">Cost</span><span>Per-Tenant</span><span class="text-neutral-400">Security</span><span>RLS + Audit</span><span class="text-neutral-400">Compliance</span><span>Multi-Tenant</span></div></div>
+ <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-amber-400 mb-3"><i aria-hidden="true" class="fas fa-microchip mr-2"></i>Leadership Agent</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Local / On-Prem</span><span class="text-neutral-400">Value</span><span>Data Sovereignty</span><span class="text-neutral-400">Cost</span><span>Near-Zero</span><span class="text-neutral-400">Security</span><span>Zero-Trust</span><span class="text-neutral-400">Compliance</span><span>HIPAA / Federal</span></div></div>
+ <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-blue-400 mb-3"><i aria-hidden="true" class="fas fa-cloud mr-2"></i>Intelligence Pulse</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Cloud / Serverless</span><span class="text-neutral-400">Value</span><span>Speed & Insight</span><span class="text-neutral-400">Cost</span><span>Per-Token</span><span class="text-neutral-400">Security</span><span>API-Native</span><span class="text-neutral-400">Compliance</span><span>Enterprise</span></div></div>
+ <div class="bg-neutral-900/50 p-4 rounded-xl border border-white/10"><div class="font-bold text-teal-400 mb-3"><i aria-hidden="true" class="fas fa-globe mr-2"></i>SaaS Orchestrator</div><div class="grid grid-cols-2 gap-y-2 gap-x-4 text-sm"><span class="text-neutral-400">Deployment</span><span>Full-Stack SaaS</span><span class="text-neutral-400">Value</span><span>Commercialization</span><span class="text-neutral-400">Cost</span><span>Per-Tenant</span><span class="text-neutral-400">Security</span><span>RLS + Audit</span><span class="text-neutral-400">Compliance</span><span>Multi-Tenant</span></div></div>
  </div>
  </section>
 
@@ -1866,7 +1891,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <div class="mt-8 grid md:grid-cols-3 gap-6">
    <div class="bg-neutral-900/40 rounded-xl p-5 border border-amber-500/20">
      <div class="flex items-center gap-3 mb-4">
-       <i class="fas fa-brain text-amber-400 text-lg"></i>
+       <i aria-hidden="true" class="fas fa-brain text-amber-400 text-lg"></i>
        <p class="text-amber-400 font-mono text-xs uppercase tracking-widest">AI & Data Engineering</p>
      </div>
      <div class="space-y-2">
@@ -1879,7 +1904,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
    </div>
    <div class="bg-neutral-900/40 rounded-xl p-5 border border-blue-500/20">
      <div class="flex items-center gap-3 mb-4">
-       <i class="fas fa-diagram-project text-blue-400 text-lg"></i>
+       <i aria-hidden="true" class="fas fa-diagram-project text-blue-400 text-lg"></i>
        <p class="text-blue-400 font-mono text-xs uppercase tracking-widest">Delivery & Product</p>
      </div>
      <div class="space-y-2">
@@ -1892,7 +1917,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
    </div>
    <div class="bg-neutral-900/40 rounded-xl p-5 border border-teal-500/20">
      <div class="flex items-center gap-3 mb-4">
-       <i class="fas fa-server text-teal-400 text-lg"></i>
+       <i aria-hidden="true" class="fas fa-server text-teal-400 text-lg"></i>
        <p class="text-teal-400 font-mono text-xs uppercase tracking-widest">Infrastructure & Backend</p>
      </div>
      <div class="space-y-2">
@@ -1924,11 +1949,11 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <form action="https://formspree.io/f/xvzdzlpb" method="POST" class="space-y-5" id="contact-form" novalidate>
  <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
  <label for="contact-name" class="sr-only">Name</label>
- <input id="contact-name" type="text" name="name" autocomplete="name" placeholder="Name *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <input id="contact-name" type="text" name="name" autocomplete="name" placeholder="Name *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
  <label for="contact-email" class="sr-only">Email</label>
- <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
  <label for="contact-company" class="sr-only">Company</label>
- <input id="contact-company" type="text" name="company" autocomplete="organization" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all">
+ <input id="contact-company" type="text" name="company" autocomplete="organization" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
  <label for="contact-inquiry-type" class="sr-only">Role / How can I help?</label>
  <select id="contact-inquiry-type" name="inquiry_type" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
  <option value="" disabled selected>Role / How can I help?</option>
@@ -1939,9 +1964,9 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <option>Other</option>
  </select>
  <label for="contact-message" class="sr-only">Message</label>
- <textarea id="contact-message" name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-500 transition-all"></textarea>
+ <textarea id="contact-message" name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all"></textarea>
  <button type="submit" id="form-submit-btn" class="bg-amber-400 text-black font-bold px-8 py-3 rounded-full hover:bg-amber-300 transition flex items-center gap-2" aria-live="polite">
- Send Message <i class="fas fa-paper-plane text-sm"></i>
+ Send Message <i aria-hidden="true" class="fas fa-paper-plane text-sm"></i>
  </button>
  <div id="form-success" class="hidden" role="alert" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-left:3px solid #22c55e;border-radius:8px;padding:12px 16px;">
  <p class="text-green-400 text-sm font-mono">✓ Message sent successfully.</p>
@@ -1957,25 +1982,25 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  <div>
  <p class="text-neutral-300 text-sm">Prefer LinkedIn?</p>
  <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" rel="noopener noreferrer" class="text-amber-400 inline-flex items-center gap-2 mt-1 hover:underline font-medium">
- Connect with me directly <i class="fas fa-arrow-right text-xs"></i>
+ Connect with me directly <i aria-hidden="true" class="fas fa-arrow-right text-xs"></i>
  </a>
  </div>
  <div>
  <p class="text-neutral-300 text-sm">Direct email?</p>
  <!-- EMAIL: Replace with your email address -->
  <a href="mailto:reginal.campbell@gmail.com" class="text-amber-400 inline-flex items-center gap-2 mt-1 hover:underline font-medium">
- Send me a message <i class="fas fa-envelope text-xs"></i>
+ Send me a message <i aria-hidden="true" class="fas fa-envelope text-xs"></i>
  </a>
  </div>
  </div>
  <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
- <i class="fas fa-chalkboard-user text-amber-400 text-2xl mb-3"></i>
+ <i aria-hidden="true" class="fas fa-chalkboard-user text-amber-400 text-2xl mb-3"></i>
  <h3 class="font-semibold text-white">Open to AI & Data Leadership Roles</h3>
  <p class="text-neutral-400 text-sm mt-2">AI Strategy · Data Platforms · Enterprise Product Development</p>
  <p class="text-neutral-400 text-sm mt-2">I operate best where complexity is real and failure has consequences. Systems that have to stand up to audit, scale under pressure, and support decisions that matter. That’s common in healthcare, federal, and financial services, but it’s not limited to them.</p>
  </div>
  <div class="p-5 bg-neutral-900/30 rounded-xl border border-white/5">
- <i class="fas fa-map-marker-alt text-amber-400 text-xl mb-3"></i>
+ <i aria-hidden="true" class="fas fa-map-marker-alt text-amber-400 text-xl mb-3"></i>
  <h3 class="font-semibold text-white">Response Time</h3>
  <p class="text-neutral-400 text-sm mt-2">Inquiries: within 24 hours.</p>
  </div>
@@ -2350,7 +2375,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
  successEl.classList.add("hidden");
  errorEl.classList.add("hidden");
- btn.innerHTML = 'Sending… <i class="fas fa-spinner fa-spin text-sm"></i>';
+ btn.innerHTML = 'Sending… <i aria-hidden="true" class="fas fa-spinner fa-spin text-sm"></i>';
  btn.disabled = true;
  btn.style.opacity = "0.7";
 
@@ -2366,7 +2391,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  btn.innerHTML = "Sent ✓";
  if (resetButtonTimer) clearTimeout(resetButtonTimer);
  resetButtonTimer = setTimeout(() => {
- btn.innerHTML = 'Send Message <i class="fas fa-paper-plane text-sm"></i>';
+ btn.innerHTML = 'Send Message <i aria-hidden="true" class="fas fa-paper-plane text-sm"></i>';
  btn.disabled = false;
  btn.style.opacity = "1";
  resetButtonTimer = null;
@@ -2377,7 +2402,7 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
  } catch (err) {
  errorEl.querySelector("p").textContent = "✗ Submission failed.";
  errorEl.classList.remove("hidden");
- btn.innerHTML = 'Send Message <i class="fas fa-paper-plane text-sm"></i>';
+ btn.innerHTML = 'Send Message <i aria-hidden="true" class="fas fa-paper-plane text-sm"></i>';
  btn.disabled = false;
  btn.style.opacity = "1";
  }
