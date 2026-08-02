@@ -1,5 +1,10 @@
 ---
 import "../styles/global.css";
+import { getCollection } from "astro:content";
+
+const latestArticles = (await getCollection("articles", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +39,7 @@ import "../styles/global.css";
  {
    "@context": "https://schema.org",
    "@type": "Person",
+   "@id": "https://reginalcampbell.com/#person",
    "name": "Reginal Campbell",
    "url": "https://reginalcampbell.com/",
    "jobTitle": "Enterprise Transformation & AI Governance Leader",
@@ -112,6 +118,7 @@ import "../styles/global.css";
        <a href="#governance" class="nav-link" data-section="governance">Governance</a>
        <a href="#innovation-lab" class="nav-link" data-section="innovation-lab">Lab</a>
        <a href="#point-of-view" class="nav-link" data-section="point-of-view">POV</a>
+       <a href="/articles" class="nav-link" data-section="articles">Articles</a>
        <a href="#contact" class="nav-link" data-section="contact">Contact</a>
       <a href="https://briefing.reginalcampbell.com" class="nav-link" data-section="briefing">Ask the AI</a>
      </div>
@@ -1331,6 +1338,28 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
   </div>
 </section>
 
+{latestArticles.length > 0 && (
+  <section id="latest-articles" class="mb-28 reveal">
+    <div class="flex items-end justify-between gap-4 flex-wrap">
+      <div>
+        <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Articles</span>
+        <h2 class="text-3xl md:text-4xl font-bold mt-2">Recent Writing.</h2>
+      </div>
+      <a href="/articles" class="text-sm font-mono text-amber-400 border border-amber-500/30 px-4 py-2 rounded-lg hover:bg-amber-500/10 transition whitespace-nowrap">All Articles →</a>
+    </div>
+    <div class="mt-8 grid md:grid-cols-3 gap-6">
+      {latestArticles.map((article) => (
+        <a href={`/articles/${article.id}`} class="block bg-neutral-900/40 rounded-2xl border border-white/8 p-6 hover:border-amber-500/30 transition">
+          <span class="text-neutral-500 text-xs font-mono uppercase tracking-widest">
+            {article.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </span>
+          <h3 class="text-lg font-bold mt-2 leading-snug">{article.data.title}</h3>
+          <p class="text-neutral-400 text-sm mt-2 leading-relaxed">{article.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+)}
 
    <!-- ══════════════════════════════════════
         EXPERIENCE FOUNDATION + DECISION MATRIX
