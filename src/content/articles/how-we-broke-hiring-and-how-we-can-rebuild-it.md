@@ -62,7 +62,7 @@ That instinct is understandable. A hiring manager who selects a conventional can
 
 As a result, many organizations retain the language of skills-based hiring while continuing to practice credential-based hiring. They then describe the outcome as a talent shortage.
 
-The mythology surrounding applicant tracking systems adds another layer of confusion. Millions of job seekers have been told that these systems automatically reject 75 percent of resumes. That claim has no supporting research and appears to trace back to a 2012 sales pitch from a resume-optimization company that ceased operating the following year.<sup><a href="#source-4" id="ref-4">[4]</a></sup>
+The mythology surrounding applicant tracking systems adds another layer of confusion. Millions of job seekers have been told that these systems automatically reject 75 percent of resumes. I could not locate a published study behind that claim; it appears to trace back to a 2012 sales pitch from a resume-optimization company that ceased operating the following year.<sup><a href="#source-4" id="ref-4">[4]</a></sup>
 
 Applicant tracking systems primarily store, organize, search, filter, and rank applications. In some respects, that reality is more troubling than the myth. A qualified person may not have been formally rejected by a machine. They may simply never have been seen by a decision-maker.
 
@@ -122,7 +122,7 @@ Candidates should know the stages of the process, the expected timeline, and whe
 
 Someone should also be accountable for closing the process. When everyone assumes another person will communicate the decision, silence becomes the default.
 
-That silence may feel operationally efficient, but it carries a reputational cost. Candidates are also customers, professional peers, referral sources, and future applicants. The way an organization rejects people becomes part of its employment brand.
+That silence may feel operationally efficient, but it carries a reputational cost. Candidates may also be customers, professional peers, referral sources, and future applicants. The way an organization rejects people becomes part of its employment brand.
 
 ### Measure hiring quality, not just hiring speed
 
@@ -178,13 +178,11 @@ Leaders decide what gets measured, which systems are purchased, whether an unans
 
 Too many organizations still treat hiring as paperwork, then wonder why execution suffers months or years later. The connection should be obvious. Hiring determines who will exercise judgment, manage risk, build relationships, solve problems, and deliver the work.
 
-The reforms described here are not especially expensive. In many cases, they are cheaper than the process they would replace. What they require is a willingness to change how managers behave, how recruiters are supported, and what leaders choose to measure. That is precisely why so many of them remain unimplemented.
+Most of these reforms do not require a major technology investment. They require clearer accountability, better management discipline, and a willingness to change what the organization measures. That is precisely why so many of them remain unimplemented.
 
 Hiring is not an administrative process sitting outside the work. It is how an organization decides who will carry the work forward.
 
 We built this system. We can rebuild it.
-
----
 
 ---
 
@@ -196,7 +194,7 @@ We built this system. We can rebuild it.
 
 3. <span id="source-3">Harvard Business School Project on Managing the Future of Work and the Burning Glass Institute, [*Skills-Based Hiring: The Long Road from Pronouncements to Practice*](https://www.hbs.edu/managing-the-future-of-work/Documents/research/Skills-Based%20Hiring.pdf), 2024. The study examined 11,300 roles at large U.S. employers.</span> [↑](#ref-3)
 
-4. <span id="source-4">The claim that 75 percent of resumes are automatically rejected by applicant tracking systems has no identified supporting study. It appears to trace to a 2012 sales claim by Preptel, a resume-optimization vendor that ceased operating in 2013.</span> [↑](#ref-4)
+4. <span id="source-4">I could not locate a published study supporting the widely repeated claim that applicant tracking systems automatically reject 75 percent of resumes. Career consultant Christine Assaf traced the figure to a 2012 sales claim from Preptel, a resume-optimization vendor that ceased operating in 2013, in [“Your Job Application Was Rejected by a Human, Not a Computer”](https://hrtact.com/2020/10/05/your-job-application-was-rejected-by-a-human-not-a-computer/), 2020.</span> [↑](#ref-4)
 
 5. <span id="source-5">Robert Half, [survey on AI-generated applications and hiring](https://press.roberthalf.com/2026-03-10-Robert-Half-survey-67-of-HR-leaders-report-AI-generated-applications-are-slowing-hiring), March 2026. The survey included 2,000 hiring managers.</span> [↑](#ref-5)
 
@@ -210,3 +208,10 @@ We built this system. We can rebuild it.
 
 10. <span id="source-10">Arnold, Quach, and Taska, [“The Impact of Pay Transparency in Job Postings on the Labor Market”](https://www.nber.org/papers/w34480), NBER Working Paper 34480, November 2025. The study reported wage gains of 1.3 percent to 3.6 percent with no measured reduction in employment or job postings.</span> [↑](#ref-10)
 
+---
+
+**About the author**
+
+Reginal Campbell writes about enterprise technology, AI governance, leadership, and the systems organizations build to make consequential decisions.
+
+[Read more articles](/articles) · [Connect with Reginal on LinkedIn](https://www.linkedin.com/in/reginal-campbell-pmp-1551845/)

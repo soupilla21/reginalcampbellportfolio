@@ -10,9 +10,10 @@ interface Props {
   ogImageAlt: string;
   slug: string;
   canonical?: string;
+  readingTime?: number;
 }
 
-const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, slug, canonical } = Astro.props;
+const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, slug, canonical, readingTime } = Astro.props;
 
 const pageUrl = new URL(`/articles/${slug}`, Astro.site).toString();
 const canonicalUrl = canonical ?? pageUrl;
@@ -100,7 +101,7 @@ const blogPostingJsonLd = {
     <article id="article-content-body" data-slug={slug}>
       <header class="mb-10">
         <p class="text-neutral-500 text-xs font-mono uppercase tracking-widest">
-          {pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          By Reginal Campbell · {pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}{readingTime ? ` · ${readingTime}-minute read` : ""}
         </p>
         <h1 class="text-3xl md:text-4xl font-bold mt-3">{title}</h1>
       </header>

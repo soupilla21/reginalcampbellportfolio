@@ -3,14 +3,24 @@ import { getCollection, render } from "astro:content";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 
 export async function getStaticPaths() {
+  function calculateReadingTime(rawMarkdown) {
+    // Strip HTML tags and collapse markdown links to their visible text before counting,
+    // so inline footnote markup and citation links don't inflate the word count.
+    const text = rawMarkdown
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+    const words = text.split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(words / 225));
+  }
+
   const articles = await getCollection("articles", ({ data }) => !data.draft);
   return articles.map((article) => ({
     params: { slug: article.id },
-    props: { article },
+    props: { article, readingTime: calculateReadingTime(article.body ?? "") },
   }));
 }
 
-const { article } = Astro.props;
+const { article, readingTime } = Astro.props;
 const { Content } = await render(article);
 const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, canonical } = article.data;
 ---
@@ -23,6 +33,7 @@ const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, canonical
   ogImageAlt={ogImageAlt}
   slug={article.id}
   canonical={canonical}
+  readingTime={readingTime}
 >
   <Content />
 </ArticleLayout>
