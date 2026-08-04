@@ -5,7 +5,7 @@ pubDate: 2026-08-04
 ogImage: "/assets/articles/hiring-machine-card.jpg"
 ogImageAlt: "Dark title card reading 'How We Broke Hiring and How We Can Rebuild It' — Reginal Campbell, reginalcampbell.com/articles"
 tags: ["enterprise-transformation"]
-draft: true
+draft: false
 ---
 
 *Employers cannot find qualified people. Qualified candidates cannot get seen. Both problems come from the same system.*

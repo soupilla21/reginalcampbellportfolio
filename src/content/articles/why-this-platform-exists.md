@@ -5,7 +5,7 @@ pubDate: 2026-08-02
 ogImage: "/assets/articles/placeholder-article-card.jpg"
 ogImageAlt: "Reginal Campbell — Articles: Why This Platform Exists"
 tags: ["enterprise-transformation"]
-draft: false
+draft: true
 ---
 
 For a long time, this site was a single HTML page. That was fine for a homepage, but it meant every article I might publish would resolve to the same URL, get the same title, and produce the same social preview card — no matter what it was actually about.
