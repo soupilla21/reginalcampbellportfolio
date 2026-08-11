@@ -5,7 +5,7 @@ pubDate: 2026-08-11
 ogImage: "/assets/articles/nobody-asked-what-the-saved-time-was-for-card.jpg"
 ogImageAlt: "Dark title card reading 'Nobody Asked What the Saved Time Was For.' · Reginal Campbell, reginalcampbell.com/articles"
 tags: ["ai-governance", "enterprise-transformation"]
-draft: true
+draft: false
 ---
 
 *AI is creating capacity faster than most organizations know what to do with it.*
