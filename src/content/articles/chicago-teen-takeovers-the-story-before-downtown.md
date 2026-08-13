@@ -4,7 +4,7 @@ description: "Chicago keeps responding to teen gatherings with curfews while ove
 pubDate: 2026-08-13
 ogImage: "/assets/articles/chicago-teen-takeovers-the-story-before-downtown-card.jpg"
 ogImageAlt: "Chicago skyline and downtown streets illustrating an article about teen gatherings, curfews, and neighborhood disinvestment"
-draft: true
+draft: false
 ---
 
 *Chicago just had its safest Memorial Day weekend in a decade, and it still can't explain why the same crowds keep showing up in the same places.*
