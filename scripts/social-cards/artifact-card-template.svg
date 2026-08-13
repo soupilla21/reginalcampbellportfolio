@@ -1,0 +1,44 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0f"/>
+      <stop offset="55%" stop-color="#0d0d12"/>
+      <stop offset="100%" stop-color="#141018"/>
+    </linearGradient>
+    <linearGradient id="diagonal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.035"/>
+      <stop offset="45%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#diagonal)"/>
+
+  <!-- hairline separators, matching the article card rhythm -->
+  <line x1="0" y1="158" x2="1200" y2="158" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+  <line x1="0" y1="472" x2="1200" y2="472" stroke="#ffffff" stroke-opacity="0.06" stroke-width="1"/>
+
+  <!-- eyebrow: GOVERNANCE ARTIFACT badge, amber -->
+  <text x="80" y="72" font-family="JetBrains Mono" font-weight="500" font-size="22" letter-spacing="3" fill="#fbbf24">GOVERNANCE ARTIFACT __EYEBROW_SUFFIX__</text>
+  <rect x="80" y="94" width="56" height="4" fill="#fbbf24"/>
+
+  <!-- corner marker: distinct visual signature vs. article cards -->
+  <g opacity="0.9">
+    <rect x="1128" y="48" width="16" height="16" fill="none" stroke="#fbbf24" stroke-width="2" stroke-opacity="0.6"/>
+    <rect x="1148" y="48" width="16" height="16" fill="#fbbf24" fill-opacity="0.15" stroke="#fbbf24" stroke-width="2" stroke-opacity="0.6"/>
+  </g>
+
+  <!-- title lines -->
+  __TITLE_LINES__
+
+  <!-- description -->
+  <text x="80" y="__DESC_Y__" font-family="Inter" font-weight="400" font-size="26" fill="#a3a3a3">__DESCRIPTION__</text>
+
+  <!-- footer -->
+  <text x="80" y="552" font-family="Inter" font-weight="700" font-size="26" fill="#ffffff">REGINAL CAMPBELL</text>
+  <text x="80" y="582" font-family="JetBrains Mono" font-weight="400" font-size="18" fill="#8a8a8a">reginalcampbell.com/artifacts</text>
+
+  <!-- version marker, bottom right -->
+  <text x="1120" y="582" font-family="JetBrains Mono" font-weight="500" font-size="18" fill="#6b6b6b" text-anchor="end">v__VERSION__</text>
+</svg>
