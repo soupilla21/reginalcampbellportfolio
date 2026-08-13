@@ -14,6 +14,7 @@ const artifacts = (await getCollection("artifacts", ({ data }) => !data.draft)).
   return a.data.title.localeCompare(b.data.title);
 });
 
+const pageUrl = new URL("/artifacts", Astro.site).toString();
 const title = "Governance Artifacts — Reginal Campbell";
 const description = "Worked examples of applied AI governance: risk assessment, policy, and compliance practice with the reasoning left visible.";
 ---
@@ -33,7 +34,12 @@ const description = "Worked examples of applied AI governance: risk assessment, 
   <title>{title}</title>
   <meta name="description" content={description}>
   <meta name="author" content="Reginal Campbell">
+  <link rel="canonical" href={pageUrl}>
   <meta name="robots" content="index, follow">
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={pageUrl}>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">

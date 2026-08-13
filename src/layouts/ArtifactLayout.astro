@@ -6,17 +6,47 @@ interface Props {
   description: string;
   lastReviewed: Date;
   version: string;
+  ogImage: string;
+  ogImageAlt: string;
   slug: string;
+  canonical?: string;
 }
 
-const { title, description, lastReviewed, version, slug } = Astro.props;
+const { title, description, lastReviewed, version, ogImage, ogImageAlt, slug, canonical } = Astro.props;
 
+// Non-trailing-slash form, per the locked URL decision. Vercel serves these
+// routes with a 200 directly, so the canonical must not carry a trailing slash.
+const pageUrl = new URL(`/artifacts/${slug}`, Astro.site).toString();
+const canonicalUrl = canonical ?? pageUrl;
+const absoluteOgImage = new URL(ogImage, Astro.site).toString();
 const pageTitle = `${title} — Reginal Campbell`;
+const reviewedISO = lastReviewed.toISOString();
 const reviewedDisplay = lastReviewed.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
   day: "numeric",
 });
+
+// CreativeWork rather than BlogPosting: these are reference material, not posts.
+// dateModified maps from lastReviewed and there is deliberately no datePublished —
+// lastReviewed replaces pubDate entirely for artifacts.
+const creativeWorkJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  name: title,
+  description,
+  image: absoluteOgImage,
+  dateModified: reviewedISO,
+  version,
+  url: pageUrl,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": pageUrl,
+  },
+  author: {
+    "@id": "https://reginalcampbell.com/#person",
+  },
+};
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +64,20 @@ const reviewedDisplay = lastReviewed.toLocaleDateString("en-US", {
   <title>{pageTitle}</title>
   <meta name="description" content={description}>
   <meta name="author" content="Reginal Campbell">
+  <link rel="canonical" href={canonicalUrl}>
   <meta name="robots" content="index, follow">
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="article">
+  <meta property="og:url" content={pageUrl}>
+  <meta property="og:image" content={absoluteOgImage}>
+  <meta property="og:image:alt" content={ogImageAlt}>
+  <meta property="article:modified_time" content={reviewedISO}>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content={absoluteOgImage}>
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(creativeWorkJsonLd)} />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -84,5 +127,36 @@ const reviewedDisplay = lastReviewed.toLocaleDateString("en-US", {
       </footer>
     </article>
   </main>
+
+  <script is:inline>
+    (function () {
+      var seen = new Set();
+      var thresholds = [25, 50, 75, 100];
+      var artifactEl = document.getElementById("artifact-content-body");
+      if (!artifactEl) return;
+      var slug = artifactEl.getAttribute("data-slug");
+
+      function checkDepth() {
+        var scrollTop = window.scrollY || document.documentElement.scrollTop;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        var pct = (scrollTop / docHeight) * 100;
+        thresholds.forEach(function (t) {
+          if (pct >= t && !seen.has(t)) {
+            seen.add(t);
+            if (typeof gtag === "function") {
+              gtag("event", "artifact_read_depth", {
+                artifact_slug: slug,
+                depth_percent: t,
+              });
+            }
+          }
+        });
+      }
+
+      window.addEventListener("scroll", checkDepth, { passive: true });
+      checkDepth();
+    })();
+  </script>
 </body>
 </html>

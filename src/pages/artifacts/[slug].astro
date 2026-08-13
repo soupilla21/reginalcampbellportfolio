@@ -12,14 +12,17 @@ export async function getStaticPaths() {
 
 const { artifact } = Astro.props;
 const { Content } = await render(artifact);
-const { title, description, lastReviewed, version } = artifact.data;
+const { title, description, lastReviewed, version, ogImage, ogImageAlt, canonical } = artifact.data;
 ---
 <ArtifactLayout
   title={title}
   description={description}
   lastReviewed={lastReviewed}
   version={version}
+  ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
   slug={artifact.id}
+  canonical={canonical}
 >
   <Content />
 </ArtifactLayout>
