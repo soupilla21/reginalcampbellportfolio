@@ -1,8 +1,8 @@
 ---
 title: "Pipeline Verification Placeholder"
 description: "Throwaway artifact used to verify the Phase A collection, route, layout, and index pipeline. Not real governance content."
-ogImage: "/assets/articles/placeholder-article-card.jpg"
-ogImageAlt: "Placeholder title card — Reginal Campbell, reginalcampbell.com"
+ogImage: "/assets/artifacts/pipeline-verification-placeholder-card.jpg"
+ogImageAlt: "Governance Artifact title card: Pipeline Verification Placeholder — Reginal Campbell, reginalcampbell.com"
 lastReviewed: 2026-08-12
 version: "0.1"
 artifactType: "risk-assessment"
