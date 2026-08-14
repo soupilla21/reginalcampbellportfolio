@@ -9,7 +9,7 @@ artifactType: "risk-assessment"
 frameworkAlignment: ["nist-ai-rmf", "iso-42001", "eu-ai-act"]
 anchorScenario: "leadership-agent"
 order: 1
-draft: true
+draft: false
 ---
 
 This is a risk assessment I actually ran on a system I built and still operate.
