@@ -9,7 +9,7 @@ artifactType: "risk-assessment"
 frameworkAlignment: ["nist-ai-rmf"]
 anchorScenario: "leadership-agent"
 order: 99
-draft: false
+draft: true
 ---
 
 This page exists to verify that the governance artifacts pipeline works end to end. It is
