@@ -6,10 +6,20 @@
   *, *::before, *::after { box-sizing: border-box; }
   a { color: inherit; text-decoration: none; }
   a:visited { color: inherit; }
-  html { scroll-behavior: smooth; }
+  /* The solid base colour lives on html, not body, and it is load-bearing.
+     body's `background` shorthand below resets background-color to transparent,
+     so the page's darkness rests entirely on gradient IMAGES. Any moment the
+     browser needs a base fill — unpainted tiles during a long smooth scroll, or
+     the interval before this stylesheet lands on a navigation — it falls back to
+     a colour, not an image, and with none declared that colour is white.
+     color-scheme tells the browser the document is dark before any CSS parses. */
+  html {
+    scroll-behavior: smooth;
+    background-color: #050505;
+    color-scheme: dark;
+  }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: #050505;
     color: #EAEAEA;
     overflow-x: hidden;
     max-width: 100vw;
@@ -17,6 +27,7 @@
       radial-gradient(circle at 18% -8%, rgba(245,158,11,0.07), transparent 26rem),
       radial-gradient(circle at 88% 10%, rgba(59,130,246,0.04), transparent 30rem),
       linear-gradient(180deg, #070707 0%, #050505 34%, #070707 100%);
+    background-color: #050505;
   }
   body::before {
     content: '';
