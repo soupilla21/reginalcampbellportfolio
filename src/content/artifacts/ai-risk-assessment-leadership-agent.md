@@ -12,29 +12,35 @@ order: 1
 draft: false
 ---
 
-This is a risk assessment I actually ran on a system I built and still operate.
+<div class="artifact-summary">
+<p class="eyebrow">Real system · Real assessment · Production evidence</p>
 
-It is not a template with the answers removed. The scores are the scores I assigned, including three I changed after taking a harder look at the evidence. The residual risk section also names the risks I chose to accept instead of pretending I solved them.
+<p><strong>Decision:</strong> Continue operating the Leadership Agent under a Tier 2 (Moderate) risk posture, with terminal human approval remaining mandatory and non-negotiable.</p>
 
-I am publishing this because the assessment format is not the hard part. Anyone can download a scoring matrix.
+<p><strong>Why it matters:</strong> Local-first inference materially reduces confidentiality exposure, but its lower reasoning ceiling raises accuracy risk. Under this architecture, removing the human approval gate would eliminate the only control directly addressing the system's highest-impact failure mode. The gate is not a phase-one safeguard awaiting automation. It is load-bearing.</p>
 
-The hard part is the judgment inside it.
+<p><strong>Assessed posture:</strong> Nine risks scored. Three elevated (R2 feedback-loop entrenchment at 16, R1 factual fabrication at 15, R8 assessor independence at 15), two moderate, four low. Three scores were revised after reviewing evidence — two up, one down. Three residual risks are explicitly accepted, each with a named owner and a stated review trigger.</p>
 
-What tier does a system belong in when the frameworks do not give you a clean answer? How do you defend a score you cannot prove with certainty? When do you decide a control is good enough? And are you willing to document the risk you chose to accept and put your name next to it?
+<p><strong>What this is:</strong> A completed assessment of a production system I designed, built, and still operate — not a template, and not a hypothetical. The scoring rationale, the tier I rejected, the revisions I got wrong the first time, and the exposure I chose to live with are all left visible.</p>
+</div>
 
-That reasoning is usually invisible. It sits in a spreadsheet or governance deck nobody outside the organization ever sees.
+This is a risk assessment I actually ran on a system I built and still operate. It is not a template with the answers removed. The scores are the scores I assigned, including three I changed after taking a harder look at the evidence, and the residual risk section names the risks I chose to accept instead of pretending I solved them.
 
-This is what it looks like when the reasoning stays visible.
+I am publishing it because the assessment format is not the hard part — anyone can download a scoring matrix. The hard part is the judgment inside it. What tier does a system belong in when the frameworks do not give you a clean answer? How do you defend a score you cannot prove with certainty? When is a control good enough? And are you willing to document the risk you chose to accept and put your name next to it?
 
-One caveat about self-assessment deserves to be stated up front. I am the builder, operator, and assessor of this system. That creates a structural weakness in the assessment itself, not just in the system. It appears again in the residual risk section because that is where it belongs. I have not tried to explain it away.
+That reasoning is usually invisible, sitting in a spreadsheet or a governance deck nobody outside the organization ever sees. This is what it looks like when the reasoning stays visible.
 
-## 1. System characterization
+One caveat about self-assessment deserves to be stated up front. I am the builder, operator, and assessor of this system, which creates a structural weakness in the assessment itself, not just in the system. It appears again in the residual risk section because that is where it belongs. I have not tried to explain it away.
+
+## 1. System Characterization
 
 **What it is.** The Leadership Agent is a nine-agent autonomous pipeline that ingests public source material, scores it for relevance, drafts long-form professional content, runs it through an automated quality gate, and surfaces finished drafts for human approval. It replaced a $10K/month ghostwriting dependency and reduced manual editorial intervention by roughly 40% during its first 90 days of operation.
 
 **Deployment.** Local-first. Inference runs on local hardware. There is no third-party model API call at any point in generation. Persistence is Postgres, with Row Level Security enforced at the database layer rather than through application logic. A misconfigured route therefore cannot leak data across tenant boundaries.
 
 **Data flows.** There are four, and being precise about them matters because the risk profile of this system is largely determined by what data crosses what boundary.
+
+<div class="table-scroll">
 
 | Flow | Source | Destination | Crosses an external boundary? |
 | --- | --- | --- | --- |
@@ -43,11 +49,9 @@ One caveat about self-assessment deserves to be stated up front. I am the builde
 | Feedback | Approved output patterns | Brand guide | No |
 | Publication | Approved draft | External platform | Outbound, after human approval |
 
-The critical property is that no proprietary or personal input data leaves the local environment because it never enters a system capable of sending it anywhere.
+</div>
 
-That is not a policy statement someone could violate through a configuration mistake. It is an architectural property.
-
-That distinction is why the confidentiality risks in the register score as low as they do. The scores are defensible because the exposure path has been removed, not because a policy says nobody should use it.
+The critical property is that no proprietary or personal input data leaves the local environment, because it never enters a system capable of sending it anywhere. That is not a policy statement someone could violate through a configuration mistake — it is an architectural property. That distinction is why the confidentiality risks in the register score as low as they do: the scores are defensible because the exposure path has been removed, not because a policy says nobody should use it.
 
 **Autonomy level.** Partial autonomy with a mandatory terminal human gate. The pipeline runs end to end without intervention through ingest, scoring, drafting, editing, and QC. Then it stops. Nothing publishes without a human action.
 
@@ -61,15 +65,9 @@ That precision matters because "human in the loop" has become one of the most ov
 2. **Source list curation.** Periodic, not per run. The human decides which sources the pipeline is allowed to ingest. It is a real control, but one exercised infrequently enough that drift is possible.
 3. **Brand guide review.** Nominally a human control. In practice, the Feedback Ingester writes to the brand guide automatically after a pattern appears three times, and the human sees the result only if they review it. This is the weakest of the three controls and, as section 4 shows, where the assessment changed most.
 
-There is no human intervention between ingest and draft.
+There is no human intervention between ingest and draft. A source can be scored, selected, synthesized, and incorporated into a draft without anyone seeing it until the finished text appears. That is intentional — it is where much of the time saving comes from — but it means every error introduced across that span is caught at one point or not at all.
 
-A source can be scored, selected, synthesized, and incorporated into a draft without anyone seeing it until the finished text appears.
-
-That is intentional. It is where much of the time saving comes from.
-
-It also means every error introduced across that span is caught at one point or not at all.
-
-## 2. Inherent risk tier determination
+## 2. Risk Tier Determination
 
 The inherent risk determination, before controls, is **Tier 2: Moderate**, using an internal three-tier scale:
 
@@ -77,9 +75,7 @@ The inherent risk determination, before controls, is **Tier 2: Moderate**, using
 - Tier 2: Moderate
 - Tier 3: Routine
 
-**The case for Tier 3: Routine, which is the tier I rejected.**
-
-The argument for Tier 3 is legitimate:
+**The case for Tier 3: Routine — the tier I rejected.** The argument for it is legitimate:
 
 - The system makes no decision about a person. It does not screen, score, rank, allocate, or deny anything to anybody.
 - It processes no personal or regulated data. Its inputs are public.
@@ -88,74 +84,34 @@ The argument for Tier 3 is legitimate:
 - It has no external model dependency, removing an entire category of third-party data exposure risk.
 - Under the EU AI Act, it falls into none of the Annex III high-risk categories and is not a prohibited practice.
 
-Using the tests most frameworks emphasize, such as whether a system touches personal data, makes consequential decisions about people, or operates in a regulated use case, Tier 3 is defensible.
-
-I still rejected it.
+Using the tests most frameworks emphasize — whether a system touches personal data, makes consequential decisions about people, or operates in a regulated use case — Tier 3 is defensible. I still rejected it.
 
 **Why? Three reasons.**
 
-First, most standard tests are designed around systems that act *on* people.
+First, most standard tests are designed around systems that act *on* people. This system acts *as* a person. Its output is published under a real identity, in the first person, into a professional market, so the primary harm model is not "the system made the wrong decision about someone" — it is "the system said something false in my voice, and I published it." Frameworks built around consequential decision-making have no natural category for that risk. That is a limitation of the framework, not evidence the risk is insignificant.
 
-This system acts *as* a person.
+Second, the audience changes the impact. The readers include hiring managers, peers, and practitioners evaluating professional judgment. A fabricated statistic in a generic marketing blog is embarrassing; the same fabrication in material being read as evidence of professional judgment damages credibility far more seriously, and it may remain indexed, cached, or screenshotted long after the original is deleted. So while the output is technically reversible, the reputational exposure is much less reversible in practice.
 
-Its output is published under a real identity, in the first person, into a professional market. The primary harm model is not, "The system made the wrong decision about someone."
+Third, and most importantly, the system contains an unsupervised loop that modifies its own instructions. The Feedback Ingester promotes patterns into the brand guide, and the brand guide shapes future generation — so the system does not simply execute the same rules repeatedly. Its future behavior is partly a function of its own history, which is categorically different from a stable system. Tier 3 is appropriate for systems whose behavior remains predictable within a fixed control structure; this one can change the instructions shaping its own output. That alone moves it above routine.
 
-It is, "The system said something false in my voice, and I published it."
-
-Frameworks built primarily around consequential decision-making do not have a natural category for that risk. That is a limitation of the framework, not evidence that the risk is insignificant.
-
-Second, the audience changes the impact.
-
-The readers include hiring managers, peers, and practitioners evaluating professional judgment and competence. A fabricated statistic in a generic marketing blog is embarrassing. A fabricated statistic in material being used as evidence of professional judgment can damage credibility much more seriously.
-
-The content may also remain indexed, cached, or screenshotted long after the original is deleted.
-
-So while the output is technically reversible, reputational exposure is much less reversible in practice.
-
-Third, and most importantly, the system contains an unsupervised loop that modifies its own instructions.
-
-The Feedback Ingester promotes patterns into the brand guide. The brand guide shapes future generation.
-
-That means the system does not simply execute the same rules repeatedly. Its future behavior is partly a function of its own history.
-
-That is categorically different from a stable system.
-
-Tier 3 is appropriate for systems whose behavior remains predictable within a fixed control structure. This one can change the instructions shaping its own output.
-
-That alone moves it above routine.
-
-**Tier 1 was not seriously considered.**
-
-There is no safety, health, fundamental-rights, or financial exposure, and no third party depends on the output. Calling a system elevated when it is not weakens the meaning of the category for systems that actually warrant it.
+**Tier 1 was not seriously considered.** There is no safety, health, fundamental-rights, or financial exposure, and no third party depends on the output. Calling a system elevated when it is not weakens the category for systems that actually warrant it.
 
 **On the EU AI Act specifically.**
 
-This system is not high-risk under Annex III, and I do not want to imply otherwise. Inflating a classification is its own form of governance failure.
+This system is not high-risk under Annex III, and I do not want to imply otherwise — inflating a classification is its own form of governance failure. The obligation that applies in substance is transparency around AI-generated content, through the Article 50 family of disclosure requirements, and the control is straightforward: published content is disclosed as AI-assisted, carried in the register as R7. I have treated it as an applicable obligation rather than debating whether a single-operator system falls inside every technical boundary of the provision. The argument costs more than the compliance.
 
-The obligation that applies in substance is transparency around AI-generated content through the Article 50 family of disclosure requirements.
+## 3. Risk Register
 
-The control is straightforward and appears in the register as R7: published content is disclosed as AI-assisted.
-
-I have treated that as an applicable obligation rather than spending energy debating whether a single-operator system falls within every technical boundary of the provision. In this case, the argument costs more than the compliance.
-
-## 3. Scored risk register
-
-Likelihood and impact are scored from 1 to 5.
-
-**Risk score = Likelihood × Impact**
-
-Bands:
+Likelihood and impact are scored from 1 to 5, and **risk score = likelihood × impact**. Bands:
 
 - 1 to 6: Low
 - 7 to 12: Moderate
 - 13 to 19: Elevated
 - 20 to 25: Critical
 
-The Revised column reflects reassessment after reviewing the evidence. Section 4 explains each change.
+The Revised column reflects reassessment after reviewing the evidence; section 4 explains each change. Three scores moved, and one of them moved down.
 
-Three scores moved.
-
-One moved down.
+<div class="table-scroll">
 
 | ID | Risk | Initial (L×I) | Revised (L×I) | Band |
 | --- | --- | --- | --- | --- |
@@ -169,121 +125,41 @@ One moved down.
 | R8 | Assessor independence: builder, operator, and assessor are one person | 5×3 = 15 | No change | Elevated |
 | R9 | Local model ceiling produces lower-quality reasoning than a frontier model | 3×3 = 9 | No change | Moderate |
 
-A note on R6 scoring 1×5.
+</div>
 
-If proprietary data left the environment, the impact could be severe, so impact stays at 5.
+**A note on R6 scoring 1×5.** If proprietary data left the environment the impact would be severe, so impact stays at 5. Likelihood is 1 rather than 0 because zero-risk claims usually create more confidence than they deserve. But the reason it is 1 instead of 3 is architectural, not procedural: there is no external inference call to misconfigure. This is the clearest example in the register of why architecture beats policy — a control that cannot be bypassed through an ordinary mistake should score differently from one that can.
 
-Likelihood is 1 rather than 0 because zero-risk claims usually create more confidence than they deserve.
+**A note on R8 scoring 5×3.** Likelihood is 5 because this is not something that might happen; it is a permanent property of the current operating model. The risk remains elevated and is not mitigated — it is accepted, which is why it appears again in section 6.
 
-But the reason likelihood is 1 instead of 3 is architectural, not procedural. There is no external inference call to misconfigure.
+## 4. Evidence-Based Reassessment
 
-This is one of the clearest examples in the register of why architecture is stronger than policy. A control that cannot be bypassed through an ordinary mistake should score differently from one that can.
-
-R8 at 5×3 also deserves explanation.
-
-Likelihood is 5 because this is not something that might happen. It is a permanent property of the current operating model.
-
-The risk remains elevated and is not mitigated. It is accepted.
-
-That is why it appears again in section 5.
-
-## 4. What changed, and why
-
-The three score revisions are probably the most important part of this assessment.
-
-An assessment where every initial score survives contact with the evidence should raise questions.
+The three score revisions are probably the most important part of this assessment. An assessment where every initial score survives contact with the evidence should raise questions about whether anyone actually looked.
 
 ### R2: Feedback loop entrenchment, 6 to 16
 
 This was the largest revision and the one that changed the assessment most.
 
-My initial score treated the Feedback Ingester primarily as a quality mechanism with a manageable drift risk.
+My initial score treated the Feedback Ingester primarily as a quality mechanism with a manageable drift risk. Then I stopped relying on my memory of how it worked and read the promotion logic carefully. A pattern promotes after three appearances. There is no human confirmation step, no decay on promoted patterns, and no review automatically triggered by promotion. To the system, a pattern appearing three times because it is genuinely useful looks exactly like a pattern appearing three times because an upstream defect caused repetition.
 
-Then I stopped relying on my memory of how it worked and read the promotion logic carefully.
+I had already seen the second case happen. UTM-suffixed URLs in the RSS ingest created duplicate scored items, which produced repeated themes downstream; the problem was diagnosed and fixed at the ingest boundary. But the more important governance lesson came later: the feedback loop does not simply inherit upstream defects, it amplifies them. A duplicate item does more than waste a slot — it creates the appearance of recurrence, which is exactly the signal the promotion logic uses to decide something should influence future behavior.
 
-A pattern promotes after three appearances.
-
-There is no human confirmation step.
-
-There is no decay on promoted patterns.
-
-There is no review automatically triggered by promotion.
-
-To the system, a pattern appearing three times because it is genuinely useful looks exactly like a pattern appearing three times because an upstream defect caused repetition.
-
-I had already seen the second case happen.
-
-UTM-suffixed URLs in the RSS ingest created duplicate scored items, which produced repeated themes downstream. The problem was eventually diagnosed and fixed at the ingest boundary.
-
-But the more important governance lesson came later.
-
-The feedback loop does not simply inherit upstream defects. It can amplify them.
-
-A duplicate item does more than waste a slot. It creates the appearance of recurrence, which is exactly the signal the promotion logic uses to decide something should influence future behavior.
-
-Likelihood moved from 2 to 4 because there was direct evidence of the mechanism firing.
-
-Impact moved from 3 to 4 because a promoted defect is not a single bad output. It becomes a persistent instruction influencing everything generated afterward, and the degradation can happen quietly.
+Likelihood moved from 2 to 4 because there was direct evidence of the mechanism firing. Impact moved from 3 to 4 because a promoted defect is not a single bad output; it becomes a persistent instruction influencing everything generated afterward, and the degradation happens quietly.
 
 ### R1: Factual fabrication, 12 to 15
 
-Likelihood stayed at 3.
+Likelihood stayed at 3; impact moved from 4 to 5. My original framing treated the primary consequence as reputational embarrassment, and that was too narrow. This content is read by people evaluating professional judgment, and in that context a confidently stated false claim is not merely an editorial error — it becomes evidence someone uses to judge competence. It also survives deletion through indexing, caching, and screenshots.
 
-Impact moved from 4 to 5.
-
-My original framing treated the primary consequence as reputational embarrassment.
-
-That was too narrow.
-
-This content is being read by people evaluating professional judgment. In that context, a confidently stated false claim is not merely an editorial error. It can become evidence someone uses to judge competence and credibility.
-
-It also survives deletion through indexing, caching, and screenshots.
-
-Likelihood did not change because the terminal human gate is genuine and is exercised.
-
-But likelihood and impact are different variables.
-
-I had allowed confidence in the control to suppress the impact score.
-
-That is a scoring error.
-
-A strong control can reduce likelihood. It does not make the consequence less serious if the control fails.
+Likelihood did not change, because the terminal human gate is genuine and is exercised. But likelihood and impact are different variables, and I had allowed confidence in the control to suppress the impact score. That is a scoring error: a strong control reduces likelihood, it does not make the consequence less serious if the control fails.
 
 ### R5: Silent pipeline failure, 8 to 4
 
-This score moved down.
+This score moved down. The Writer and Editor agents required timeouts above 180 seconds for complex content; at 90 seconds, runs disappeared silently — no error, no alert, no completed output, while the system still reported healthy. That incident drove the original likelihood of 4. After raising the timeout and adding explicit run-status logging, 90 days of logs showed no recurrence, and more importantly the failure mode changed: a failed run now fails visibly instead of quietly producing the appearance of normal operation. Likelihood dropped to 2 on evidence.
 
-The Writer and Editor agents required timeouts above 180 seconds for complex content. At 90 seconds, runs could disappear silently. There was no error, no alert, and no completed output, while the system still appeared healthy.
+I am including a downward revision deliberately. If an assessment only ever moves scores upward, it stops measuring risk and starts performing caution. Scores should move in whichever direction the evidence supports, and being willing to lower one is part of what makes raising another credible.
 
-That incident drove the original likelihood score of 4.
+## 5. Control Effectiveness & Tradeoffs
 
-After increasing the timeout and adding explicit run-status logging, 90 days of logs showed no recurrence.
-
-More importantly, the failure mode changed.
-
-A failed run now fails visibly instead of quietly producing the appearance of normal operation.
-
-Likelihood therefore dropped to 2 based on evidence.
-
-I am including a downward revision deliberately.
-
-If every risk assessment only moves scores upward, it stops measuring risk and starts performing caution.
-
-Scores should move in whichever direction the evidence supports.
-
-Being willing to lower one is part of what makes raising another one credible.
-
-## 5. Controls, and what they actually cost
-
-Every control below is currently in place.
-
-I included the cost column because generic control catalogues usually do not.
-
-That omission matters.
-
-Controls create friction. When that friction is ignored during design, people bypass the control later because the operational cost was never acknowledged.
-
-A control that looks perfect on paper but cannot survive real workflow pressure is not a strong control.
+Every control below is currently in place. I included the cost column because generic control catalogues usually do not, and that omission matters. Controls create friction; when the friction is ignored during design, people bypass the control later because its operational cost was never acknowledged. A control that looks perfect on paper but cannot survive real workflow pressure is not a strong control.
 
 | Control | Risks addressed | What it actually costs |
 | --- | --- | --- |
@@ -296,145 +172,91 @@ A control that looks perfect on paper but cannot survive real workflow pressure 
 | **AI-assistance disclosure on published output.** | R7 | Effectively zero cost. Cheap controls still deserve documentation. |
 | **Quarterly brand-guide diff review.** Added as a direct result of this assessment. The promotion threshold was raised, and every promoted pattern is reviewed against the previous quarter's guide. | R2 | The loop adapts more slowly. That is a real cost because automatic promotion was producing useful improvements. The control also depends on a recurring human commitment, which makes it inherently weaker than an architectural control. It reduces R2. It does not eliminate it. |
 
-Notice what is not in this control set.
+Notice what is *not* in this control set: there is no mechanism independently verifying factual claims. No fact-checking agent, no retrieval-grounded citation requirement, no external verification layer. That is a deliberate gap, and it appears below as residual risk rather than being disguised as a control that does not exist.
 
-There is no mechanism independently verifying factual claims.
+## 6. Accepted Residual Risk
 
-No fact-checking agent.
+These risks are named, owned, and tied to explicit review triggers. They are not open remediation items — they are decisions to continue operating despite known exposure. I own all three, which is itself part of the problem with the first one.
 
-No retrieval-grounded citation requirement.
+### RR1: Assessor Independence — from R8
 
-No external verification layer.
+<div class="residual-risk">
+<span class="rr-label">Exposure</span>
 
-That is a deliberate gap.
+The builder, operator, and assessor of this system are the same person. There is no independent review of my scoring, and I am structurally motivated to view my own system favorably. No internal control can fully remove that: a single-operator environment cannot manufacture genuine segregation of duties.
 
-It appears below as residual risk instead of being disguised as a control that does not exist.
+<span class="rr-label">Disposition</span>
 
-## 6. Residual risk accepted
+Accepted. Publishing the assessment openly is a partial substitute — external scrutiny creates a weak form of independence, and I do not confuse it with actual independent review. It is one reason this document is public rather than sitting in a spreadsheet on my machine.
 
-These risks are named, owned, and tied to explicit review triggers.
+<span class="rr-label">Owner</span>
 
-They are not open remediation items.
+Reginal Campbell
 
-They are decisions to continue operating despite known exposure.
+<span class="rr-label">Review trigger</span>
 
-I own all three, which is itself part of the problem with the first one.
+Any second operator, any third party relying on the output, or any use of this system on behalf of an employer or client. Any one of those changes the risk from uncomfortable to unacceptable and requires an independent reassessment.
+</div>
 
-### RR1: Assessor independence, from R8
+### RR2: No Factual Verification Layer — from R1
 
-The builder, operator, and assessor of this system are the same person.
+<div class="residual-risk">
+<span class="rr-label">Exposure</span>
 
-There is no independent review of my scoring, and I am structurally motivated to view my own system favorably.
+The system can produce a fluent, confident, false claim, and the only thing standing between that claim and publication is one human reading carefully.
 
-No internal control can fully remove that problem. A single-operator environment cannot manufacture genuine segregation of duties.
+<span class="rr-label">Disposition</span>
 
-Publishing the assessment openly is a partial substitute. External scrutiny creates a weak form of independence, but I do not confuse it with actual independent review.
+Accepted. A retrieval-grounded verification stage would introduce latency and complexity disproportionate to a single-operator content system, and the terminal gate is genuinely exercised rather than nominal. But the risk needs describing accurately: this control depends on the operator's attention remaining strong, and human attention degrades.
 
-That is one reason this document is public instead of sitting in a spreadsheet on my machine.
+<span class="rr-label">Owner</span>
 
-**Owner:** Reginal Campbell
+Reginal Campbell
 
-**Review trigger:** Any second operator, any third party relying on the output, or any use of this system on behalf of an employer or client.
+<span class="rr-label">Review trigger</span>
 
-Any one of those changes the risk from uncomfortable to unacceptable and requires an independent reassessment.
+The first published factual error that reaches an external reader, or any increase in publication cadence that materially reduces review time per output. Either event moves this risk from accepted to unacceptable.
+</div>
 
-### RR2: No factual verification layer, from R1
+### RR3: Feedback-Loop Drift Below the Detection Threshold — from R2
 
-The system can produce a fluent, confident, false claim.
+<div class="residual-risk">
+<span class="rr-label">Exposure</span>
 
-The only thing standing between that claim and publication is one human reading carefully.
+The quarterly diff review identifies pattern-level drift. It is much weaker at catching a series of small, individually reasonable changes that gradually compound into a voice I did not intentionally choose — and slow drift is exactly the failure a quarterly snapshot misses.
 
-I accept that exposure today because adding a retrieval-grounded verification stage would introduce latency and complexity that I consider disproportionate for a single-operator content system, and because the terminal gate is genuinely exercised rather than nominal.
+<span class="rr-label">Disposition</span>
 
-But the risk needs to be described accurately.
+Accepted. The control reduces the risk; it does not eliminate it, and no cheaper mechanism materially improves on it at this scale.
 
-This control depends on the operator's attention remaining strong.
+<span class="rr-label">Owner</span>
 
-Human attention degrades.
+Reginal Campbell
 
-**Owner:** Reginal Campbell
+<span class="rr-label">Review trigger</span>
 
-**Review trigger:** The first published factual error that reaches an external reader, or any increase in publication cadence that materially reduces review time per output.
+Two consecutive quarterly reviews showing promoted patterns I do not recognize as deliberate, or any single promoted pattern traced to a data defect rather than a genuine editorial signal.
+</div>
 
-Either event moves this risk from accepted to unacceptable.
+## 7. Governance Decision: Why the Human Gate Stays
 
-### RR3: Residual feedback-loop drift below the detection threshold, from R2
+The Leadership Agent runs local and on-premises because the data cannot leave the building. That architectural decision predates this assessment, and I want to be precise about the sequence rather than construct a cleaner story than what happened: the architecture came first as a judgment call, and the assessment tested it afterward. What changed was not the decision. What changed were its terms.
 
-The quarterly diff review can identify pattern-level drift.
-
-It is much weaker at identifying a series of small, individually reasonable changes that gradually compound into a voice I did not intentionally choose.
-
-Slow drift is exactly the kind of failure a quarterly snapshot can miss.
-
-**Owner:** Reginal Campbell
-
-**Review trigger:** Two consecutive quarterly reviews showing promoted patterns I do not recognize as deliberate, or any single promoted pattern traced to a data defect rather than a genuine editorial signal.
-
-## 7. The decision this assessment drove
-
-The Leadership Agent runs local and on-premises because the data cannot leave the building.
-
-That architectural decision predates this assessment.
-
-I want to be precise about the sequence rather than construct a cleaner story than what actually happened.
-
-The architecture came first as a judgment call.
-
-The assessment tested that judgment afterward.
-
-What changed was not the decision.
-
-What changed were the terms of the decision.
-
-The original instinct was straightforward: local-first buys confidentiality.
-
-The assessment confirmed that.
-
-R6 scores 1×5 because the exposure path is architecturally absent rather than procedurally prohibited. That is a stronger control position than any policy could create.
-
-But the register also exposed something the original instinct did not fully account for.
-
-Local-first *spends* accuracy to buy that confidentiality.
-
-R9 exists because the local model ceiling is lower than a frontier API's.
-
-The trade is not free.
-
-And the cost lands directly against the risk with the highest impact score in the register.
+The original instinct was straightforward — local-first buys confidentiality — and the assessment confirmed it. R6 scores 1×5 because the exposure path is architecturally absent rather than procedurally prohibited, which is a stronger control position than any policy could create. But the register also exposed something the instinct did not account for: local-first *spends* accuracy to buy that confidentiality. R9 exists because the local model ceiling is lower than a frontier API's. The trade is not free, and its cost lands directly against the risk carrying the highest impact score in the register.
 
 That reframing produced the actual finding:
 
 > Local-first inference and removal of the terminal human gate are mutually incompatible under the current risk model. The architecture eliminates a major confidentiality exposure but increases accuracy risk. The human gate is the only control in the current set directly addressing that accuracy exposure. As long as the architecture remains, the gate is not a temporary phase-one safeguard waiting to be automated away. It is load-bearing.
 
-That matters because the most obvious next optimization for a system like this is to remove the bottleneck.
+That matters because the most obvious next optimization for a system like this is to remove the bottleneck — and the bottleneck is the human. The efficiency gain would be real, which makes the temptation real. Without the assessment, removing the gate could easily look like a straightforward maturity improvement. It is not: it would remove the primary control against a risk the architecture itself helps increase.
 
-The bottleneck is the human.
-
-The efficiency gain would be real, which makes the temptation real.
-
-Without the assessment, removing the human gate could easily look like a straightforward maturity improvement.
-
-It is not.
-
-Doing so would remove the primary control against a risk the architecture itself helps increase.
-
-The second major finding came from R2.
-
-That finding changed the system, not just the document.
-
-The promotion threshold was raised and the quarterly brand-guide diff review was added.
-
-Neither existed before this assessment.
-
-They exist because reading the promotion logic carefully instead of relying on memory moved a risk score from 6 to 16.
+The second major finding came from R2, and it changed the system rather than just the document. The promotion threshold was raised and the quarterly brand-guide diff review was added. Neither existed before this assessment. They exist because reading the promotion logic carefully, instead of relying on memory, moved a risk score from 6 to 16.
 
 The full architecture, agent topology, and delivery outcomes are documented in the [Leadership Agent case study](/#ai-systems).
 
-## 8. What this assessment deliberately does not cover
+## 8. Scope & Limitations
 
-This section exists because silence around scope can look like oversight.
-
-An assessment that appears to cover everything is usually less trustworthy than one that clearly states where it stops.
+This section exists because silence around scope reads as oversight. An assessment that appears to cover everything is usually less trustworthy than one that states clearly where it stops.
 
 - **Model-level evaluation.** No benchmarking, bias testing, or capability evaluation of the underlying model. This assessment evaluates the system and its controls, not the model weights.
 - **Security assessment.** No threat model, penetration test, or supply-chain review of the local stack. Those are important, adjacent concerns that require a different method.

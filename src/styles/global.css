@@ -513,3 +513,83 @@
   .prose-article a { color: var(--amber); text-decoration: underline; text-underline-offset: 2px; }
   .prose-article code { font-family: 'JetBrains Mono', monospace; background: rgba(255,255,255,0.06); padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.9em; }
   .prose-article blockquote { border-left: 3px solid var(--amber); padding-left: 1rem; color: #a3a3a3; font-style: italic; margin: 1.5rem 0; }
+
+  /* ── ARTIFACT PROSE (used only by /artifacts pages) ──
+     Applied alongside .prose-article, which supplies the base type scale.
+     These rules exist because governance artifacts are tabular in a way the
+     articles never were: no article contains a single <table>, so table
+     styling was never written. Scoped to .prose-artifact so article pages
+     are untouched by construction rather than by coincidence. */
+  .prose-artifact table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.75rem 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose-artifact thead th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    background: rgba(255,255,255,0.03);
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid rgba(245,158,11,0.25);
+    white-space: nowrap;
+  }
+  .prose-artifact tbody td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    vertical-align: top;
+    color: #c4c4c4;
+  }
+  .prose-artifact tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .prose-artifact tbody td:first-child { color: #e5e5e5; font-weight: 500; }
+  .prose-artifact tbody td strong { color: #fff; font-weight: 600; }
+  /* Narrow viewports: let wide tables scroll rather than crush the columns. */
+  .prose-artifact .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.75rem 0; }
+  .prose-artifact .table-scroll > table { margin: 0; min-width: 640px; }
+
+  /* Executive summary block: the conclusion-first entry point. */
+  .artifact-summary {
+    border: 1px solid rgba(245,158,11,0.25);
+    background: rgba(245,158,11,0.04);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin: 0 0 2.5rem;
+  }
+  .artifact-summary .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--amber);
+    margin-bottom: 0.75rem;
+  }
+  .artifact-summary p { margin-bottom: 0.875rem; color: #d4d4d4; }
+  .artifact-summary p:last-child { margin-bottom: 0; }
+  .artifact-summary strong { color: #fff; }
+
+  /* Residual risk: risk -> disposition -> owner -> trigger, as a block. */
+  .residual-risk {
+    border-left: 3px solid rgba(245,158,11,0.5);
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .residual-risk .rr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #a3a3a3;
+    display: block;
+    margin-top: 0.875rem;
+  }
+  .residual-risk .rr-label:first-child { margin-top: 0; }
+  .residual-risk p { margin: 0.25rem 0 0; }
