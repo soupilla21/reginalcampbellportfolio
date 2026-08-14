@@ -10,9 +10,28 @@ interface Props {
   ogImageAlt: string;
   slug: string;
   canonical?: string;
+  anchorScenario?: "leadership-agent" | "helios";
 }
 
-const { title, description, lastReviewed, version, ogImage, ogImageAlt, slug, canonical } = Astro.props;
+const { title, description, lastReviewed, version, ogImage, ogImageAlt, slug, canonical, anchorScenario } = Astro.props;
+
+// anchorScenario cross-link, deferred from Phase A to Phase D because nothing
+// rendered until a real anchor existed. Only leadership-agent is mapped; helios
+// lands in Phase E and targets a different homepage section (#case-study, the
+// Project Helios downloads), not this one. An unmapped value renders nothing
+// rather than a broken link.
+const ANCHOR_SCENARIOS = {
+  "leadership-agent": {
+    href: "/#ai-systems",
+    label: "The Leadership Agent",
+    context: "This assessment is anchored on a real system. Read the architecture case study",
+  },
+} as const;
+
+const anchor =
+  anchorScenario && anchorScenario in ANCHOR_SCENARIOS
+    ? ANCHOR_SCENARIOS[anchorScenario as keyof typeof ANCHOR_SCENARIOS]
+    : undefined;
 
 // Non-trailing-slash form, per the locked URL decision. Vercel serves these
 // routes with a 200 directly, so the canonical must not carry a trailing slash.
@@ -123,6 +142,11 @@ const creativeWorkJsonLd = {
         <slot />
       </div>
       <footer class="mt-16 pt-6 border-t border-white/10">
+        {anchor && (
+          <p class="text-neutral-400 text-sm leading-relaxed mb-6">
+            {anchor.context}: <a href={anchor.href} class="text-amber-400 hover:underline">{anchor.label}</a>.
+          </p>
+        )}
         <a href="/artifacts" class="text-amber-400 text-sm font-mono hover:underline">&larr; All governance artifacts</a>
       </footer>
     </article>
