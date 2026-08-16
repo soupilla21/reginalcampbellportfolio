@@ -5,7 +5,7 @@ pubDate: 2026-08-15
 ogImage: "/assets/articles/four-sentences-nobody-reads-card.jpg"
 ogImageAlt: "Dark title card for an article about employee referrals, reading The Four Sentences Nobody Reads"
 tags: ["enterprise-transformation"]
-draft: true
+draft: false
 ---
 
 *Every applicant tracking system can hold the reason behind a recommendation. Most organizations have never decided who is responsible for making sure it gets there.*
