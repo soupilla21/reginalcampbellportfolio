@@ -5,7 +5,7 @@ pubDate: 2026-09-16
 ogImage: "/assets/articles/who-benefits-from-the-ai-slowdown-card.jpg"
 ogImageAlt: "Abstract data center and circuit imagery illustrating an article about AI investment, infrastructure, and who benefits from selective AI adoption"
 tags: ["ai-governance", "enterprise-transformation"]
-draft: true
+draft: false
 ---
 
 *Frontier AI capability keeps climbing and AI capital keeps setting records. What has actually slowed is everyone's ability to turn either one into dependable, organization-wide value.*
