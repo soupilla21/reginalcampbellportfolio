@@ -525,12 +525,52 @@
   .prose-article code { font-family: 'JetBrains Mono', monospace; background: rgba(255,255,255,0.06); padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.9em; }
   .prose-article blockquote { border-left: 3px solid var(--amber); padding-left: 1rem; color: #a3a3a3; font-style: italic; margin: 1.5rem 0; }
 
+  /* Table styling: added for "Who Benefits from the AI Slowdown?", the first
+     article to contain a <table>. Mirrors .prose-artifact's table rules below
+     rather than sharing a selector with them, keeping articles and artifacts
+     decoupled on purpose, same reasoning as the note on .prose-artifact. */
+  .prose-article table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.75rem 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose-article thead th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    background: rgba(255,255,255,0.03);
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid rgba(245,158,11,0.25);
+    white-space: nowrap;
+  }
+  .prose-article tbody td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    vertical-align: top;
+    color: #c4c4c4;
+  }
+  .prose-article tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .prose-article tbody td:first-child { color: #e5e5e5; font-weight: 500; }
+  .prose-article tbody td strong { color: #fff; font-weight: 600; }
+  /* Narrow viewports: let wide tables scroll rather than crush the columns. */
+  .prose-article .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.75rem 0; }
+  .prose-article .table-scroll > table { margin: 0; min-width: 640px; }
+
   /* ── ARTIFACT PROSE (used only by /artifacts pages) ──
      Applied alongside .prose-article, which supplies the base type scale.
-     These rules exist because governance artifacts are tabular in a way the
-     articles never were: no article contains a single <table>, so table
-     styling was never written. Scoped to .prose-artifact so article pages
-     are untouched by construction rather than by coincidence. */
+     These rules exist because governance artifacts are tabular in a way most
+     articles aren't: this is the original table styling, written for
+     artifacts before any article needed one. .prose-article now has its own
+     mirrored copy above (see "Who Benefits from the AI Slowdown?"); kept
+     separate on purpose so a change to one scope can't silently affect the
+     other. */
   .prose-artifact table {
     width: 100%;
     border-collapse: collapse;
