@@ -604,3 +604,40 @@
   }
   .residual-risk .rr-label:first-child { margin-top: 0; }
   .residual-risk p { margin: 0.25rem 0 0; }
+
+  /* Table styling: added for "Who Benefits from the AI Slowdown?", the first
+     article to contain a <table>. Mirrors .prose-artifact's table rules
+     rather than sharing a selector with them, keeping articles and artifacts
+     decoupled on purpose, same reasoning as the note on .prose-artifact. */
+  .prose-article table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.75rem 0;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+  }
+  .prose-article thead th {
+    text-align: left;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--amber);
+    background: rgba(255,255,255,0.03);
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid rgba(245,158,11,0.25);
+    white-space: nowrap;
+  }
+  .prose-article tbody td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    vertical-align: top;
+    color: #c4c4c4;
+  }
+  .prose-article tbody tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .prose-article tbody td:first-child { color: #e5e5e5; font-weight: 500; }
+  .prose-article tbody td strong { color: #fff; font-weight: 600; }
+  .prose-article .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.75rem 0; }
+  .prose-article .table-scroll > table { margin: 0; min-width: 640px; }
