@@ -10,7 +10,7 @@ const articles = defineCollection({
     updatedDate: z.coerce.date().optional(),
     ogImage: z.string(),
     ogImageAlt: z.string(),
-    tags: z.array(z.enum(['ai-governance', 'enterprise-transformation', 'delivery'])).optional(),
+    tags: z.array(z.enum(['ai-governance', 'enterprise-transformation', 'delivery', 'leadership'])).optional(),
     draft: z.boolean().default(true),
     canonical: z.string().url().optional(),
   }),
