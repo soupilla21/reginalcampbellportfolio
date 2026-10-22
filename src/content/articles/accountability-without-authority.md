@@ -1,7 +1,7 @@
 ---
 title: "Accountability Without Authority Is Not Delegation"
 description: "When a program fails, scrutinize delivery and the decisions leadership left unanswered. Retaining authority means retaining responsibility for making the call."
-pubDate: 2026-10-27
+pubDate: 2026-10-22
 ogImage: "/assets/articles/accountability-without-authority-card.jpg"
 ogImageAlt: "Dark article card titled Accountability Without Authority Is Not Delegation, on how executives own program outcomes"
 tags: ["leadership", "enterprise-transformation"]
