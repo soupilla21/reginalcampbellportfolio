@@ -47,23 +47,27 @@ const artifacts = defineCollection({
 });
 
 // Evidence library: one entry per body of work the site makes claims about.
-// `status` is the honesty label shown on every entry. Use only claims that are
-// already stated elsewhere on the site, in the same words; this page collects
-// evidence, it does not create new claims.
+// Labels use the same governance model as the portfolio assistant
+// (verified / illustrative / in-development), and every entry names the
+// knowledge-file record it comes from in `corpusKeys`, so the page and the
+// assistant can never disagree about what a piece of work is.
 const evidence = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/evidence' }),
   schema: z.object({
     title: z.string(),
     subtitle: z.string().optional(),
-    summary: z.string().max(240),
-    status: z.enum(['real-system', 'delivery-record', 'illustrative', 'in-development']),
+    summary: z.string().max(280),
+    status: z.enum(['verified', 'illustrative', 'in-development']),
+    kind: z.enum(['program-delivery', 'built-system', 'scenario', 'design']),
+    period: z.string().optional(),
+    corpusKeys: z.array(z.string()).min(1),
     claims: z.array(z.string()).default([]),
     links: z
       .array(
         z.object({
           label: z.string(),
           href: z.string(),
-          kind: z.enum(['pdf', 'artifact', 'section', 'code']),
+          kind: z.enum(['pdf', 'artifact', 'section', 'code', 'resume']),
         })
       )
       .default([]),

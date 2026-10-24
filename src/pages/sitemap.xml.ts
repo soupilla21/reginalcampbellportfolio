@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { ASK_URL } from "../config/site";
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.toString().replace(/\/$/, "") ?? "https://reginalcampbell.com";
@@ -28,6 +29,15 @@ export const GET: APIRoute = async ({ site }) => {
       lastmod: (article.data.updatedDate ?? article.data.pubDate).toISOString().split("T")[0],
     })),
     { loc: `${base}/evidence`, changefreq: "monthly", priority: "0.8" },
+    // The assistant's pages are listed only once it is served from this domain
+    // (ASK_URL is a same-site path such as "/ask/"), never while it still
+    // lives on the briefing subdomain.
+    ...(ASK_URL.startsWith("/")
+      ? [
+          { loc: `${base}${ASK_URL}`, changefreq: "monthly", priority: "0.6" },
+          { loc: `${base}${ASK_URL}governance`, changefreq: "monthly", priority: "0.5" },
+        ]
+      : []),
     { loc: `${base}/artifacts`, changefreq: "monthly", priority: "0.8" },
     ...sortedArtifacts.map((artifact) => ({
       loc: `${base}/artifacts/${artifact.id}`,

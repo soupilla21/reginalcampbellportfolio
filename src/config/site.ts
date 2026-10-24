@@ -1,10 +1,10 @@
 // Where "Ask the assistant" links point.
 //
 // Phase A (safe to merge now): keep pointing at the existing subdomain.
-// Phase B: once the /ask rewrite in vercel.json points at the real Netlify
-// host and you have confirmed https://reginalcampbell.com/ask loads the
-// assistant, change this to "/ask". Every entry point on the site reads
-// this one value.
+// Phase B: once the /ask/ rewrite in vercel.json is live and
+// https://reginalcampbell.com/ask/ loads the assistant and answers a
+// question, change this to "/ask/" (with the trailing slash). Every entry
+// point on the site, and the sitemap, reads this one value.
 export const ASK_URL = "https://briefing.reginalcampbell.com";
 
 // Builds an assistant link, pre-filling a suggested question as ?q=.

@@ -1,5 +1,11 @@
 {
   "framework": "astro",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "redirects": [
+    { "source": "/ask", "destination": "/ask/", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/ask/:path*", "destination": "https://portfolio-intelligence-bot.netlify.app/:path*" }
+  ]
 }

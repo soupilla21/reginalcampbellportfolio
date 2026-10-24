@@ -2,9 +2,11 @@
 title: "The Leadership Agent"
 subtitle: "Autonomous content operations pipeline"
 summary: "A nine-stage, on-premises AI content pipeline I designed, built, and operate, with a mandatory human approval gate and a published risk assessment."
-status: "real-system"
+status: "verified"
+kind: "built-system"
+corpusKeys: ["leadership_agent_local_ai_pipeline"]
 claims:
-  - "Nine-stage pipeline running on local hardware; no third-party model API call during generation"
+  - "Nine-stage pipeline on local hardware; zero third-party LLM calls and zero external data exposure by design"
   - "Manual brand-guide edits per 10-run batch fell from about 8 to under 5 in the first 90 days (roughly 40%)"
   - "Nothing publishes without a human approval action"
 links:
@@ -16,6 +18,6 @@ questions:
   - "Why is the human approval gate treated as load-bearing rather than temporary?"
   - "Which risks in the assessment were accepted instead of solved?"
   - "What failure modes showed up once the pipeline ran in production?"
-order: 3
+order: 4
 draft: false
 ---
