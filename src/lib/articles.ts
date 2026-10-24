@@ -96,3 +96,26 @@ export function getRelatedArticles(current: Article, published: Article[]): Arti
 
   return [...sameCategory, ...otherCategories];
 }
+
+/** Filter order on /articles. */
+export const CATEGORY_ORDER: Category[] = ["leadership", "ai-technology", "hiring-careers", "life-society"];
+
+/**
+ * The Start Here articles, in `featured` order. Zod validates one entry at a time,
+ * so two articles claiming the same position would pass the schema; this fails
+ * the build instead of silently showing one of them.
+ */
+export function getFeaturedArticles(published: Article[]): Article[] {
+  const featured = published.filter((a) => a.data.featured !== undefined);
+  const seen = new Map<number, string>();
+  for (const a of featured) {
+    const pos = a.data.featured as number;
+    if (seen.has(pos)) {
+      throw new Error(
+        `Articles "${seen.get(pos)}" and "${a.id}" both set featured: ${pos}. Each Start Here position must be unique.`
+      );
+    }
+    seen.set(pos, a.id);
+  }
+  return featured.sort((a, b) => (a.data.featured as number) - (b.data.featured as number));
+}

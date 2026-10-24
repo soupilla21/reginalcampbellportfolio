@@ -2,11 +2,21 @@
 import Analytics from "../../components/Analytics.astro";
 import SiteNav from "../../components/SiteNav.astro";
 import "../../styles/global.css";
-import { getPublishedArticles } from "../../lib/articles";
+import TrackClicks from "../../components/TrackClicks.astro";
+import {
+  getPublishedArticles,
+  getFeaturedArticles,
+  calculateReadingTime,
+  CATEGORY_LABELS,
+  CATEGORY_ORDER,
+} from "../../lib/articles";
 
 const articles = (await getPublishedArticles()).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
+const featured = getFeaturedArticles(articles);
+const readingTime = (a: (typeof articles)[number]) => calculateReadingTime(a.body ?? "");
+const formatDate = (d: Date) => d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
 const pageUrl = new URL("/articles", Astro.site).toString();
 const title = "Articles | Reginal Campbell";
@@ -47,22 +57,116 @@ const description = "Essays by Reginal Campbell on leadership, hiring and career
     </header>
 
     {articles.length === 0 ? (
-      <p class="text-neutral-400">No articles published yet — check back soon.</p>
+      <p class="text-neutral-400">No articles published yet. Check back soon.</p>
     ) : (
-      <ul class="space-y-6">
-        {articles.map((article) => (
-          <li class="bg-neutral-900/40 rounded-2xl border border-white/8 p-6">
-            <a href={`/articles/${article.id}`} class="block hover:opacity-90 transition">
-              <span class="text-neutral-500 text-xs font-mono uppercase tracking-widest">
-                {article.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-              </span>
-              <h2 class="text-xl font-bold mt-2">{article.data.title}</h2>
-              <p class="text-neutral-400 text-sm mt-2 leading-relaxed">{article.data.description}</p>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <>
+        {featured.length > 0 && (
+          <section id="start-here" aria-labelledby="start-here-heading" class="mb-14">
+            <h2 id="start-here-heading" class="text-amber-400 font-mono text-sm uppercase tracking-wider">Start here</h2>
+            <ol class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+              {featured.map((article) => (
+                <li>
+                  <a href={`/articles/${article.id}`} class="block h-full bg-neutral-900/40 rounded-2xl border border-white/8 p-5 hover:border-white/20 transition">
+                    <span class="text-neutral-500 text-xs font-mono uppercase tracking-widest">
+                      {CATEGORY_LABELS[article.data.category]} · {readingTime(article)} min
+                    </span>
+                    <span class="block text-base font-bold mt-2 text-white">{article.data.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        <section aria-labelledby="all-articles-heading">
+          <h2 id="all-articles-heading" class="text-amber-400 font-mono text-sm uppercase tracking-wider">All articles</h2>
+
+          {/* Hidden until the script runs, so a visitor without JavaScript sees the full list and no dead buttons. */}
+          {/* The `hidden` attribute sits on a wrapper with no display class: a Tailwind `flex`
+              class on the same element would override it and show the chips without JavaScript. */}
+          <div id="article-filters" hidden>
+          <div class="mt-5 flex flex-wrap gap-2" role="group" aria-label="Filter articles by category">
+            <button type="button" class="filter-chip" data-filter="all" aria-pressed="true"
+              data-ga-event="articles_filter" data-ga-category="all">All</button>
+            {CATEGORY_ORDER.map((cat) => (
+              <button type="button" class="filter-chip" data-filter={cat} aria-pressed="false"
+                data-ga-event="articles_filter" data-ga-category={cat}>{CATEGORY_LABELS[cat]}</button>
+            ))}
+          </div>
+          </div>
+          <p id="filter-status" class="sr-only" role="status" aria-live="polite"></p>
+
+          <ul id="article-grid" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {articles.map((article) => (
+              <li data-category={article.data.category}>
+                <a href={`/articles/${article.id}`} class="block h-full bg-neutral-900/40 rounded-2xl border border-white/8 p-6 hover:border-white/20 transition">
+                  <span class="text-amber-400/90 text-xs font-mono uppercase tracking-widest">{CATEGORY_LABELS[article.data.category]}</span>
+                  <h3 class="text-xl font-bold mt-2 text-white">{article.data.title}</h3>
+                  <p class="text-neutral-400 text-sm mt-2 leading-relaxed">{article.data.description}</p>
+                  <span class="block text-neutral-500 text-xs font-mono uppercase tracking-widest mt-4">
+                    {formatDate(article.data.pubDate)} · {readingTime(article)}-minute read
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </>
     )}
   </main>
+  <script is:inline>
+    // Category filter. Every card is in the HTML; this only hides and shows them.
+    // The selected category lives in ?category= so filtered views can be linked to,
+    // and Back/Forward move between filters.
+    (function () {
+      var bar = document.getElementById("article-filters");
+      var grid = document.getElementById("article-grid");
+      var status = document.getElementById("filter-status");
+      var startHere = document.getElementById("start-here");
+      if (!bar || !grid) return;
+      var chips = Array.prototype.slice.call(bar.querySelectorAll("[data-filter]"));
+      var cards = Array.prototype.slice.call(grid.querySelectorAll("li[data-category]"));
+      var valid = chips.map(function (c) { return c.getAttribute("data-filter"); });
+
+      function apply(filter, announce) {
+        if (valid.indexOf(filter) === -1) filter = "all";
+        var shown = 0;
+        cards.forEach(function (card) {
+          var match = filter === "all" || card.getAttribute("data-category") === filter;
+          card.hidden = !match;
+          if (match) shown++;
+        });
+        chips.forEach(function (chip) {
+          chip.setAttribute("aria-pressed", chip.getAttribute("data-filter") === filter ? "true" : "false");
+        });
+        // A filtered view is about that category, so Start Here steps aside.
+        if (startHere) startHere.hidden = filter !== "all";
+        if (announce && status) status.textContent = "Showing " + shown + (shown === 1 ? " article" : " articles");
+      }
+
+      function fromUrl() {
+        try { return new URLSearchParams(window.location.search).get("category") || "all"; }
+        catch (e) { return "all"; }
+      }
+
+      bar.addEventListener("click", function (e) {
+        var chip = e.target.closest ? e.target.closest("[data-filter]") : null;
+        if (!chip) return;
+        var filter = chip.getAttribute("data-filter");
+        apply(filter, true);
+        try {
+          var url = new URL(window.location.href);
+          if (filter === "all") url.searchParams.delete("category"); else url.searchParams.set("category", filter);
+          history.pushState({ category: filter }, "", url.pathname + url.search + url.hash);
+        } catch (e) {}
+      });
+
+      window.addEventListener("popstate", function () { apply(fromUrl(), true); });
+
+      bar.hidden = false;
+      apply(fromUrl(), false);
+    })();
+  </script>
+  <TrackClicks />
 </body>
 </html>
