@@ -5,7 +5,7 @@
 // https://reginalcampbell.com/ask/ loads the assistant and answers a
 // question, change this to "/ask/" (with the trailing slash). Every entry
 // point on the site, and the sitemap, reads this one value.
-export const ASK_URL = "https://briefing.reginalcampbell.com";
+export const ASK_URL = "/ask/";
 
 // Builds an assistant link, pre-filling a suggested question as ?q=.
 // The assistant only pre-fills the box if it reads the q parameter; if it
