@@ -1,6 +1,7 @@
 ---
 import SiteNav from "../components/SiteNav.astro";
 import TrackClicks from "../components/TrackClicks.astro";
+import { ASK_URL } from "../config/site";
 import "../styles/global.css";
 import { getCollection } from "astro:content";
 
@@ -141,6 +142,10 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
              Explore the Evidence <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
          </div>
+         <p class="mt-5 text-sm text-neutral-400">
+           Have a question about my record?
+           <a href={ASK_URL} data-ga-event="ask_click" data-ga-source="hero" class="text-amber-300 underline underline-offset-4 decoration-amber-400/40 hover:text-amber-200 hover:decoration-amber-300">Ask the portfolio assistant <span aria-hidden="true">&rarr;</span></a>
+         </p>
        </div>
        <!-- Right: photo + stats -->
        <div class="flex flex-col items-center" style="order:2;gap:1.5rem;">
