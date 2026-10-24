@@ -1,0 +1,27 @@
+---
+// Google Analytics 4. The one copy of the tag for every page on the site.
+//
+// gtag() and dataLayer are always defined, so the site's event calls
+// (read depth, click tracking, case-study views) never throw. The GA library
+// itself loads only on the production hostnames below, so localhost and
+// Vercel preview deployments stop sending data to the property.
+//
+// The check runs in the browser, not at build time, because Vercel builds
+// preview deployments in production mode; a build-time flag cannot tell a
+// preview from the live site. Serving the site from a new domain requires
+// adding it to PROD_HOSTS, or that domain will not be tracked.
+---
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  (function () {
+    var PROD_HOSTS = ["reginalcampbell.com", "www.reginalcampbell.com"];
+    if (PROD_HOSTS.indexOf(window.location.hostname) === -1) return;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://www.googletagmanager.com/gtag/js?id=G-32FSF2EFEW";
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', 'G-32FSF2EFEW');
+  })();
+</script>
