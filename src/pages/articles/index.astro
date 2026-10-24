@@ -9,8 +9,8 @@ const articles = (await getPublishedArticles()).sort(
 );
 
 const pageUrl = new URL("/articles", Astro.site).toString();
-const title = "Articles — Reginal Campbell";
-const description = "Writing on enterprise transformation, AI governance, and delivery from Reginal Campbell.";
+const title = "Articles | Reginal Campbell";
+const description = "Essays by Reginal Campbell on leadership, hiring and careers, AI and technology, and the personal side of work.";
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +28,7 @@ const description = "Writing on enterprise transformation, AI governance, and de
   <meta property="og:description" content={description}>
   <meta property="og:type" content="website">
   <meta property="og:url" content={pageUrl}>
-  <link rel="alternate" type="application/rss+xml" title="Reginal Campbell — Articles RSS" href="/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="Reginal Campbell | Articles RSS" href="/rss.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -43,7 +43,7 @@ const description = "Writing on enterprise transformation, AI governance, and de
   <main id="articles-main" style="max-width:860px;margin:0 auto;padding:calc(var(--nav-height, 64px) + 48px) 24px 96px;">
     <header class="mb-12">
       <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Articles</span>
-      <h1 class="text-3xl md:text-4xl font-bold mt-2">Writing on Enterprise Transformation &amp; AI Governance.</h1>
+      <h1 class="text-3xl md:text-4xl font-bold mt-2">Essays on leadership, hiring, and AI, and the life around the work.</h1>
     </header>
 
     {articles.length === 0 ? (

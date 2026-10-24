@@ -7,8 +7,8 @@ export async function GET(context) {
   );
 
   return rss({
-    title: "Reginal Campbell — Articles",
-    description: "Writing on enterprise transformation, AI governance, and delivery.",
+    title: "Reginal Campbell | Articles",
+    description: "Essays by Reginal Campbell on leadership, hiring and careers, AI and technology, and the personal side of work.",
     site: context.site,
     items: articles.map((article) => ({
       title: article.data.title,
