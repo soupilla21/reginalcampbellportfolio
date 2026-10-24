@@ -36,3 +36,63 @@ export function calculateReadingTime(rawMarkdown: string): number {
   const words = text.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.round(words / 225));
 }
+
+type Article = CollectionEntry<"articles">;
+export type Category = Article["data"]["category"];
+
+/** Display labels for the category enum in src/content.config.ts. */
+export const CATEGORY_LABELS: Record<Category, string> = {
+  leadership: "Leadership",
+  "ai-technology": "AI & Technology",
+  "hiring-careers": "Hiring & Careers",
+  "life-society": "Life & Society",
+};
+
+const RELATED_COUNT = 3;
+const SAME_CATEGORY_SLOTS = 2;
+
+const newestFirst = (a: Article, b: Article) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+
+/**
+ * Up to three articles to show after the author bio.
+ *
+ * - If the article sets `related` in frontmatter, those slugs are used, in order.
+ *   An unknown, draft, or self slug fails the build rather than rendering a 404 link.
+ * - Otherwise: up to two from the same category (most shared tags first, then newest),
+ *   then the newest articles from other categories to fill the remaining slots.
+ *   The cross-category slot keeps each category from becoming a closed loop.
+ *
+ * `published` must already be draft-filtered (getPublishedArticles), so drafts can
+ * never be selected.
+ */
+export function getRelatedArticles(current: Article, published: Article[]): Article[] {
+  const others = published.filter((a) => a.id !== current.id);
+
+  const override = current.data.related;
+  if (override && override.length > 0) {
+    return override.map((slug) => {
+      const match = others.find((a) => a.id === slug);
+      if (!match) {
+        throw new Error(
+          `Article "${current.id}" lists related slug "${slug}", which is not a published article other than itself.`
+        );
+      }
+      return match;
+    });
+  }
+
+  const tags = new Set(current.data.tags ?? []);
+  const sharedTags = (a: Article) => (a.data.tags ?? []).filter((t) => tags.has(t)).length;
+
+  const sameCategory = others
+    .filter((a) => a.data.category === current.data.category)
+    .sort((a, b) => sharedTags(b) - sharedTags(a) || newestFirst(a, b))
+    .slice(0, SAME_CATEGORY_SLOTS);
+
+  const otherCategories = others
+    .filter((a) => a.data.category !== current.data.category)
+    .sort(newestFirst)
+    .slice(0, RELATED_COUNT - sameCategory.length);
+
+  return [...sameCategory, ...otherCategories];
+}

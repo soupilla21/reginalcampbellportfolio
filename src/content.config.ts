@@ -18,6 +18,10 @@ const articles = defineCollection({
     // Zod validates one entry at a time, so it cannot enforce uniqueness across
     // articles; the index page must guard against duplicate positions.
     featured: z.number().int().min(1).max(3).optional(),
+    // Optional manual override for the related-reading block: up to 3 article
+    // slugs, shown in this order. Every slug must be a published article other
+    // than this one, or the build fails (see getRelatedArticles in src/lib/articles.ts).
+    related: z.array(z.string()).max(3).optional(),
     draft: z.boolean().default(true),
     canonical: z.string().url().optional(),
   }),

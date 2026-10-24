@@ -1,6 +1,9 @@
 ---
 import Analytics from "../components/Analytics.astro";
 import SiteNav from "../components/SiteNav.astro";
+import RelatedReading from "../components/RelatedReading.astro";
+import TrackClicks from "../components/TrackClicks.astro";
+import type { CollectionEntry } from "astro:content";
 import "../styles/global.css";
 
 interface Props {
@@ -13,9 +16,10 @@ interface Props {
   slug: string;
   canonical?: string;
   readingTime?: number;
+  related?: CollectionEntry<"articles">[];
 }
 
-const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, slug, canonical, readingTime } = Astro.props;
+const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, slug, canonical, readingTime, related = [] } = Astro.props;
 
 const pageUrl = new URL(`/articles/${slug}`, Astro.site).toString();
 const canonicalUrl = canonical ?? pageUrl;
@@ -88,6 +92,7 @@ const blogPostingJsonLd = {
         <slot />
       </div>
     </article>
+    <RelatedReading fromSlug={slug} articles={related} />
   </main>
 
   <script is:inline>
@@ -98,11 +103,17 @@ const blogPostingJsonLd = {
       if (!articleEl) return;
       var slug = articleEl.getAttribute("data-slug");
 
+      // Depth is measured to the end of the article (through the author bio), not
+      // the page bottom, so content placed after the article (related reading)
+      // does not lower the numbers. 100% means the bottom of the article is in view.
       function checkDepth() {
         var scrollTop = window.scrollY || document.documentElement.scrollTop;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        if (docHeight <= 0) return;
-        var pct = (scrollTop / docHeight) * 100;
+        var articleBottom = articleEl.getBoundingClientRect().bottom + scrollTop;
+        // Rounded down: element positions are fractional but scroll positions are
+        // whole pixels, so an unrounded target can leave a finished read at 99.9%.
+        var target = Math.floor(articleBottom - window.innerHeight);
+        if (target <= 0) return;
+        var pct = (scrollTop / target) * 100;
         thresholds.forEach(function (t) {
           if (pct >= t && !seen.has(t)) {
             seen.add(t);
@@ -120,5 +131,6 @@ const blogPostingJsonLd = {
       checkDepth();
     })();
   </script>
+  <TrackClicks />
 </body>
 </html>

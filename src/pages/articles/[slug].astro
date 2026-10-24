@@ -1,17 +1,21 @@
 ---
 import { render } from "astro:content";
-import { getPublishedArticles, calculateReadingTime } from "../../lib/articles";
+import { getPublishedArticles, calculateReadingTime, getRelatedArticles } from "../../lib/articles";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 
 export async function getStaticPaths() {
   const articles = await getPublishedArticles();
   return articles.map((article) => ({
     params: { slug: article.id },
-    props: { article, readingTime: calculateReadingTime(article.body ?? "") },
+    props: {
+      article,
+      readingTime: calculateReadingTime(article.body ?? ""),
+      related: getRelatedArticles(article, articles),
+    },
   }));
 }
 
-const { article, readingTime } = Astro.props;
+const { article, readingTime, related } = Astro.props;
 const { Content } = await render(article);
 const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, canonical } = article.data;
 ---
@@ -25,6 +29,7 @@ const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, canonical
   slug={article.id}
   canonical={canonical}
   readingTime={readingTime}
+  related={related}
 >
   <Content />
 </ArticleLayout>

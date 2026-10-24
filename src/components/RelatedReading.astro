@@ -1,0 +1,39 @@
+---
+// Related reading, rendered by ArticleLayout after the author bio and outside
+// the <article> element, so it is not part of the counted body or the
+// read-depth measurement. Clicks send a GA `related_click` event through
+// TrackClicks (params: from_slug, to_slug, position).
+import type { CollectionEntry } from "astro:content";
+import { CATEGORY_LABELS, calculateReadingTime } from "../lib/articles";
+
+interface Props {
+  fromSlug: string;
+  articles: CollectionEntry<"articles">[];
+}
+
+const { fromSlug, articles } = Astro.props;
+---
+{articles.length > 0 && (
+  <aside class="mt-16 pt-10 border-t border-white/10" aria-labelledby="related-reading-heading">
+    <h2 id="related-reading-heading" class="text-amber-400 font-mono text-sm uppercase tracking-wider">Related reading</h2>
+    <ul class="mt-6 space-y-4">
+      {articles.map((article, i) => (
+        <li>
+          <a
+            href={`/articles/${article.id}`}
+            class="block bg-neutral-900/40 rounded-2xl border border-white/8 p-5 hover:border-white/20 transition"
+            data-ga-event="related_click"
+            data-ga-from-slug={fromSlug}
+            data-ga-to-slug={article.id}
+            data-ga-position={String(i + 1)}
+          >
+            <span class="text-neutral-500 text-xs font-mono uppercase tracking-widest">
+              {CATEGORY_LABELS[article.data.category]} · {calculateReadingTime(article.body ?? "")}-minute read
+            </span>
+            <span class="block text-lg font-bold mt-2 text-white">{article.data.title}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </aside>
+)}
