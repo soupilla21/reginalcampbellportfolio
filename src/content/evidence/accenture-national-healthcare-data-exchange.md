@@ -10,6 +10,7 @@ claims:
   - "Platform processing more than 2 billion transactions per month"
   - "Aligned quarterly planning, investment prioritization, and feature delivery across cross-functional teams"
 links:
+  - { label: "Read the case study", href: "/#case-study", kind: "section" }
   - { label: "Executive resume", href: "https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view", kind: "resume" }
 questions:
   - "What was Reginal responsible for on the national healthcare data exchange at Accenture?"
