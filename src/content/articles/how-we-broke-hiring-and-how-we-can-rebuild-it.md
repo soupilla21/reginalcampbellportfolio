@@ -1,9 +1,9 @@
 ---
 title: "How We Broke Hiring and How We Can Rebuild It"
-description: "Employers can't find talent. Candidates can't get a conversation. Both problems come from the same broken hiring system — and it can be rebuilt."
+description: "Employers can't find talent. Candidates can't get a conversation. Both problems come from the same broken hiring system, and it can be rebuilt."
 pubDate: 2026-08-04
 ogImage: "/assets/articles/hiring-machine-card.jpg"
-ogImageAlt: "Dark title card reading 'How We Broke Hiring and How We Can Rebuild It' — Reginal Campbell, reginalcampbell.com/articles"
+ogImageAlt: "Dark title card reading 'How We Broke Hiring and How We Can Rebuild It' by Reginal Campbell, reginalcampbell.com/articles"
 tags: ["enterprise-transformation"]
 category: "hiring-careers"
 featured: 2
