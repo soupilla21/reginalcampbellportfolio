@@ -1,4 +1,5 @@
 ---
+import SiteNav from "../components/SiteNav.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -107,25 +108,7 @@ const creativeWorkJsonLd = {
 <body class="antialiased">
   <a href="#artifact-main" class="skip-link">Skip to main content</a>
 
-  <nav id="main-nav" aria-label="Main navigation">
-    <div class="inner">
-      <div class="flex items-center gap-2 min-w-0">
-        <a href="/" class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent whitespace-nowrap">REGINAL CAMPBELL</a>
-        <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>
-        <span class="hidden md:inline text-sm font-mono text-neutral-400 truncate">AI &amp; Data Strategy</span>
-      </div>
-      <div class="flex items-center gap-5 text-sm font-medium flex-shrink-0">
-        <a href="/#case-study" class="nav-link">Work</a>
-        <a href="/#delivery-portfolio" class="nav-link">Portfolio</a>
-        <a href="/#governance" class="nav-link nav-active">Governance</a>
-        <a href="/#innovation-lab" class="nav-link">Lab</a>
-        <a href="/#point-of-view" class="nav-link">POV</a>
-        <a href="/articles" class="nav-link">Articles</a>
-        <a href="/#contact" class="nav-link">Contact</a>
-        <a href="https://briefing.reginalcampbell.com" class="nav-link">Ask the AI</a>
-      </div>
-    </div>
-  </nav>
+  <SiteNav active="governance" />
 
   <main id="artifact-main" style="max-width:860px;margin:0 auto;padding:calc(var(--nav-height, 64px) + 48px) 24px 96px;">
     <article id="artifact-content-body" data-slug={slug}>

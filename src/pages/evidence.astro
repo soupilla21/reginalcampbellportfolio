@@ -1,0 +1,197 @@
+---
+import SiteNav from "../components/SiteNav.astro";
+import TrackClicks from "../components/TrackClicks.astro";
+import "../styles/global.css";
+import { getCollection } from "astro:content";
+import { askHref } from "../config/site";
+
+const entries = (await getCollection("evidence", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+// One place defines what each status means. The same wording appears in the
+// legend at the top of the page and on every entry.
+const STATUS = {
+  "real-system": {
+    label: "Real system",
+    meaning: "Built and operated by me. Code, artifacts, or a published assessment are available.",
+    badge: "bg-amber-500/10 border-amber-500/30 text-amber-300",
+  },
+  "delivery-record": {
+    label: "Delivery record",
+    meaning: "Program work I led. Client and agency details are generalized; figures are as stated in my record.",
+    badge: "bg-blue-500/10 border-blue-500/30 text-blue-300",
+  },
+  "in-development": {
+    label: "In development",
+    meaning: "An architecture design. Not running in production.",
+    badge: "bg-teal-500/10 border-teal-500/30 text-teal-300",
+  },
+  illustrative: {
+    label: "Illustrative scenario",
+    meaning: "A fictional scenario built to show method. Not client work.",
+    badge: "bg-neutral-500/10 border-neutral-400/30 text-neutral-300",
+  },
+} as const;
+
+const KIND_ICON = {
+  pdf: "fa-file-pdf",
+  artifact: "fa-clipboard-check",
+  section: "fa-arrow-right",
+  code: "fab fa-github",
+} as const;
+
+const pageUrl = new URL("/evidence", Astro.site).toString();
+const title = "The Evidence Behind the Work — Reginal Campbell";
+const description =
+  "Every system and program on this site, labeled by what it is: real systems, delivery records, designs in development, and illustrative scenarios.";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "The Evidence Behind the Work",
+  description,
+  url: pageUrl,
+  author: { "@id": "https://reginalcampbell.com/#person" },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: entries.map((e, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: e.data.title,
+      url: `${pageUrl}#${e.id}`,
+    })),
+  },
+};
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-32FSF2EFEW"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-32FSF2EFEW');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <meta name="author" content="Reginal Campbell">
+  <link rel="canonical" href={pageUrl}>
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="The Evidence Behind the Work">
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={pageUrl}>
+  <meta property="og:image" content="https://reginalcampbell.com/assets/reginal-campbell.jpg">
+  <meta name="twitter:card" content="summary">
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="antialiased">
+  <a href="#evidence-main" class="skip-link">Skip to main content</a>
+
+  <SiteNav active="evidence" />
+
+  <main id="evidence-main" style="max-width:920px;margin:0 auto;padding:calc(var(--nav-height, 64px) + 48px) 24px 96px;">
+    <header class="mb-10">
+      <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Evidence</span>
+      <h1 class="text-3xl md:text-4xl font-bold mt-2">The Evidence Behind the Work.</h1>
+      <p class="text-neutral-400 max-w-3xl mt-4 leading-relaxed">
+        Everything this site makes a claim about, in one place, labeled by what it actually is.
+        Real systems are separated from program records, designs still in development, and
+        scenarios built to show method. Each entry links to the underlying material.
+      </p>
+      <p class="text-neutral-400 max-w-3xl mt-3 leading-relaxed">
+        Have a specific question?
+        <a href={askHref()} class="text-amber-300 underline underline-offset-2 hover:text-amber-200"
+           data-ga-event="ask_click" data-ga-source="evidence_header">Ask the portfolio assistant</a>,
+        which answers from the same record with sources cited.
+      </p>
+    </header>
+
+    <section aria-labelledby="legend-heading" class="mb-12 rounded-2xl border border-white/10 bg-neutral-900/40 p-5">
+      <h2 id="legend-heading" class="text-sm font-mono uppercase tracking-widest text-neutral-400 mb-4">How to read the labels</h2>
+      <dl class="grid sm:grid-cols-2 gap-4">
+        {Object.values(STATUS).map((s) => (
+          <div>
+            <dt><span class:list={["inline-block text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border", s.badge]}>{s.label}</span></dt>
+            <dd class="text-neutral-400 text-sm mt-2 leading-relaxed">{s.meaning}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <ol class="space-y-6" role="list">
+      {entries.map((entry) => {
+        const s = STATUS[entry.data.status];
+        return (
+          <li id={entry.id} class="rounded-2xl border border-white/5 bg-neutral-900/40 p-6" style="scroll-margin-top:calc(var(--nav-height, 64px) + 16px);">
+            <article aria-labelledby={`${entry.id}-title`}>
+              <span class:list={["inline-block text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border", s.badge]}>{s.label}</span>
+              <h2 id={`${entry.id}-title`} class="text-xl md:text-2xl font-bold text-white mt-3">{entry.data.title}</h2>
+              {entry.data.subtitle && <p class="text-neutral-500 text-xs font-mono mt-1">{entry.data.subtitle}</p>}
+              <p class="text-neutral-300 text-sm leading-relaxed mt-3">{entry.data.summary}</p>
+
+              {entry.data.claims.length > 0 && (
+                <div class="mt-5">
+                  <h3 class="text-xs font-mono uppercase tracking-widest text-neutral-500">What the site claims</h3>
+                  <ul class="mt-2 space-y-1.5">
+                    {entry.data.claims.map((c) => (
+                      <li class="text-neutral-300 text-sm leading-relaxed flex gap-2"><span class="text-amber-400 flex-shrink-0" aria-hidden="true">·</span>{c}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {entry.data.links.length > 0 && (
+                <div class="mt-5">
+                  <h3 class="text-xs font-mono uppercase tracking-widest text-neutral-500">Where the evidence is</h3>
+                  <ul class="mt-2 flex flex-wrap gap-2">
+                    {entry.data.links.map((l) => (
+                      <li>
+                        <a href={l.href}
+                           {...(l.kind === "pdf" || l.kind === "code" ? { target: "_blank", rel: "noopener" } : {})}
+                           class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 text-xs font-mono hover:bg-neutral-700 transition"
+                           data-ga-event="evidence_link_click" data-ga-evidence-item={entry.id} data-ga-link-kind={l.kind}>
+                          <i aria-hidden="true" class={l.kind === "code" ? KIND_ICON.code : `fas ${KIND_ICON[l.kind]}`}></i>{l.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {entry.data.questions.length > 0 && (
+                <div class="mt-5 border-t border-white/5 pt-4">
+                  <h3 class="text-xs font-mono uppercase tracking-widest text-neutral-500">Questions worth asking</h3>
+                  <ul class="mt-2 space-y-1.5">
+                    {entry.data.questions.map((q) => (
+                      <li>
+                        <a href={askHref(q)} class="text-sm text-amber-300 hover:text-amber-200 underline-offset-2 hover:underline"
+                           data-ga-event="ask_click" data-ga-source="evidence_page" data-ga-evidence-item={entry.id} data-ga-question={q}>
+                          {q} <span aria-hidden="true">→</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </article>
+          </li>
+        );
+      })}
+    </ol>
+  </main>
+
+  <TrackClicks />
+</body>
+</html>

@@ -1,4 +1,6 @@
 ---
+import SiteNav from "../components/SiteNav.astro";
+import TrackClicks from "../components/TrackClicks.astro";
 import "../styles/global.css";
 import { getCollection } from "astro:content";
 
@@ -106,25 +108,7 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
  </button>
 
  <!-- NAV -->
- <nav id="main-nav" aria-label="Main navigation">
-   <div class="inner">
-     <div class="flex items-center gap-2 min-w-0">
-       <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent whitespace-nowrap">REGINAL CAMPBELL</span>
-       <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>
-       <span class="hidden md:inline text-sm font-mono text-neutral-400 truncate">AI &amp; Data Strategy</span>
-     </div>
-     <div class="flex items-center gap-5 text-sm font-medium flex-shrink-0">
-       <a href="#case-study" class="nav-link" data-section="case-study">Work</a>
-       <a href="#delivery-portfolio" class="nav-link" data-section="delivery-portfolio">Portfolio</a>
-       <a href="#governance" class="nav-link" data-section="governance">Governance</a>
-       <a href="#innovation-lab" class="nav-link" data-section="innovation-lab">Lab</a>
-       <a href="#point-of-view" class="nav-link" data-section="point-of-view">POV</a>
-       <a href="/articles" class="nav-link" data-section="articles">Articles</a>
-       <a href="#contact" class="nav-link" data-section="contact">Contact</a>
-      <a href="https://briefing.reginalcampbell.com" class="nav-link" data-section="briefing">Ask the AI</a>
-     </div>
-   </div>
- </nav>
+ <SiteNav variant="home" />
 
  <main id="main-content" style="overflow-x:hidden;">
 
@@ -153,8 +137,8 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
            <a href="#case-study" class="px-7 py-3 rounded-full border border-white/20 bg-transparent text-white font-medium hover:bg-white/5 transition flex items-center gap-2">
              See the Work <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
-           <a href="https://briefing.reginalcampbell.com" class="px-7 py-3 rounded-full border border-amber-400/40 bg-amber-400/10 text-amber-300 font-medium hover:bg-amber-400/20 transition flex items-center gap-2">
-             Ask the AI <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
+           <a href="/evidence" data-ga-event="evidence_hub_click" data-ga-source="hero" class="px-7 py-3 rounded-full border border-amber-400/40 bg-amber-400/10 text-amber-300 font-medium hover:bg-amber-400/20 transition flex items-center gap-2">
+             Explore the Evidence <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
          </div>
        </div>
@@ -317,6 +301,7 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
  <div>
  <p class="text-base italic font-light text-neutral-100 leading-relaxed">"The audit finding wasn't the problem. It was the evidence of a problem that had been building for years. You can patch the finding and fail the next audit, or you can fix the architecture and close the exposure for good. We chose the architecture. That added timeline pressure in the short term. It eliminated a category of risk permanently."</p>
  <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why it matters at this scale:</strong> At 2B+ monthly transactions, a governance gap isn't a documentation issue; it's a liability. The standard for federal healthcare data isn't best effort. It's auditability, traceability, and demonstrated control at every layer of the stack.</p>
+ <a href="/evidence#national-healthcare-data-fabric" data-ga-event="evidence_hub_click" data-ga-source="case_study" class="mt-3 self-start inline-flex items-center gap-1.5 text-xs font-mono text-amber-300/90 hover:text-amber-200">Evidence and questions <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
  </div>
  </div>
  </div>
@@ -349,6 +334,7 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
        <a href="case-studies/Leadership_Agent_Case_Study.pdf" target="_blank" rel="noopener" data-case-study-download="Leadership Agent" data-asset-type="case_study_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-amber-500 text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-amber-400 transition shadow-lg shadow-amber-500/10" aria-label="Download the Leadership Agent case study PDF">
          <span>Download Case Study</span><i aria-hidden="true" class="fas fa-file-pdf"></i>
        </a>
+       <a href="/evidence#leadership-agent" data-ga-event="evidence_hub_click" data-ga-source="portfolio_leadership_agent" class="mt-3 self-start inline-flex items-center gap-1.5 text-xs font-mono text-amber-300/90 hover:text-amber-200">Evidence and questions <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
      </div>
 
      <div data-case-study-card="Project Helios" data-asset-type="case_study_pdf" class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
@@ -360,6 +346,7 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
        <a href="case-studies/Project_Helios_Case_Study.pdf" target="_blank" rel="noopener" data-case-study-download="Project Helios" data-asset-type="case_study_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios case study PDF">
          <span>Download Case Study</span><i aria-hidden="true" class="fas fa-file-pdf text-neutral-400"></i>
        </a>
+       <a href="/evidence#project-helios" data-ga-event="evidence_hub_click" data-ga-source="portfolio_helios_case" class="mt-3 self-start inline-flex items-center gap-1.5 text-xs font-mono text-amber-300/90 hover:text-amber-200">Evidence and questions <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
      </div>
 
      <div data-case-study-card="Project Helios" data-asset-type="delivery_governance_pdf" class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col transition hover:border-amber-500/30 hover:-translate-y-0.5">
@@ -371,6 +358,7 @@ const latestArticles = (await getCollection("articles", ({ data }) => !data.draf
        <a href="case-studies/Project_Helios_Delivery_Governance.pdf" target="_blank" rel="noopener" data-case-study-download="Project Helios" data-asset-type="delivery_governance_pdf" class="mt-auto inline-flex items-center justify-between gap-2 px-4 py-2.5 rounded-lg bg-neutral-800 border border-white/10 text-neutral-200 font-mono font-medium text-xs uppercase tracking-wider hover:bg-neutral-700 transition" aria-label="Download the Project Helios delivery governance PDF">
          <span>Download Blueprint</span><i aria-hidden="true" class="fas fa-file-pdf text-neutral-400"></i>
        </a>
+       <a href="/evidence#project-helios" data-ga-event="evidence_hub_click" data-ga-source="portfolio_helios_governance" class="mt-3 self-start inline-flex items-center gap-1.5 text-xs font-mono text-amber-300/90 hover:text-amber-200">Evidence and questions <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
      </div>
 
    </div>
@@ -2052,5 +2040,6 @@ async def get_current_tenant(token: str = Depends(oauth2_scheme)):
 
  </script>
 
+ <TrackClicks />
 </body>
 </html>

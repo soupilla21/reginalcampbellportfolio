@@ -1,0 +1,26 @@
+---
+// Sends a GA4 event when a visitor clicks any element carrying
+// data-ga-event="<event_name>". Extra data-ga-* attributes become event
+// parameters, e.g. data-ga-evidence-item="leadership-agent" is sent as
+// evidence_item: "leadership-agent".
+//
+// Events used for the 60 to 90 day keep-or-retire decision on the assistant:
+//   ask_click             a visitor opened the assistant (param: source, evidence_item, question)
+//   evidence_link_click   a visitor opened a piece of evidence (param: evidence_item, link_kind)
+---
+<script is:inline>
+  (function () {
+    document.addEventListener("click", function (e) {
+      var el = e.target && e.target.closest ? e.target.closest("[data-ga-event]") : null;
+      if (!el || typeof gtag !== "function") return;
+      var params = {};
+      for (var i = 0; i < el.attributes.length; i++) {
+        var a = el.attributes[i];
+        if (a.name.indexOf("data-ga-") === 0 && a.name !== "data-ga-event") {
+          params[a.name.slice(8).replace(/-/g, "_")] = a.value;
+        }
+      }
+      gtag("event", el.getAttribute("data-ga-event"), params);
+    });
+  })();
+</script>

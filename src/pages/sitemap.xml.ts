@@ -27,6 +27,7 @@ export const GET: APIRoute = async ({ site }) => {
       priority: "0.7",
       lastmod: (article.data.updatedDate ?? article.data.pubDate).toISOString().split("T")[0],
     })),
+    { loc: `${base}/evidence`, changefreq: "monthly", priority: "0.8" },
     { loc: `${base}/artifacts`, changefreq: "monthly", priority: "0.8" },
     ...sortedArtifacts.map((artifact) => ({
       loc: `${base}/artifacts/${artifact.id}`,

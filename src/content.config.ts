@@ -46,4 +46,31 @@ const artifacts = defineCollection({
     }),
 });
 
-export const collections = { articles, artifacts };
+// Evidence library: one entry per body of work the site makes claims about.
+// `status` is the honesty label shown on every entry. Use only claims that are
+// already stated elsewhere on the site, in the same words; this page collects
+// evidence, it does not create new claims.
+const evidence = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/evidence' }),
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    summary: z.string().max(240),
+    status: z.enum(['real-system', 'delivery-record', 'illustrative', 'in-development']),
+    claims: z.array(z.string()).default([]),
+    links: z
+      .array(
+        z.object({
+          label: z.string(),
+          href: z.string(),
+          kind: z.enum(['pdf', 'artifact', 'section', 'code']),
+        })
+      )
+      .default([]),
+    questions: z.array(z.string()).max(3).default([]),
+    order: z.number().int(),
+    draft: z.boolean().default(true),
+  }),
+});
+
+export const collections = { articles, artifacts, evidence };

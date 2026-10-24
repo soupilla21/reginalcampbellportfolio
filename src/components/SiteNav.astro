@@ -1,0 +1,58 @@
+---
+// Shared site navigation. Previously this markup was copied into five files
+// (homepage, articles index, artifacts index, ArticleLayout, ArtifactLayout),
+// so every nav change had to be made five times.
+//
+// variant="home"  : on the homepage, section links are in-page anchors and carry
+//                   data-section so the scroll observer in index.astro can
+//                   highlight the section currently in view.
+// variant="page"  : on every other page, section links point back to the homepage.
+interface Props {
+  variant?: "home" | "page";
+  active?: "case-study" | "delivery-portfolio" | "governance" | "innovation-lab" | "point-of-view" | "articles" | "contact" | "evidence";
+}
+
+const { variant = "page", active } = Astro.props;
+const onHome = variant === "home";
+
+const items = [
+  { id: "case-study", label: "Work", anchor: true },
+  { id: "delivery-portfolio", label: "Portfolio", anchor: true },
+  { id: "governance", label: "Governance", anchor: true },
+  { id: "innovation-lab", label: "Lab", anchor: true },
+  { id: "point-of-view", label: "POV", anchor: true },
+  { id: "articles", label: "Articles", href: "/articles" },
+  { id: "contact", label: "Contact", anchor: true },
+  { id: "evidence", label: "Evidence", href: "/evidence" },
+] as const;
+
+function hrefFor(item: (typeof items)[number]) {
+  if ("href" in item) return item.href;
+  return onHome ? `#${item.id}` : `/#${item.id}`;
+}
+---
+<nav id="main-nav" aria-label="Main navigation">
+  <div class="inner">
+    <div class="flex items-center gap-2 min-w-0">
+      {onHome ? (
+        <span class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent whitespace-nowrap">REGINAL CAMPBELL</span>
+      ) : (
+        <a href="/" class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent whitespace-nowrap">REGINAL CAMPBELL</a>
+      )}
+      <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>
+      <span class="hidden md:inline text-sm font-mono text-neutral-400 truncate">AI &amp; Data Strategy</span>
+    </div>
+    <div class="flex items-center gap-5 text-sm font-medium flex-shrink-0">
+      {items.map((item) => (
+        <a
+          href={hrefFor(item)}
+          class:list={["nav-link", { "nav-active": active === item.id }]}
+          data-section={onHome ? item.id : undefined}
+          aria-current={active === item.id && "href" in item ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
