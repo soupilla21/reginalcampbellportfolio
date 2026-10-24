@@ -24,7 +24,7 @@ const { title, description, pubDate, updatedDate, ogImage, ogImageAlt, slug, can
 const pageUrl = new URL(`/articles/${slug}`, Astro.site).toString();
 const canonicalUrl = canonical ?? pageUrl;
 const absoluteOgImage = new URL(ogImage, Astro.site).toString();
-const pageTitle = `${title} — Reginal Campbell`;
+const pageTitle = `${title} | Reginal Campbell`;
 const publishedISO = pubDate.toISOString();
 const modifiedISO = (updatedDate ?? pubDate).toISOString();
 

@@ -40,7 +40,7 @@ const anchor =
 const pageUrl = new URL(`/artifacts/${slug}`, Astro.site).toString();
 const canonicalUrl = canonical ?? pageUrl;
 const absoluteOgImage = new URL(ogImage, Astro.site).toString();
-const pageTitle = `${title} — Reginal Campbell`;
+const pageTitle = `${title} | Reginal Campbell`;
 const reviewedISO = lastReviewed.toISOString();
 const reviewedDisplay = lastReviewed.toLocaleDateString("en-US", {
   year: "numeric",
