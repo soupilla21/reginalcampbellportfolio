@@ -14,7 +14,7 @@ const articles = defineCollection({
     // One primary category per article. Drives the /articles filters and related
     // reading. `tags` stays for finer grouping and is not used for filtering.
     category: z.enum(['leadership', 'ai-technology', 'hiring-careers', 'life-society']),
-    // Position in the /articles "Start Here" row (1 to 3). Absent means not featured.
+    // Position in the /articles "Author's picks" row (1 to 3). Absent means not featured.
     // Zod validates one entry at a time, so it cannot enforce uniqueness across
     // articles; the index page must guard against duplicate positions.
     featured: z.number().int().min(1).max(3).optional(),

@@ -6,7 +6,6 @@ ogImage: "/assets/articles/nobody-asked-what-the-saved-time-was-for-card.jpg"
 ogImageAlt: "Dark title card reading 'Nobody Asked What the Saved Time Was For.' · Reginal Campbell, reginalcampbell.com/articles"
 tags: ["ai-governance", "enterprise-transformation"]
 category: "ai-technology"
-featured: 1
 draft: false
 ---
 

@@ -6,6 +6,7 @@ ogImage: "/assets/articles/i-wont-make-you-prove-it-card.jpg"
 ogImageAlt: "Dark card with the quote 'I won't abandon you. And I won't make you prove it,' alongside a subtitle about loyalty and friendship"
 tags: ["leadership"]
 category: "life-society"
+featured: 3
 draft: false
 ---
 

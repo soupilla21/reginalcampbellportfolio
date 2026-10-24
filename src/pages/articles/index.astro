@@ -62,7 +62,7 @@ const description = "Essays by Reginal Campbell on leadership, hiring and career
       <>
         {featured.length > 0 && (
           <section id="start-here" aria-labelledby="start-here-heading" class="mb-14">
-            <h2 id="start-here-heading" class="text-amber-400 font-mono text-sm uppercase tracking-wider">Start here</h2>
+            <h2 id="start-here-heading" class="text-amber-400 font-mono text-sm uppercase tracking-wider">Author's picks</h2>
             <ol class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
               {featured.map((article) => (
                 <li>
@@ -139,7 +139,7 @@ const description = "Essays by Reginal Campbell on leadership, hiring and career
         chips.forEach(function (chip) {
           chip.setAttribute("aria-pressed", chip.getAttribute("data-filter") === filter ? "true" : "false");
         });
-        // A filtered view is about that category, so Start Here steps aside.
+        // A filtered view is about that category, so Author's picks steps aside.
         if (startHere) startHere.hidden = filter !== "all";
         if (announce && status) status.textContent = "Showing " + shown + (shown === 1 ? " article" : " articles");
       }

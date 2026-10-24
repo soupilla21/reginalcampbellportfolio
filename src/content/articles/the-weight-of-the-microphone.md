@@ -6,7 +6,6 @@ ogImage: "/assets/articles/the-weight-of-the-microphone-card.jpg"
 ogImageAlt: "Title card for an article on influence, leadership, and the difference between facts and convictions"
 tags: ["leadership"]
 category: "leadership"
-featured: 3
 draft: false
 ---
 
