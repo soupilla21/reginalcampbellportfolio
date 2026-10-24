@@ -6,6 +6,7 @@
     { "source": "/ask", "destination": "/ask/", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/ask/:path*", "destination": "https://portfolio-intelligence-bot.netlify.app/:path*" }
+    { "source": "/ask/", "destination": "https://portfolio-intelligence-bot.netlify.app/" },
+    { "source": "/ask/:path+", "destination": "https://portfolio-intelligence-bot.netlify.app/:path+" }
   ]
 }
