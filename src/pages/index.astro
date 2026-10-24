@@ -3,9 +3,9 @@ import SiteNav from "../components/SiteNav.astro";
 import TrackClicks from "../components/TrackClicks.astro";
 import { ASK_URL } from "../config/site";
 import "../styles/global.css";
-import { getCollection } from "astro:content";
+import { getPublishedArticles } from "../lib/articles";
 
-const latestArticles = (await getCollection("articles", ({ data }) => !data.draft))
+const latestArticles = (await getPublishedArticles())
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 ---

@@ -1,10 +1,11 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
+import { getPublishedArticles } from "../lib/articles";
 import { ASK_URL } from "../config/site";
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.toString().replace(/\/$/, "") ?? "https://reginalcampbell.com";
-  const articles = await getCollection("articles", ({ data }) => !data.draft);
+  const articles = await getPublishedArticles();
   const artifacts = await getCollection("artifacts", ({ data }) => !data.draft);
 
   // Artifacts sort by `order` ascending, then alphabetically by title for entries
