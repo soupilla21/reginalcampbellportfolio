@@ -5,6 +5,7 @@ pubDate: 2026-09-16
 ogImage: "/assets/articles/who-benefits-from-the-ai-slowdown-card.jpg"
 ogImageAlt: "Abstract data center and circuit imagery illustrating an article about AI investment, infrastructure, and who benefits from selective AI adoption"
 tags: ["ai-governance", "enterprise-transformation"]
+category: "ai-technology"
 draft: false
 ---
 

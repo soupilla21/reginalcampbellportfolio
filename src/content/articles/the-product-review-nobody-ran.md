@@ -5,6 +5,7 @@ pubDate: 2026-09-21
 ogImage: "/assets/articles/the-product-review-nobody-ran-card.jpg"
 ogImageAlt: "Abstract illustration of a broken pipeline and dashboard, representing an article auditing the hiring process like a failing product"
 tags: ["enterprise-transformation", "delivery"]
+category: "hiring-careers"
 draft: false
 ---
 

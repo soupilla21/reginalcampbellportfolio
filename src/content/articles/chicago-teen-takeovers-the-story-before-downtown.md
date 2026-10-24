@@ -4,6 +4,7 @@ description: "Chicago keeps responding to teen gatherings with curfews while ove
 pubDate: 2026-08-13
 ogImage: "/assets/articles/chicago-teen-takeovers-the-story-before-downtown-card.jpg"
 ogImageAlt: "Chicago skyline and downtown streets illustrating an article about teen gatherings, curfews, and neighborhood disinvestment"
+category: "life-society"
 draft: false
 ---
 

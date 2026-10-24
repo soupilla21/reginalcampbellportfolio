@@ -5,6 +5,7 @@ pubDate: 2026-10-17
 ogImage: "/assets/articles/job-requirement-after-the-interview-card.jpg"
 ogImageAlt: "Dark card with an amber Article, Leadership label, the title The Job Requirement You Learn About After the Interview, and the subtitle If a demonstration will decide the hire, it belongs in the invitation."
 tags: ["leadership"]
+category: "hiring-careers"
 draft: false
 ---
 

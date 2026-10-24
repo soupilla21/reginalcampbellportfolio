@@ -5,6 +5,7 @@ pubDate: 2026-10-07
 ogImage: "/assets/articles/case-for-nicknames-card.jpg"
 ogImageAlt: "Dark article card reading A Case for Nicknames, a leadership essay by Reginal Campbell on names, identity, and workplace culture"
 tags: ["leadership"]
+category: "life-society"
 draft: false
 ---
 

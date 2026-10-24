@@ -5,6 +5,7 @@ pubDate: 2026-10-13
 ogImage: "/assets/articles/indispensable-is-what-we-call-a-bottleneck-card.jpg"
 ogImageAlt: "Dark card with an amber Article, Leadership label, the title Indispensable Is What We Call a Bottleneck When We Like the Person, and the subtitle What if the better measure is what a team can do without you?"
 tags: ["leadership"]
+category: "leadership"
 draft: false
 ---
 

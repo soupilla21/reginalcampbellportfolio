@@ -5,6 +5,7 @@ pubDate: 2026-08-15
 ogImage: "/assets/articles/four-sentences-nobody-reads-card.jpg"
 ogImageAlt: "Dark title card for an article about employee referrals, reading The Four Sentences Nobody Reads"
 tags: ["enterprise-transformation"]
+category: "hiring-careers"
 draft: false
 ---
 

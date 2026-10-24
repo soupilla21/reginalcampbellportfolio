@@ -5,6 +5,7 @@ pubDate: 2026-10-23
 ogImage: "/assets/articles/executive-tax-on-profanity-card.jpg"
 ogImageAlt: "Dark article card with the title The Executive Tax on Profanity, by Reginal Campbell"
 tags: ["leadership"]
+category: "leadership"
 draft: false
 ---
 

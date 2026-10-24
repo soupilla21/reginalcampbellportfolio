@@ -5,6 +5,7 @@ pubDate: 2026-09-30
 ogImage: "/assets/articles/what-you-owe-the-place-you-escaped-card.jpg"
 ogImageAlt: "Dark title card for a leadership essay by Reginal Campbell on what people who rise economically owe the communities they came from"
 tags: ["leadership"]
+category: "life-society"
 draft: false
 ---
 

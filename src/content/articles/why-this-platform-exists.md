@@ -5,6 +5,7 @@ pubDate: 2026-08-02
 ogImage: "/assets/articles/placeholder-article-card.jpg"
 ogImageAlt: "Reginal Campbell — Articles: Why This Platform Exists"
 tags: ["enterprise-transformation"]
+category: "ai-technology"
 draft: true
 ---
 

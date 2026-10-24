@@ -5,6 +5,7 @@ pubDate: 2026-10-22
 ogImage: "/assets/articles/accountability-without-authority-card.jpg"
 ogImageAlt: "Dark article card titled Accountability Without Authority Is Not Delegation, on how executives own program outcomes"
 tags: ["leadership", "enterprise-transformation"]
+category: "leadership"
 draft: false
 ---
 
