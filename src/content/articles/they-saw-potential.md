@@ -1,13 +1,13 @@
 ---
 title: "They Saw Potential. I Saw a Leader."
 description: "An interviewer said they saw potential in me. On being called promising after delivering, and what gets lost translating real work for a stranger."
-pubDate: 2026-11-03
+pubDate: 2026-10-30
 ogImage: "/assets/articles/they-saw-potential-card.jpg"
 ogImageAlt: "Article card for They Saw Potential. I Saw a Leader., an essay on being called promising after already delivering"
 tags: ["leadership"]
 category: "hiring-careers"
 related: ["job-requirement-after-the-interview"]
-draft: true
+draft: false
 ---
 
 *Being called promising lands differently when you believe you've already delivered.*
