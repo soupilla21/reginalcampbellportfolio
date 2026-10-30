@@ -58,7 +58,7 @@ const sectors = ["Financial services", "Healthcare IT", "AI governance", "Enterp
     <p class="text-neutral-300 max-w-2xl mt-4 leading-relaxed">15+ years leading federal and enterprise data platforms, including a national healthcare data exchange processing 2B+ transactions a month.</p>
     <div class="mt-8 flex flex-wrap gap-4">
       <a href={contactHref("role")} data-ga-event="engage_contact_click" data-ga-source="record" class="btn-primary px-6 py-3 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition inline-flex items-center gap-2">Contact me about a role <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i></a>
-      <a href={RESUME_URL} target="_blank" rel="noopener" data-resume-link class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">Download resume (PDF) <i aria-hidden="true" class="fas fa-file-pdf text-sm"></i></a>
+      <a href={RESUME_URL} target="_blank" rel="noopener" data-resume-link data-ga-event="resume_download" data-ga-source="record_header" class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">Download resume (PDF) <i aria-hidden="true" class="fas fa-file-pdf text-sm"></i></a>
     </div>
   </header>
 
@@ -101,6 +101,6 @@ const sectors = ["Financial services", "Healthcare IT", "AI governance", "Enterp
 
   <div class="mt-12 border-t border-white/10 pt-8 flex flex-wrap gap-4">
     <a href={contactHref("role")} data-ga-event="engage_contact_click" data-ga-source="record" class="btn-primary px-6 py-3 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition inline-flex items-center gap-2">Contact me about a role <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i></a>
-    <a href={RESUME_URL} target="_blank" rel="noopener" data-resume-link class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">Download resume (PDF)</a>
+    <a href={RESUME_URL} target="_blank" rel="noopener" data-resume-link data-ga-event="resume_download" data-ga-source="record_footer" class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">Download resume (PDF)</a>
   </div>
 </PageLayout>

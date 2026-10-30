@@ -110,7 +110,7 @@ const jsonLd = {
       <p class="text-neutral-400 max-w-3xl mt-3 leading-relaxed">
         Have a specific question?
         <a href={askHref()} class="text-amber-300 underline underline-offset-2 hover:text-amber-200"
-           data-ga-event="ask_click" data-ga-source="evidence_header">Ask the portfolio assistant</a>,
+           data-ga-event="ask_open" data-ga-source="evidence_header">Ask the portfolio assistant</a>,
         which answers from the same governed record and uses the same three labels.
       </p>
     </header>
@@ -178,7 +178,7 @@ const jsonLd = {
                     {entry.data.questions.map((q) => (
                       <li>
                         <a href={askHref(q)} class="text-sm text-amber-300 hover:text-amber-200 underline-offset-2 hover:underline"
-                           data-ga-event="ask_click" data-ga-source="evidence_page" data-ga-evidence-item={entry.id} data-ga-question={q}>
+                           data-ga-event="ask_open" data-ga-source="evidence_page" data-ga-evidence-item={entry.id} data-ga-question={q}>
                           {q} <span aria-hidden="true">→</span>
                         </a>
                       </li>
