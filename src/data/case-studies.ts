@@ -20,6 +20,10 @@ export interface Metric {
 
 export interface CaseStudy {
   slug: string;
+  // For client work: "{client}" in any text is replaced at build time. The
+  // client's real name is NOT stored in this repo until the client approves
+  // naming; until then `name` stays undefined and the anonymized label is used.
+  client?: { anonymized: string; name?: string };
   status: "published" | "draft"; // drafts build but are noindex and kept out of the sitemap
   eyebrow: string;
   title: string;
@@ -40,7 +44,20 @@ export const ph = (placeholder: string): Placeholder => ({ placeholder });
 export const isPlaceholder = (t: unknown): t is Placeholder =>
   typeof t === "object" && t !== null && "placeholder" in t;
 
-export const caseStudies: CaseStudy[] = [
+// Replace "{client}" / "{Client}" tokens throughout a study.
+export function resolveClient(study: CaseStudy): CaseStudy {
+  if (!study.client) return study;
+  const label = study.client.name ?? study.client.anonymized;
+  const cap = label.charAt(0).toUpperCase() + label.slice(1);
+  const walk = (v: unknown): unknown =>
+    typeof v === "string" ? v.replaceAll("{client}", label).replaceAll("{Client}", cap)
+    : Array.isArray(v) ? v.map(walk)
+    : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, walk(x)]))
+    : v;
+  return walk(study) as CaseStudy;
+}
+
+const rawCaseStudies: CaseStudy[] = [
   {
     slug: "national-healthcare-data-exchange",
     status: "published",
@@ -93,4 +110,55 @@ export const caseStudies: CaseStudy[] = [
       { claim: "$40M VA platform (link text only)", source: "Homepage #case-study link; /portfolio" },
     ],
   },
+  {
+    // Home inspection client engagement. Anonymized until the client approves naming (Reggie, 30 Oct 2026).
+    // Draft: builds at its URL for review, noindex, out of the sitemap, not linked from any page.
+    slug: "home-inspection-website",
+    status: "draft",
+    client: { anonymized: "a regional home inspection company" },
+    eyebrow: "Small-Business Digital Services · InnovatePM Solutions",
+    title: "Website Launch for a Regional Home Inspection Company",
+    role: "Consultant: proposal, build and launch",
+    summary:
+      "Website proposal, build and production launch for {client}, with Google Analytics 4 and Microsoft Clarity installed.",
+    problem: [
+      ph("What {client} needed before the engagement, in one or two sentences (for example: no website, or a site that no longer worked for them)."),
+    ],
+    myRole: [
+      "I wrote the website proposal, built the site and took it through production launch. The work was delivered through InnovatePM Solutions.",
+      ph("Anything else in scope: content, domain, hosting, business listings, handoff or training."),
+    ],
+    constraints: [
+      ph("Budget, timeline or technical constraints you are willing to share."),
+    ],
+    decisions: [
+      ph("Two or three decisions and why: for example platform choice, page structure, or installing analytics before launch."),
+    ],
+    results: {
+      metrics: [
+        { label: "Launched", value: ph("Month and year"), detail: "Production launch" },
+        { label: "Analytics", value: "GA4 + Clarity", detail: "Installed at launch" },
+        { label: "Result", value: ph("Client-approved figure"), detail: ph("What it measures: visits, calls, form submissions or rankings") },
+      ],
+      text: [
+        "The site launched to production with Google Analytics 4 and Microsoft Clarity installed, so {client} can see visitor traffic and on-page behavior from the start.",
+        ph("Any measurable result the client approves. Remove this line if there is none."),
+      ],
+    },
+    lessons: [
+      ph("One or two lessons, in your words."),
+    ],
+    cta: {
+      label: "Discuss a project",
+      href: "/?type=small-business#contact",
+      secondary: { label: "Small-business services", href: "/digital-services" },
+    },
+    sources: [
+      { claim: "InnovatePM engagement: website proposal, build and production launch", source: "Reggie's Week 2 brief; project memory (InnovatePM client work)" },
+      { claim: "Google Analytics 4 and Microsoft Clarity installed", source: "Reggie's Week 2 brief; project memory" },
+      { claim: "Anonymized as 'a regional home inspection company'", source: "Reggie, decision D5 (30 Oct 2026)" },
+    ],
+  },
 ];
+
+export const caseStudies: CaseStudy[] = rawCaseStudies.map(resolveClient);
