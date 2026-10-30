@@ -9,21 +9,20 @@
 // variant="page"  : on every other page, section links point back to the homepage.
 interface Props {
   variant?: "home" | "page";
-  active?: "case-study" | "delivery-portfolio" | "governance" | "innovation-lab" | "point-of-view" | "articles" | "contact" | "evidence";
+  active?: "engage" | "case-study" | "portfolio" | "articles" | "contact" | "evidence";
 }
 
 const { variant = "page", active } = Astro.props;
 const onHome = variant === "home";
 
 const items = [
-  { id: "case-study", label: "Work", anchor: true },
-  { id: "delivery-portfolio", label: "Portfolio", anchor: true },
-  { id: "governance", label: "Governance", anchor: true },
-  { id: "innovation-lab", label: "Lab", anchor: true },
-  { id: "point-of-view", label: "POV", anchor: true },
+  { id: "engage", label: "Engage", href: "/engage" },
+  // "Record" points to the Enterprise Delivery Record until the Week 2 career section exists.
+  { id: "case-study", label: "Record", anchor: true },
+  { id: "portfolio", label: "Portfolio", href: "/portfolio" },
   { id: "articles", label: "Articles", href: "/articles" },
-  { id: "contact", label: "Contact", anchor: true },
   { id: "evidence", label: "Evidence", href: "/evidence" },
+  { id: "contact", label: "Contact", anchor: true },
 ] as const;
 
 function hrefFor(item: (typeof items)[number]) {
