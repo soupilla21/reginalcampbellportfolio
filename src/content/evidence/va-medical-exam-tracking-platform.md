@@ -10,7 +10,7 @@ claims:
   - "$40M multi-year enterprise platform"
   - "Coordinated more than 25 technical team members, vendors, and executive stakeholders"
 links:
-  - { label: "Executive resume", href: "https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view", kind: "resume" }
+  - { label: "Executive resume", href: "/reginal-campbell-resume.pdf", kind: "resume" }
 questions:
   - "How did Reginal govern the $40M VA platform implementation?"
   - "What did the VA program teach Reginal about governance on large federal platforms?"

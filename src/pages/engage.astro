@@ -1,22 +1,29 @@
 ---
-import StubLayout from "../layouts/StubLayout.astro";
+import PageLayout from "../layouts/PageLayout.astro";
 ---
-<StubLayout
+<PageLayout
   title="Work With Me | Reginal Campbell"
   description="Two ways to engage: enterprise advisory for regulated organizations, and digital services for small businesses."
-  eyebrow="Engage"
-  heading="Two ways to work together."
+  path="/engage"
+  active="engage"
+  width={920}
 >
+  <header class="mb-10">
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Engage</span>
+    <h1 class="text-3xl md:text-4xl font-bold mt-2">Two ways to work together.</h1>
+  </header>
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <a href="/advisory" data-ga-event="offer_click" data-ga-offer="advisory" class="block bg-neutral-900/40 rounded-2xl border border-white/10 p-6 hover:border-amber-500/40 transition">
       <p class="label-mono text-amber-400 mb-3">Enterprise advisory</p>
       <h2 class="text-xl font-bold text-white">AI governance and delivery discipline for regulated organizations.</h2>
+      <p class="text-neutral-400 text-sm mt-3 leading-relaxed">For leaders whose AI or data program needs an assessment, a recovery plan or a delivery lead.</p>
       <p class="mt-4 text-sm font-medium text-amber-300">Enterprise advisory <span aria-hidden="true">&rarr;</span></p>
     </a>
     <a href="/digital-services" data-ga-event="offer_click" data-ga-offer="digital_services" class="block bg-neutral-900/40 rounded-2xl border border-white/10 p-6 hover:border-amber-500/40 transition">
       <p class="label-mono text-amber-400 mb-3">Small-business digital services</p>
       <h2 class="text-xl font-bold text-white">Websites, AI discoverability and launch planning.</h2>
+      <p class="text-neutral-400 text-sm mt-3 leading-relaxed">For small businesses that need a website built and launched, and found by customers and AI assistants.</p>
       <p class="mt-4 text-sm font-medium text-amber-300">Digital services <span aria-hidden="true">&rarr;</span></p>
     </a>
   </div>
-</StubLayout>
+</PageLayout>

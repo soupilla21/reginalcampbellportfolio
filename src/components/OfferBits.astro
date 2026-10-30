@@ -1,0 +1,22 @@
+---
+// Shared pieces for the offer pages: the firm line (InnovatePM Solutions,
+// SDVOSB, UEI, CAGE) and the pricing line. Approved by Reggie on 30 Oct 2026:
+// firm name, SDVOSB, UEI and CAGE shown; pricing "by proposal".
+interface Props { kind: "firm" | "pricing" }
+const { kind } = Astro.props;
+---
+{kind === "firm" && (
+  <div class="rounded-2xl border border-white/10 bg-neutral-900/40 p-6">
+    <p class="text-amber-400 font-mono text-xs uppercase tracking-widest mb-3">Delivered through</p>
+    <p class="text-white font-semibold">InnovatePM Solutions</p>
+    <p class="text-neutral-400 text-sm mt-1">Service-Disabled Veteran-Owned Small Business (SDVOSB)</p>
+    <p class="text-neutral-500 text-xs font-mono mt-3">UEI GWZQV3MFE4R6 · CAGE 09X84</p>
+  </div>
+)}
+{kind === "pricing" && (
+  <div class="rounded-2xl border border-white/10 bg-neutral-900/40 p-6">
+    <p class="text-amber-400 font-mono text-xs uppercase tracking-widest mb-3">Pricing</p>
+    <p class="text-white font-semibold">By proposal.</p>
+    <p class="text-neutral-400 text-sm mt-1">Every engagement is scoped first. You receive a written proposal with scope, deliverables and price before any work starts.</p>
+  </div>
+)}

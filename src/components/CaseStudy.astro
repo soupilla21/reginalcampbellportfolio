@@ -1,0 +1,81 @@
+---
+// Renders one case study in the six-part format. Parts that are undefined are
+// skipped and the remaining parts are numbered in order. Placeholders render
+// as dashed amber boxes so a missing fact is obvious on preview.
+import { isPlaceholder, type CaseStudy, type Text } from "../data/case-studies";
+
+interface Props { study: CaseStudy }
+const { study } = Astro.props;
+
+const parts: { id: string; title: string; body?: Text[] }[] = [
+  { id: "problem", title: "Business problem", body: study.problem },
+  { id: "role", title: "My role", body: study.myRole },
+  { id: "constraints", title: "Constraints", body: study.constraints },
+  { id: "decisions", title: "Decisions", body: study.decisions },
+  { id: "results", title: "Measurable results", body: study.results ? (study.results.text ?? []) : undefined },
+  { id: "lessons", title: "Lessons learned", body: study.lessons },
+].filter((p) => p.body !== undefined);
+const metrics = study.results?.metrics ?? [];
+---
+<article class="case-study">
+  <header class="mb-10">
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">{study.eyebrow}</span>
+    <h1 class="text-3xl md:text-4xl font-bold mt-2">Case Study: {study.title}</h1>
+    <p class="text-neutral-400 max-w-2xl mt-3 leading-relaxed">{study.summary}</p>
+  </header>
+
+  {metrics.length > 0 && (
+    <div class="grid md:grid-cols-3 gap-5 mb-14 reveal">
+      {metrics.map((m) => (
+        <div class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 flex flex-col gap-1">
+          <span class="text-amber-400 font-mono text-xs uppercase tracking-widest">{m.label}</span>
+          {isPlaceholder(m.value)
+            ? <span class="cs-placeholder mt-1">Placeholder: {m.value.placeholder}</span>
+            : <span class="font-mono text-3xl font-bold text-white mt-1">{m.value}</span>}
+          {isPlaceholder(m.detail)
+            ? <span class="cs-placeholder">Placeholder: {m.detail.placeholder}</span>
+            : <span class="text-neutral-400 text-sm">{m.detail}</span>}
+        </div>
+      ))}
+    </div>
+  )}
+
+  <div class="flex flex-col gap-12">
+    {parts.map((part, i) => (
+      <section id={part.id} style="margin-bottom:0" class="reveal grid md:grid-cols-[220px_1fr] gap-4 md:gap-10">
+        <div class="flex items-center md:items-start gap-2">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-mono text-xs flex items-center justify-center font-bold flex-shrink-0">{i + 1}</span>
+          <h2 class="text-xs font-mono text-amber-400 uppercase tracking-widest md:mt-1">{part.title}</h2>
+        </div>
+        <div class="flex flex-col gap-4">
+          {part.body!.map((t) =>
+            isPlaceholder(t)
+              ? <p class="cs-placeholder">Placeholder: {t.placeholder}</p>
+              : <p class="text-neutral-300 leading-relaxed">{t}</p>
+          )}
+          {part.id === "results" && study.results?.quote && (
+            <blockquote class="mt-2 bg-black/50 border border-amber-500/25 border-l-4 border-l-amber-500 rounded-2xl p-6 flex items-start gap-3">
+              <i aria-hidden="true" class="fas fa-quote-left text-amber-400 text-xl opacity-50 mt-1 flex-shrink-0"></i>
+              <p class="text-base italic font-light text-neutral-100 leading-relaxed">"{study.results.quote}"</p>
+            </blockquote>
+          )}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  {study.links && study.links.length > 0 && (
+    <div class="mt-12 flex flex-wrap gap-x-6 gap-y-3">
+      {study.links.map((l) => (
+        <a href={l.href} class="inline-flex items-center gap-1.5 text-sm font-mono text-amber-300/90 hover:text-amber-200">{l.label} <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
+      ))}
+    </div>
+  )}
+
+  <div class="mt-12 border-t border-white/10 pt-8 flex flex-wrap gap-4">
+    <a href={study.cta.href} class="btn-primary px-6 py-3 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition inline-flex items-center gap-2">{study.cta.label} <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i></a>
+    {study.cta.secondary && (
+      <a href={study.cta.secondary.href} class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">{study.cta.secondary.label}</a>
+    )}
+  </div>
+</article>

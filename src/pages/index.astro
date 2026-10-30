@@ -4,6 +4,7 @@ import SiteNav from "../components/SiteNav.astro";
 import TrackClicks from "../components/TrackClicks.astro";
 import SiteScripts from "../components/SiteScripts.astro";
 import { ASK_URL } from "../config/site";
+import { RESUME_URL, INQUIRY_TYPES } from "../config/site";
 import "../styles/global.css";
 import { getPublishedArticles } from "../lib/articles";
 
@@ -99,7 +100,7 @@ const latestArticles = (await getPublishedArticles())
            <a href="/engage" data-ga-event="hero_cta_click" data-ga-cta="engagement" class="px-6 py-3 rounded-full bg-amber-400 text-black font-bold shadow-lg hover:bg-amber-300 transition flex items-center justify-center gap-2 text-center">
              Discuss an engagement <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
-           <a href="#case-study" data-ga-event="hero_cta_click" data-ga-cta="leadership_record" class="px-6 py-3 rounded-full bg-white text-black font-bold shadow-lg hover:bg-neutral-200 transition flex items-center justify-center gap-2 text-center">
+           <a href="/record" data-ga-event="hero_cta_click" data-ga-cta="leadership_record" class="px-6 py-3 rounded-full bg-white text-black font-bold shadow-lg hover:bg-neutral-200 transition flex items-center justify-center gap-2 text-center">
              View my leadership record <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i>
            </a>
          </div>
@@ -182,7 +183,7 @@ const latestArticles = (await getPublishedArticles())
        <div class="bg-neutral-900/40 rounded-2xl border border-white/10 p-6 flex flex-col">
          <p class="label-mono text-amber-400 mb-3">Hiring leaders</p>
          <p class="text-neutral-300 text-sm leading-relaxed flex-grow">You are filling a senior AI, data or delivery leadership role.</p>
-         <a href="#case-study" data-ga-event="path_click" data-ga-path="hiring_leaders" class="mt-4 self-start text-sm font-medium text-amber-300 underline underline-offset-4 decoration-amber-400/40 hover:text-amber-200">View my leadership record <span aria-hidden="true">&rarr;</span></a>
+         <a href="/record" data-ga-event="path_click" data-ga-path="hiring_leaders" class="mt-4 self-start text-sm font-medium text-amber-300 underline underline-offset-4 decoration-amber-400/40 hover:text-amber-200">View my leadership record <span aria-hidden="true">&rarr;</span></a>
        </div>
        <div class="bg-neutral-900/40 rounded-2xl border border-white/10 p-6 flex flex-col">
          <p class="label-mono text-amber-400 mb-3">Readers</p>
@@ -258,7 +259,8 @@ const latestArticles = (await getPublishedArticles())
  <p class="text-base italic font-light text-neutral-100 leading-relaxed">"At this volume, a shared data definition is a control, not a convenience. When every team means the same thing by the same field, prioritization gets faster and the platform can grow without losing the trust of the people who depend on it."</p>
  <p class="text-neutral-400 text-sm mt-3"><strong class="text-neutral-300">Why it matters at this scale:</strong> At 2B+ monthly transactions, a governance gap isn't a documentation issue; it's a liability. The standard for federal healthcare data isn't best effort. It's auditability, traceability, and demonstrated control at every layer of the stack.</p>
  <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2">
- <a href="/evidence#accenture-national-healthcare-data-exchange" data-ga-event="evidence_hub_click" data-ga-source="case_study" class="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300/90 hover:text-amber-200">Evidence and questions <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
+ <a href="/case-studies/national-healthcare-data-exchange" class="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300 hover:text-amber-200 font-semibold">Read the full case study <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
+  <a href="/evidence#accenture-national-healthcare-data-exchange" data-ga-event="evidence_hub_click" data-ga-source="case_study" class="inline-flex items-center gap-1.5 text-xs font-mono text-amber-300/90 hover:text-amber-200">Evidence and questions <i aria-hidden="true" class="fas fa-arrow-right text-[10px]"></i></a>
  <a href="/portfolio#experience-foundation" class="inline-flex items-center gap-1.5 text-xs font-mono text-neutral-400 hover:text-neutral-200">Earlier federal work, including the $40M VA platform <i aria-hidden="true" class="fas fa-arrow-down text-[10px]"></i></a>
  </div>
  </div>
@@ -427,14 +429,10 @@ const latestArticles = (await getPublishedArticles())
  <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
  <label for="contact-company" class="sr-only">Company</label>
  <input id="contact-company" type="text" name="company" autocomplete="organization" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
- <label for="contact-inquiry-type" class="sr-only">Role / How can I help?</label>
- <select id="contact-inquiry-type" name="inquiry_type" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
- <option value="" disabled selected>Role / How can I help?</option>
- <option>Leadership role or executive opportunity</option>
- <option>Data or AI initiatives not delivering expected outcomes</option>
- <option>Decision-making and execution challenges</option>
- <option>Architecture or platform strategy review</option>
- <option>Other</option>
+ <label for="contact-inquiry-type" class="sr-only">Inquiry type (required)</label>
+ <select id="contact-inquiry-type" name="inquiry_type" required aria-required="true" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
+ <option value="" disabled selected>Inquiry type *</option>
+ {INQUIRY_TYPES.map((t) => <option value={t.label} data-type={t.key}>{t.label}</option>)}
  </select>
  <label for="contact-message" class="sr-only">Message</label>
  <textarea id="contact-message" name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all"></textarea>
@@ -489,8 +487,7 @@ const latestArticles = (await getPublishedArticles())
  <p class="text-sm text-neutral-400">Reginal Campbell · Enterprise Transformation Leader · PMP · U.S. Army Veteran</p>
  </div>
  <div class="flex flex-wrap justify-center gap-6">
- <!-- RESUME: Replace the href below with your Google Drive or Dropbox PDF link -->
- <a href="https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="text-sm text-white hover:text-amber-400 transition" id="resume-link">Download Executive Resume</a>
+ <a href={RESUME_URL} target="_blank" rel="noopener" class="text-sm text-white hover:text-amber-400 transition" id="resume-link">Download Executive Resume</a>
  <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" rel="noopener noreferrer" class="text-sm text-white hover:text-amber-400 transition">Connect on LinkedIn →</a>
  </div>
  </footer>
