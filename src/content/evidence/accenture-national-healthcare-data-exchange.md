@@ -11,7 +11,7 @@ claims:
   - "Aligned quarterly planning, investment prioritization, and feature delivery across cross-functional teams"
 links:
   - { label: "Read the case study", href: "/case-studies/national-healthcare-data-exchange", kind: "section" }
-  - { label: "Executive resume", href: "https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view", kind: "resume" }
+  - { label: "Executive resume", href: "/reginal-campbell-resume.pdf", kind: "resume" }
 questions:
   - "What was Reginal responsible for on the national healthcare data exchange at Accenture?"
   - "How did Reginal run planning and prioritization across engineering, security, and compliance teams?"
