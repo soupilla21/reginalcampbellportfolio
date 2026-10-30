@@ -74,7 +74,7 @@ const rawCaseStudies: CaseStudy[] = [
       "I was the client-facing delivery lead, responsible for executive decision support, operating cadence, and portfolio-level planning.",
       "I aligned quarterly planning, investment prioritization, and feature delivery across cross-functional engineering, cloud, security, compliance, and product teams.",
     ],
-    // constraints, decisions, lessons: held back for now (Reggie, 30 Oct 2026).
+    // constraints, decisions, lessons: left off permanently (Reggie, 30 Oct 2026).
     results: {
       metrics: [
         { label: "Scale", value: "2B+", detail: "Transactions per month on the national healthcare data exchange platform" },
@@ -112,41 +112,43 @@ const rawCaseStudies: CaseStudy[] = [
   },
   {
     // Home inspection client engagement. Anonymized until the client approves naming (Reggie, 30 Oct 2026).
-    // Draft: builds at its URL for review, noindex, out of the sitemap, not linked from any page.
     slug: "home-inspection-website",
-    status: "draft",
+    status: "published",
     client: { anonymized: "a regional home inspection company" },
-    eyebrow: "Small-Business Digital Services · InnovatePM Solutions",
+    eyebrow: "Small-Business Digital Services · InnovatePM Solutions · 2026",
     title: "Website Launch for a Regional Home Inspection Company",
     role: "Consultant: proposal, build and launch",
     summary:
-      "Website proposal, build and production launch for {client}, with Google Analytics 4 and Microsoft Clarity installed.",
+      "Website proposal, build and production launch for {client} that had no website, with Google Analytics 4 and Microsoft Clarity installed.",
     problem: [
-      ph("What {client} needed before the engagement, in one or two sentences (for example: no website, or a site that no longer worked for them)."),
+      "{Client} had no website.",
     ],
     myRole: [
       "I wrote the website proposal, built the site and took it through production launch. The work was delivered through InnovatePM Solutions.",
-      ph("Anything else in scope: content, domain, hosting, business listings, handoff or training."),
+      "Scope also covered domain and hosting setup, the site content, the Google Business Profile and listings, and a handoff with training for the owner.",
     ],
     constraints: [
-      ph("Budget, timeline or technical constraints you are willing to share."),
+      "The work had to fit a small-business budget.",
+      "The business has no in-house technical staff, so the owner needed to be able to run the site without a developer.",
     ],
     decisions: [
-      ph("Two or three decisions and why: for example platform choice, page structure, or installing analytics before launch."),
+      "Mobile-first layout, built for customers searching on their phones.",
+      "The Google Business Profile and listings were set up alongside the site, so search finds the business in both places.",
+      "A clear path to call or book an inspection from every page.",
+      "Google Analytics 4 and Microsoft Clarity went in before launch, so results are measurable from day one.",
     ],
     results: {
       metrics: [
-        { label: "Launched", value: ph("Month and year"), detail: "Production launch" },
+        { label: "Launched", value: "2026", detail: "Production launch" },
         { label: "Analytics", value: "GA4 + Clarity", detail: "Installed at launch" },
-        { label: "Result", value: ph("Client-approved figure"), detail: ph("What it measures: visits, calls, form submissions or rankings") },
       ],
       text: [
-        "The site launched to production with Google Analytics 4 and Microsoft Clarity installed, so {client} can see visitor traffic and on-page behavior from the start.",
-        ph("Any measurable result the client approves. Remove this line if there is none."),
+        "The site launched to production in 2026 with Google Analytics 4 and Microsoft Clarity installed, so {client} can see visitor traffic and on-page behavior from the start.",
       ],
     },
     lessons: [
-      ph("One or two lessons, in your words."),
+      "Measure from day one. Analytics installed after launch loses the baseline you need to show results.",
+      "For a local service business, listings matter as much as the site. The Google profile is often found before the website.",
     ],
     cta: {
       label: "Discuss a project",
@@ -154,9 +156,11 @@ const rawCaseStudies: CaseStudy[] = [
       secondary: { label: "Small-business services", href: "/digital-services" },
     },
     sources: [
-      { claim: "InnovatePM engagement: website proposal, build and production launch", source: "Reggie's Week 2 brief; project memory (InnovatePM client work)" },
-      { claim: "Google Analytics 4 and Microsoft Clarity installed", source: "Reggie's Week 2 brief; project memory" },
-      { claim: "Anonymized as 'a regional home inspection company'", source: "Reggie, decision D5 (30 Oct 2026)" },
+      { claim: "InnovatePM engagement: website proposal, build and production launch", source: "Reggie's Week 2 brief; project memory" },
+      { claim: "Google Analytics 4 and Microsoft Clarity installed before launch", source: "Reggie's Week 2 brief; Reggie, closeout answers (30 Oct 2026)" },
+      { claim: "No website before; scope (domain and hosting, content, Google Business Profile and listings, handoff and training); launched 2026; no result figure", source: "Reggie, closeout answers (30 Oct 2026)" },
+      { claim: "Constraints, decisions and lessons as written", source: "Reggie, closeout answers (30 Oct 2026), chosen from offered options" },
+      { claim: "Anonymized as 'a regional home inspection company'", source: "Reggie, decisions D5 and closeout (30 Oct 2026)" },
     ],
   },
 ];
