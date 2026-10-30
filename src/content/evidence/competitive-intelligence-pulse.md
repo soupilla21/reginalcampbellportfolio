@@ -8,7 +8,7 @@ corpusKeys: ["competitive_intelligence_pulse"]
 claims:
   - "Architecture design; not running in production"
 links:
-  - { label: "Explore the architecture", href: "/#innovation-lab", kind: "section" }
+  - { label: "Explore the architecture", href: "/portfolio#innovation-lab", kind: "section" }
 questions:
   - "Why does this design use cloud APIs when the Leadership Agent runs locally?"
   - "How would the design keep hallucinated intelligence out of executive reports?"

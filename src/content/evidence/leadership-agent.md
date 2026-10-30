@@ -12,7 +12,7 @@ claims:
 links:
   - { label: "Download the case study (PDF)", href: "/case-studies/Leadership_Agent_Case_Study.pdf", kind: "pdf" }
   - { label: "Read the AI risk assessment", href: "/artifacts/ai-risk-assessment-leadership-agent", kind: "artifact" }
-  - { label: "Explore the architecture", href: "/#innovation-lab", kind: "section" }
+  - { label: "Explore the architecture", href: "/portfolio#innovation-lab", kind: "section" }
   - { label: "View the code on GitHub", href: "https://github.com/soupilla21/reginalcampbellportfolio", kind: "code" }
 questions:
   - "Why is the human approval gate treated as load-bearing rather than temporary?"

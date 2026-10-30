@@ -12,7 +12,7 @@ claims:
   - "Described as audit-ready; not represented as holding any formal certification"
   - "Billing, usage metering, and self-service onboarding are planned, not built"
 links:
-  - { label: "Explore the architecture", href: "/#innovation-lab", kind: "section" }
+  - { label: "Explore the architecture", href: "/portfolio#innovation-lab", kind: "section" }
 questions:
   - "Why enforce tenant isolation in the database instead of the application?"
   - "What would a compliance reviewer check first in this design?"

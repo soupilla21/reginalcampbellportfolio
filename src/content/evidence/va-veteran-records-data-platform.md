@@ -9,7 +9,7 @@ corpusKeys: ["role_va_batch_automation"]
 claims:
   - "Data platform supporting more than 1 million veteran records"
 links:
-  - { label: "See the platform history", href: "/#experience-foundation", kind: "section" }
+  - { label: "See the platform history", href: "/portfolio#experience-foundation", kind: "section" }
   - { label: "Executive resume", href: "https://drive.google.com/file/d/1tRVcyNSOf7ec7-xqskH90cSyH0uS2vcT/view", kind: "resume" }
 questions:
   - "What made legacy veteran data hard to trust as an input to downstream systems?"

@@ -252,7 +252,7 @@ That matters because the most obvious next optimization for a system like this i
 
 The second major finding came from R2, and it changed the system rather than just the document. The promotion threshold was raised and the quarterly brand-guide diff review was added. Neither existed before this assessment. They exist because reading the promotion logic carefully, instead of relying on memory, moved a risk score from 6 to 16.
 
-The full architecture, agent topology, and delivery outcomes are documented in the [Leadership Agent case study](/#ai-systems).
+The full architecture, agent topology, and delivery outcomes are documented in the [Leadership Agent case study](/portfolio#ai-systems).
 
 ## 8. Scope & Limitations
 
