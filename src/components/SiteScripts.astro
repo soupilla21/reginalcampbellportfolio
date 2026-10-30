@@ -40,7 +40,7 @@
  let resetButtonTimer = null;
 
  // ── CASE STUDY VIEW TRACKING (GA4) ──
- // Fires a `view_case_study` event any time a visitor genuinely engages with one of
+ // Fires a `case_study_view` event any time a visitor genuinely engages with one of
  // the case-study narratives, whether by scrolling to it, downloading its PDF, or
  // clicking into its interactive architecture panel. `case_study_name` is the
  // dimension to slice by in GA4 to see which story actually holds attention.
@@ -55,7 +55,7 @@
      if (_firedCaseStudyEvents.has(dedupeKey)) return;
      _firedCaseStudyEvents.add(dedupeKey);
    }
-   gtag('event', 'view_case_study', Object.assign({
+   gtag('event', 'case_study_view', Object.assign({
      case_study_name: caseStudyName,
      interaction_type: interactionType, // 'scroll_view' | 'click_download' | 'click_explore'
      content_area: contentArea          // e.g. 'case_study_section', 'delivery_portfolio_card', 'ai_systems_section', 'innovation_lab_panel'
@@ -380,6 +380,17 @@
  headers: { "Accept": "application/json" }
  });
  if (res.ok) {
+ // GA4: counted only after Formspree confirms. Sends the inquiry
+ // category and nothing else from the form. Wrapped so a blocked or
+ // broken GA tag can never affect the confirmation the visitor sees.
+ try {
+   const opt = inquirySel ? inquirySel.options[inquirySel.selectedIndex] : null;
+   const GA_INQUIRY = { "advisory": "enterprise", "small-business": "smb", "role": "executive", "other": "other" };
+   const inquiryKey = opt ? GA_INQUIRY[opt.getAttribute("data-type")] : null;
+   if (typeof gtag === "function") {
+     gtag("event", "inquiry_submit", { inquiry_type: inquiryKey || "other" });
+   }
+ } catch (gaErr) {}
  form.reset();
  applyInquiryType();
  successEl.classList.remove("hidden");

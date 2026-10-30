@@ -131,6 +131,33 @@ const blogPostingJsonLd = {
       checkDepth();
     })();
   </script>
+  <script is:inline>
+    // GA4 article_to_article: any click from this article to another article,
+    // in the body or the related-reading cards. Params: from_slug, to_slug,
+    // link_location (body | related | other).
+    (function () {
+      var articleEl = document.getElementById("article-content-body");
+      if (!articleEl) return;
+      var fromSlug = articleEl.getAttribute("data-slug");
+      document.addEventListener("click", function (e) {
+        try {
+          var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
+          if (!a || typeof gtag !== "function") return;
+          var url = new URL(a.getAttribute("href"), window.location.href);
+          if (url.hostname !== window.location.hostname) return;
+          var m = url.pathname.match(/^\/articles\/([^\/]+)\/?$/);
+          if (!m || m[1] === fromSlug) return;
+          var where = articleEl.contains(a) ? "body"
+            : (a.closest("[aria-labelledby='related-reading-heading']") ? "related" : "other");
+          gtag("event", "article_to_article", {
+            from_slug: fromSlug,
+            to_slug: m[1],
+            link_location: where,
+          });
+        } catch (err) {}
+      });
+    })();
+  </script>
   <TrackClicks />
 </body>
 </html>

@@ -18,6 +18,14 @@ const { study } = Astro.props;
   path={`/case-studies/${study.slug}`}
   active="record"
   noindex={study.status !== "published"}
+  event={{
+    name: "case_study_view",
+    params: {
+      case_study_name: study.title,
+      interaction_type: "page_view",
+      content_area: "case_study_page",
+    },
+  }}
 >
   <CaseStudy study={study} />
 </PageLayout>
