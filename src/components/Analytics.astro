@@ -2,26 +2,70 @@
 // Google Analytics 4. The one copy of the tag for every page on the site.
 //
 // gtag() and dataLayer are always defined, so the site's event calls
-// (read depth, click tracking, case-study views) never throw. The GA library
-// itself loads only on the production hostnames below, so localhost and
-// Vercel preview deployments stop sending data to the property.
+// (read depth, click tracking, case-study views, inquiries) never throw. The
+// GA library itself loads only on the production hostnames below, so
+// localhost and Vercel preview deployments stop sending data to the property.
 //
 // The check runs in the browser, not at build time, because Vercel builds
 // preview deployments in production mode; a build-time flag cannot tell a
 // preview from the live site. Serving the site from a new domain requires
 // adding it to PROD_HOSTS, or that domain will not be tracked.
+//
+// Two private URL switches, production only:
+//   ?ga_debug=1 / ?ga_debug=0      Turn GA4 DebugView on or off for this
+//                                  browser tab session (sessionStorage).
+//   ?rc_internal=on / =off         Mark this browser as Reggie's own traffic
+//                                  (cookie, 2 years). Hits carry
+//                                  traffic_type=internal, which the GA4
+//                                  "Internal Traffic" data filter removes.
+//
+// Optional per-page event: pass `event` (name plus parameters) and it is
+// sent once on page load. Used for offer_view and case_study_view.
+interface Props {
+  event?: { name: string; params?: Record<string, string> };
+}
+const { event } = Astro.props;
+const pageEvent = event ? JSON.stringify(event) : "";
 ---
-<script is:inline>
+<script is:inline define:vars={{ pageEvent }}>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  window.gtag = gtag;
   (function () {
     var PROD_HOSTS = ["reginalcampbell.com", "www.reginalcampbell.com"];
     if (PROD_HOSTS.indexOf(window.location.hostname) === -1) return;
+
+    var config = {};
+    try {
+      var q = new URLSearchParams(window.location.search);
+      var dbg = q.get("ga_debug");
+      if (dbg === "1") sessionStorage.setItem("ga_debug", "1");
+      if (dbg === "0") sessionStorage.removeItem("ga_debug");
+      if (sessionStorage.getItem("ga_debug") === "1") config.debug_mode = true;
+
+      var internal = q.get("rc_internal");
+      if (internal === "on") {
+        document.cookie = "rc_internal=1; Max-Age=63072000; Path=/; SameSite=Lax; Secure";
+      }
+      if (internal === "off") {
+        document.cookie = "rc_internal=; Max-Age=0; Path=/; SameSite=Lax; Secure";
+      }
+      if (/(?:^|;\s*)rc_internal=1(?:;|$)/.test(document.cookie)) {
+        config.traffic_type = "internal";
+      }
+    } catch (e) {}
+
     var s = document.createElement("script");
     s.async = true;
     s.src = "https://www.googletagmanager.com/gtag/js?id=G-32FSF2EFEW";
     document.head.appendChild(s);
     gtag('js', new Date());
-    gtag('config', 'G-32FSF2EFEW');
+    gtag('config', 'G-32FSF2EFEW', config);
   })();
+  if (pageEvent) {
+    try {
+      var ev = JSON.parse(pageEvent);
+      gtag("event", ev.name, ev.params || {});
+    } catch (e) {}
+  }
 </script>

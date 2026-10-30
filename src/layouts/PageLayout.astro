@@ -16,14 +16,16 @@ interface Props {
   active?: string;
   noindex?: boolean;
   width?: number;
+  // Sent once on page load, e.g. offer_view or case_study_view.
+  event?: { name: string; params?: Record<string, string> };
 }
-const { title, description, path, active = "", noindex = false, width = 960 } = Astro.props;
+const { title, description, path, active = "", noindex = false, width = 960, event } = Astro.props;
 const url = `https://reginalcampbell.com${path}`;
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <Analytics />
+  <Analytics event={event} />
   <meta charset="UTF-8">
   <meta name="color-scheme" content="dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -57,7 +59,7 @@ const url = `https://reginalcampbell.com${path}`;
     <footer class="mt-24 border-t border-white/10 pt-10 pb-8 flex flex-col md:flex-row justify-between items-center gap-4">
       <p class="text-sm text-neutral-400 text-center md:text-left">Reginal Campbell · Enterprise Transformation Leader · PMP · U.S. Army Veteran</p>
       <div class="flex flex-wrap justify-center gap-6">
-        <a href={RESUME_URL} target="_blank" rel="noopener" data-resume-link class="text-sm text-white hover:text-amber-400 transition">Download Executive Resume</a>
+        <a href={RESUME_URL} target="_blank" rel="noopener" data-resume-link data-ga-event="resume_download" data-ga-source="footer" class="text-sm text-white hover:text-amber-400 transition">Download Executive Resume</a>
         <a href="https://www.linkedin.com/in/reginal-campbell-pmp-1551845/" target="_blank" rel="noopener noreferrer" class="text-sm text-white hover:text-amber-400 transition">Connect on LinkedIn →</a>
       </div>
     </footer>
