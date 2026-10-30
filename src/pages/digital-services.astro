@@ -29,6 +29,15 @@ const services = [
   path="/digital-services"
   active="engage"
   event={{ name: "offer_view", params: { offer: "digital_services" } }}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "InnovatePM Solutions",
+    "url": "https://reginalcampbell.com/digital-services",
+    "description": "Website builds, AI discoverability assessments and launch planning for small businesses.",
+    "serviceType": "Small-business digital services",
+    "founder": { "@id": "https://reginalcampbell.com/#person" }
+  }}
 >
   <header class="mb-14">
     <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Digital services</span>

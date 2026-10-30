@@ -27,6 +27,15 @@ const formats = [
   path="/advisory"
   active="engage"
   event={{ name: "offer_view", params: { offer: "advisory" } }}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "InnovatePM Solutions",
+    "url": "https://reginalcampbell.com/advisory",
+    "description": "AI governance and delivery discipline for regulated organizations: assessments, program recovery and fractional delivery leadership.",
+    "serviceType": "Enterprise AI governance and delivery advisory",
+    "founder": { "@id": "https://reginalcampbell.com/#person" }
+  }}
 >
   <header class="mb-14">
     <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Enterprise advisory</span>
