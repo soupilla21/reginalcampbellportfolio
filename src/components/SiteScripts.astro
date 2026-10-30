@@ -1,0 +1,478 @@
+---
+// The site's shared inline script: scroll reveal, nav offset and highlight,
+// back-to-top, scroll progress, GA4 case-study events, POV article toggles,
+// the Innovation Lab architecture panels and agent cards, and the Formspree
+// contact form. Used by the homepage and /portfolio. Every lookup is either
+// null-safe or guarded, so a page without a given section runs the rest.
+---
+<script is:inline>
+ // Agent data for pipeline tooltips
+ const agentData = {
+ researcher: { stage: "Stage 1 of 9", name: "Researcher", detail: "Runs on a cron schedule three times daily (6am, noon, 6pm) independently of the main pipeline. Fetches RSS feeds from 25+ curated sources.", input: "→ Input: RSS feed URLs from sources/rss_feeds.txt", output: "→ Output: Raw article list → passed to Gatekeeper" },
+ gatekeeper: { stage: "Stage 2 of 9", name: "Gatekeeper", detail: "LLM-powered brand alignment filter. Evaluates each article against the brand guide before downstream agents are invoked.", input: "→ Input: Raw article list from Researcher", output: "→ Output: Filtered and scored article list → passed to Orchestrator" },
+ orchestrator: { stage: "Stage 3 of 9", name: "Orchestrator", detail: "Selects the highest-scoring article and determines content format (post, article, or both).", input: "→ Input: Scored and filtered article list", output: "→ Output: Selected topic + content plan → passed to Strategist" },
+ strategist: { stage: "Stage 4 of 9", name: "Strategist", detail: "Frames the narrative angle before any writing begins.", input: "→ Input: Selected topic + brand guide themes", output: "→ Output: Narrative angle + structural brief → passed to Writer" },
+ writer: { stage: "Stage 5 of 9", name: "Writer", detail: "Generates the first full draft using the documented author voice.", input: "→ Input: Narrative brief + brand voice examples", output: "→ Output: First draft → passed to Critic" },
+ critic: { stage: "Stage 6 of 9", name: "Critic", detail: "Multi-axis quality validation loop evaluating brand alignment, tone, originality, and structure.", input: "→ Input: First draft from Writer", output: "→ Output: Validated draft + quality notes → passed to Editor" },
+ editor: { stage: "Stage 7 of 9", name: "Editor", detail: "Refines the validated draft with surgical precision.", input: "→ Input: Validated draft + Critic quality notes", output: "→ Output: Polished draft → passed to Formatter" },
+ formatter: { stage: "Stage 8 of 9", name: "Formatter", detail: "Applies LinkedIn-specific structural formatting.", input: "→ Input: Polished draft from Editor", output: "→ Output: Formatted post or article → passed to Publisher QC" },
+ publisherqc: { stage: "Stage 9a of 9", name: "Publisher QC", detail: "The final governance gate before output is delivered.", input: "→ Input: Formatted draft from Formatter", output: "→ Output: QC pass/fail report → triggers Feedback Ingester" },
+ feedback: { stage: "Stage 9b of 9", name: "Feedback Ingester", detail: "The self-improvement engine. Compares agent output against human-edited final.", input: "→ Input: Agent output + human-edited final", output: "→ Output: Pattern log → brand guide updates" }
+ };
+
+ const cloudAgentData = {
+ ingestor: { stage: "Stage 1 of 5", name: "Ingestor", detail: "Scheduled Lambda functions ingest from news APIs, RSS, SEC filings, earnings calls, and social signals.", input: "→ Input: Configured source list", output: "→ Output: Normalized article objects → passed to Embedder" },
+ embedder: { stage: "Stage 2 of 5", name: "Embedder", detail: "Each item is chunked and passed through an embedding model to generate dense vector representations.", input: "→ Input: Normalized items from Ingestor", output: "→ Output: Vector embeddings stored in vector DB" },
+ retriever: { stage: "Stage 3 of 5", name: "Retriever", detail: "Performs semantic similarity search across the vector database based on watchlist queries.", input: "→ Input: Query vector from watchlist trigger", output: "→ Output: Top-ranked relevant content → passed to Synthesizer" },
+ synthesizer: { stage: "Stage 4 of 5", name: "Synthesizer", detail: "Frontier LLM synthesizes retrieved context into structured intelligence briefs.", input: "→ Input: Retrieved content chunks", output: "→ Output: Structured intelligence brief with attribution" },
+ alerter: { stage: "Stage 5 of 5", name: "Alerter", detail: "Delivers intelligence to Slack, email, or webhook based on configured thresholds.", input: "→ Input: Structured brief from Synthesizer", output: "→ Output: Alert to configured destinations" }
+ };
+
+ const saasAgentData = {
+ authlayer: { stage: "Layer 1 of 5", name: "Auth Layer", detail: "Supabase Auth issues ES256 JWT tokens per tenant on login.", input: "→ Input: User credentials", output: "→ Output: Signed ES256 JWT with tenant_id and role claims" },
+ apigateway: { stage: "Layer 2 of 5", name: "API Gateway", detail: "FastAPI endpoint layer with tenant-scoped routes.", input: "→ Input: Authenticated HTTP request with JWT", output: "→ Output: Tenant-scoped API response" },
+ datalayer: { stage: "Layer 3 of 5", name: "Data Layer", detail: "PostgreSQL with Row Level Security policies enforcing tenant isolation.", input: "→ Input: Tenant-scoped query", output: "→ Output: Isolated tenant data" },
+ tenantworkspace: { stage: "Layer 4 of 5", name: "Tenant Workspace", detail: "Isolated workspace per tenant with brand profile and run history.", input: "→ Input: Tenant configuration", output: "→ Output: Isolated workspace state" },
+ pipelinerunner: { stage: "Layer 5 of 5", name: "Pipeline Runner", detail: "Wraps the Python agent pipeline as an API-triggered job.", input: "→ Input: Run request + tenant context", output: "→ Output: Run record, audit trail, artifacts" }
+ };
+
+ let currentArch = null;
+ let resetButtonTimer = null;
+
+ // ── CASE STUDY VIEW TRACKING (GA4) ──
+ // Fires a `view_case_study` event any time a visitor genuinely engages with one of
+ // the case-study narratives, whether by scrolling to it, downloading its PDF, or
+ // clicking into its interactive architecture panel. `case_study_name` is the
+ // dimension to slice by in GA4 to see which story actually holds attention.
+ const _firedCaseStudyEvents = new Set();
+ function trackCaseStudyView(caseStudyName, interactionType, contentArea, extraParams) {
+   if (typeof gtag !== 'function' || !caseStudyName) return;
+   // De-dupe passive scroll views per section per pageview so re-scrolling past
+   // a section doesn't spam events. Clicks/downloads are real actions each time
+   // and are always sent.
+   const dedupeKey = caseStudyName + '|' + interactionType + '|' + contentArea;
+   if (interactionType === 'scroll_view') {
+     if (_firedCaseStudyEvents.has(dedupeKey)) return;
+     _firedCaseStudyEvents.add(dedupeKey);
+   }
+   gtag('event', 'view_case_study', Object.assign({
+     case_study_name: caseStudyName,
+     interaction_type: interactionType, // 'scroll_view' | 'click_download' | 'click_explore'
+     content_area: contentArea          // e.g. 'case_study_section', 'delivery_portfolio_card', 'ai_systems_section', 'innovation_lab_panel'
+   }, extraParams || {}));
+ }
+
+ function setActiveArchitecture(arch, scrollToPanel, isUserAction) {
+ if (isUserAction === undefined) isUserAction = true;
+ if (currentArch === arch) {
+ document.getElementById('panel-' + arch).classList.remove('open');
+ document.body.removeAttribute('data-arch');
+ document.querySelectorAll('[aria-pressed]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+ document.querySelectorAll('[aria-expanded][data-arch-card]').forEach(c => c.setAttribute('aria-expanded', 'false'));
+ currentArch = null;
+ return;
+ }
+
+ ['edge','cloud','saas'].forEach(a => {
+ document.getElementById('panel-' + a).classList.remove('open');
+ });
+
+ currentArch = arch;
+ document.body.setAttribute('data-arch', arch);
+
+ if (isUserAction) {
+   const archCaseStudyNames = { edge: 'Leadership Agent', cloud: 'Intelligence Pulse', saas: 'SaaS Orchestrator' };
+   trackCaseStudyView(archCaseStudyNames[arch] || arch, 'click_explore', 'innovation_lab_panel');
+ }
+
+ document.querySelectorAll('[aria-pressed]').forEach(b => {
+ b.setAttribute('aria-pressed', b.getAttribute('data-arch') === arch ? 'true' : 'false');
+ });
+ document.querySelectorAll('[aria-expanded][data-arch-card]').forEach(c => {
+ c.setAttribute('aria-expanded', c.getAttribute('data-arch-card') === arch ? 'true' : 'false');
+ });
+
+ const panel = document.getElementById('panel-' + arch);
+ panel.classList.add('open');
+
+ if (scrollToPanel) {
+ setTimeout(() => {
+ panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ }, 80);
+ }
+ }
+
+ // Wire up all architecture toggles
+ document.querySelectorAll('.arch-toggle, .arch-toggle-mobile').forEach(btn => {
+ btn.addEventListener('click', (e) => {
+ e.stopPropagation();
+ const arch = btn.getAttribute('data-arch');
+ if (arch) setActiveArchitecture(arch, true);
+ });
+ });
+
+ // Sidebar visibility
+ function updateNavVisibility() {
+   // Sidebar and mobile bar controlled via CSS body.in-innovation-lab class
+   // This function kept for resize hook compatibility
+ }
+
+ function updateNavOffset() {
+ var nav = document.getElementById("main-nav");
+ var main = document.getElementById("main-content");
+ if (!nav || !main) return;
+ var h = nav.getBoundingClientRect().height;
+ document.documentElement.style.setProperty("--nav-height", h + "px");
+ }
+
+ updateNavOffset();
+ updateNavVisibility();
+ window.addEventListener("resize", () => { updateNavOffset(); updateNavVisibility(); });
+ window.addEventListener("orientationchange", () => setTimeout(updateNavOffset, 150));
+
+ // Back to top button - visible on all devices after scroll
+ const backToTop = document.getElementById("back-to-top");
+ window.addEventListener("scroll", function() {
+ if (window.scrollY > 400) {
+ backToTop.style.display = "flex";
+ } else {
+ backToTop.style.display = "none";
+ }
+ var nav = document.getElementById("main-nav");
+ if (nav) nav.style.boxShadow = window.scrollY > 10 ? "0 2px 20px rgba(0,0,0,0.6)" : "none";
+ });
+
+ // Scroll reveal
+ const revealObserver = new IntersectionObserver((entries) => {
+ entries.forEach(e => {
+ if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+ });
+ }, { threshold: 0.03, rootMargin: "0px 0px -20px 0px" });
+ document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+ // Case study scroll-view tracking: fires once per section per pageview when at
+ // least half of it has been scrolled into view.
+ const caseStudySections = [
+   { el: document.getElementById('case-study'), name: 'National Healthcare Data Exchange', area: 'case_study_section' },
+   { el: document.getElementById('ai-systems'), name: 'Leadership Agent', area: 'ai_systems_section' }
+ ];
+ const caseStudySectionObserver = new IntersectionObserver((entries) => {
+   entries.forEach(entry => {
+     if (!entry.isIntersecting) return;
+     const match = caseStudySections.find(c => c.el === entry.target);
+     if (match) {
+       trackCaseStudyView(match.name, 'scroll_view', match.area);
+       caseStudySectionObserver.unobserve(entry.target);
+     }
+   });
+ }, { threshold: 0.5 });
+ caseStudySections.forEach(c => { if (c.el) caseStudySectionObserver.observe(c.el); });
+
+ // Case study scroll-view tracking for the three delivery-portfolio cards
+ // (Leadership Agent / Project Helios case study / Project Helios governance).
+ const caseStudyCardObserver = new IntersectionObserver((entries) => {
+   entries.forEach(entry => {
+     if (!entry.isIntersecting) return;
+     const card = entry.target;
+     const name = card.getAttribute('data-case-study-card');
+     const assetType = card.getAttribute('data-asset-type');
+     trackCaseStudyView(name, 'scroll_view', 'delivery_portfolio_card', { asset_type: assetType });
+     caseStudyCardObserver.unobserve(card);
+   });
+ }, { threshold: 0.5 });
+ document.querySelectorAll('[data-case-study-card]').forEach(card => caseStudyCardObserver.observe(card));
+
+ // Case study PDF download click tracking
+ document.querySelectorAll('[data-case-study-download]').forEach(link => {
+   link.addEventListener('click', () => {
+     const name = link.getAttribute('data-case-study-download');
+     const assetType = link.getAttribute('data-asset-type');
+     trackCaseStudyView(name, 'click_download', 'delivery_portfolio_card', {
+       asset_type: assetType,
+       file_name: link.getAttribute('href')
+     });
+   });
+ });
+
+ // Nav active on scroll
+ const navLinks = document.querySelectorAll('.nav-link');
+ const navObserver = new IntersectionObserver((entries) => {
+ entries.forEach(entry => {
+ if (entry.isIntersecting) {
+ const id = entry.target.id;
+ navLinks.forEach(link => {
+ link.classList.remove('nav-active');
+ if (link.getAttribute('data-section') === id) link.classList.add('nav-active');
+ });
+ }
+ });
+ }, { threshold: 0.3 });
+ ['hero','paths','case-study','point-of-view','latest-articles','contact'].forEach(id => {
+ const el = document.getElementById(id);
+ if (el) navObserver.observe(el);
+ });
+
+ // Code toggles
+ // Article toggles (POV section)
+ function toggleArticle(id) {
+   const el = document.getElementById(id);
+   const btn = document.getElementById(id + '-btn');
+   if (!el || !btn) return;
+   const isHidden = el.classList.contains('hidden');
+   el.classList.toggle('hidden');
+   btn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+   btn.innerHTML = isHidden
+     ? btn.innerHTML.replace('↓', '↑').replace('Read Article', 'Close Article')
+     : btn.innerHTML.replace('↑', '↓').replace('Close Article', 'Read Article');
+   if (isHidden) {
+     setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+   }
+ }
+
+ // Auto-expand an article if the page loads with its id as the URL fragment
+ // (e.g. a provenance chip linking to /#article2 from the Portfolio Intelligence
+ // System). Without this, the fragment scrolls to the collapsed section but the
+ // article text stays hidden until a visitor manually clicks "Read Article."
+ document.addEventListener('DOMContentLoaded', () => {
+   const hash = window.location.hash.slice(1);
+   if (['article1', 'article2', 'article3'].includes(hash)) {
+     toggleArticle(hash);
+   }
+ });
+
+ function toggleCode(id) {
+ const el = document.getElementById(id);
+ const btn = document.querySelector(`button[onclick="toggleCode('${id}')"]`);
+ if (el && btn) {
+ el.classList.toggle('open');
+ btn.setAttribute('aria-expanded', el.classList.contains('open') ? 'true' : 'false');
+ btn.innerHTML = el.classList.contains('open') 
+ ? btn.innerHTML.replace('↓', '↑').replace('View', 'Hide')
+ : btn.innerHTML.replace('↑', '↓').replace('Hide', 'View');
+ }
+ }
+
+ // Agent detail functions
+ function showAgent(el) {
+ const key = el.getAttribute("data-agent");
+ const data = agentData[key];
+ if (!data) return;
+
+ document.querySelectorAll("[data-agent]").forEach(n => {
+ n.style.boxShadow = "";
+ n.style.transform = "";
+ });
+ el.style.boxShadow = "0 0 0 2px rgba(245,158,11,0.8)";
+ el.style.transform = "scale(1.05)";
+
+ document.getElementById("agent-stage").textContent = data.stage;
+ document.getElementById("agent-name").textContent = data.name;
+ document.getElementById("agent-detail").textContent = data.detail;
+ document.getElementById("agent-input").textContent = data.input;
+ document.getElementById("agent-output").textContent = data.output;
+
+ const card = document.getElementById("agent-detail-card");
+ card.style.display = "block";
+ setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+ }
+
+ function closeAgent() {
+ document.getElementById("agent-detail-card").style.display = "none";
+ document.querySelectorAll("[data-agent]").forEach(n => {
+ n.style.boxShadow = "";
+ n.style.transform = "";
+ });
+ }
+
+ function showCloudAgent(el) {
+ const key = el.getAttribute("data-cloud-agent");
+ const data = cloudAgentData[key];
+ if (!data) return;
+ document.querySelectorAll("[data-cloud-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ el.style.boxShadow = "0 0 0 2px rgba(59,130,246,0.8)";
+ el.style.transform = "scale(1.05)";
+ document.getElementById("cloud-agent-stage").textContent = data.stage;
+ document.getElementById("cloud-agent-name").textContent = data.name;
+ document.getElementById("cloud-agent-detail").textContent = data.detail;
+ document.getElementById("cloud-agent-input").textContent = data.input;
+ document.getElementById("cloud-agent-output").textContent = data.output;
+ const card = document.getElementById("cloud-agent-detail-card");
+ card.style.display = "block";
+ setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+ }
+
+ function closeCloudAgent() {
+ document.getElementById("cloud-agent-detail-card").style.display = "none";
+ document.querySelectorAll("[data-cloud-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ }
+
+ function showSaasAgent(el) {
+ const key = el.getAttribute("data-saas-agent");
+ const data = saasAgentData[key];
+ if (!data) return;
+ document.querySelectorAll("[data-saas-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ el.style.boxShadow = "0 0 0 2px rgba(20,184,166,0.8)";
+ el.style.transform = "scale(1.05)";
+ document.getElementById("saas-agent-stage").textContent = data.stage;
+ document.getElementById("saas-agent-name").textContent = data.name;
+ document.getElementById("saas-agent-detail").textContent = data.detail;
+ document.getElementById("saas-agent-input").textContent = data.input;
+ document.getElementById("saas-agent-output").textContent = data.output;
+ const card = document.getElementById("saas-agent-detail-card");
+ card.style.display = "block";
+ setTimeout(() => card.scrollIntoView({ behavior: "smooth", block: "nearest" }), 50);
+ }
+
+ function closeSaasAgent() {
+ document.getElementById("saas-agent-detail-card").style.display = "none";
+ document.querySelectorAll("[data-saas-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
+ }
+
+ // Form handling
+ const form = document.getElementById("contact-form");
+ if (form) {
+ form.addEventListener("submit", async function(e) {
+ e.preventDefault();
+ const btn = document.getElementById("form-submit-btn");
+ const successEl = document.getElementById("form-success");
+ const errorEl = document.getElementById("form-error");
+ const honeypot = form.querySelector("input[name=_gotcha]");
+ if (honeypot && honeypot.value) return;
+ if (btn.disabled) return;
+
+ const name = form.querySelector("input[name=name]").value.trim();
+ const email = form.querySelector("input[name=email]").value.trim();
+ const message = form.querySelector("textarea[name=message]").value.trim();
+ const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+ if (!name || !email || !message) {
+ errorEl.querySelector("p").textContent = "✗ Please fill in all required fields.";
+ errorEl.classList.remove("hidden");
+ return;
+ }
+ if (!emailRe.test(email)) {
+ errorEl.querySelector("p").textContent = "✗ Please enter a valid email address.";
+ errorEl.classList.remove("hidden");
+ return;
+ }
+
+ successEl.classList.add("hidden");
+ errorEl.classList.add("hidden");
+ btn.innerHTML = 'Sending… <i aria-hidden="true" class="fas fa-spinner fa-spin text-sm"></i>';
+ btn.disabled = true;
+ btn.style.opacity = "0.7";
+
+ try {
+ const res = await fetch(form.action, {
+ method: "POST",
+ body: new FormData(form),
+ headers: { "Accept": "application/json" }
+ });
+ if (res.ok) {
+ form.reset();
+ successEl.classList.remove("hidden");
+ btn.innerHTML = "Sent ✓";
+ if (resetButtonTimer) clearTimeout(resetButtonTimer);
+ resetButtonTimer = setTimeout(() => {
+ btn.innerHTML = 'Send Message <i aria-hidden="true" class="fas fa-paper-plane text-sm"></i>';
+ btn.disabled = false;
+ btn.style.opacity = "1";
+ resetButtonTimer = null;
+ }, 3000);
+ } else {
+ throw new Error("Server error");
+ }
+ } catch (err) {
+ errorEl.querySelector("p").textContent = "✗ Submission failed.";
+ errorEl.classList.remove("hidden");
+ btn.innerHTML = 'Send Message <i aria-hidden="true" class="fas fa-paper-plane text-sm"></i>';
+ btn.disabled = false;
+ btn.style.opacity = "1";
+ }
+ });
+ }
+
+ // Innovation Lab sidebar: show/hide via body class when section is in view
+ const labSection = document.getElementById('innovation-lab');
+ if (labSection) {
+   const labObserver = new IntersectionObserver((entries) => {
+     entries.forEach(entry => {
+       if (entry.isIntersecting) {
+         document.body.classList.add('in-innovation-lab');
+       } else {
+         document.body.classList.remove('in-innovation-lab');
+       }
+     });
+   }, { threshold: 0.05 });
+   labObserver.observe(labSection);
+ }
+
+ // Force reveal any hidden sections after 2s
+ setTimeout(() => {
+ document.querySelectorAll('.reveal:not(.visible)').forEach(el => el.classList.add('visible'));
+ }, 2000);
+
+ // Initialize with edge panel open, unless the URL requests a different one
+ // (e.g. a provenance chip linking to /#panel-saas from the Portfolio
+ // Intelligence System). Falls back to edge for a bare page load, matching
+ // the prior default exactly.
+ const archHash = window.location.hash.slice(1);
+ const archFromHash = ['panel-edge', 'panel-cloud', 'panel-saas'].includes(archHash)
+   ? archHash.replace('panel-', '')
+   : 'edge';
+ // Only pages that contain the architecture panels (/portfolio) run this.
+ if (document.getElementById('panel-edge')) setActiveArchitecture(archFromHash, archFromHash !== 'edge', false);
+
+ // Add keyboard handlers for pipeline nodes
+ document.querySelectorAll('.pipeline-node').forEach(node => {
+ node.addEventListener('keydown', (e) => {
+ if (e.key === 'Enter' || e.key === ' ') {
+ e.preventDefault();
+ node.click();
+ }
+ });
+ });
+
+ // ── SCROLL PROGRESS BAR ──
+ const progressBar = document.getElementById('scroll-progress');
+ if (progressBar) {
+   const updateProgress = () => {
+     const scrollTop = window.scrollY;
+     const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+     const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+     progressBar.style.width = pct.toFixed(2) + '%';
+   };
+   window.addEventListener('scroll', updateProgress, { passive: true });
+   updateProgress();
+ }
+
+ // ── PIPELINE NODE PULSE on architecture switch ──
+ // Wrap the existing setActiveArchitecture to add pulse to the first node of the active panel
+ const _origSetArch = typeof setActiveArchitecture === 'function' ? setActiveArchitecture : null;
+ function applyPulseToActivePanel(archName) {
+   // Remove pulse from all nodes first
+   document.querySelectorAll('.pipeline-node.pulse-node').forEach(n => n.classList.remove('pulse-node'));
+   // Find first pipeline node inside the newly active panel
+   const panel = document.getElementById('panel-' + archName);
+   if (panel) {
+     const firstNode = panel.querySelector('.pipeline-node');
+     if (firstNode) {
+       firstNode.classList.add('pulse-node');
+       // Remove pulse after 3 cycles (~4.2s) so it doesn't run forever
+       setTimeout(() => firstNode.classList.remove('pulse-node'), 4200);
+     }
+   }
+ }
+
+ // Hook into arch toggle buttons
+ document.querySelectorAll('.arch-toggle, .arch-toggle-mobile').forEach(btn => {
+   btn.addEventListener('click', () => {
+     const arch = btn.getAttribute('data-arch');
+     if (arch) setTimeout(() => applyPulseToActivePanel(arch), 50);
+   });
+ });
+
+ // Fire once on load for the default active arch
+ setTimeout(() => applyPulseToActivePanel('edge'), 600);
+
+ </script>
