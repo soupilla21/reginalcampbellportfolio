@@ -324,6 +324,19 @@
  document.querySelectorAll("[data-saas-agent]").forEach(n => { n.style.boxShadow = ""; n.style.transform = ""; });
  }
 
+ // Contact form: a ?type= URL parameter (advisory, small-business, role,
+ // other) pre-selects the inquiry type. Unknown values are ignored.
+ function applyInquiryType() {
+ const sel = document.getElementById("contact-inquiry-type");
+ if (!sel) return;
+ let key = null;
+ try { key = new URLSearchParams(window.location.search).get("type"); } catch (e) {}
+ if (!key) return;
+ const opt = sel.querySelector('option[data-type="' + key.replace(/[^a-z-]/gi, "") + '"]');
+ if (opt) sel.value = opt.value;
+ }
+ applyInquiryType();
+
  // Form handling
  const form = document.getElementById("contact-form");
  if (form) {
@@ -339,9 +352,11 @@
  const name = form.querySelector("input[name=name]").value.trim();
  const email = form.querySelector("input[name=email]").value.trim();
  const message = form.querySelector("textarea[name=message]").value.trim();
+ const inquirySel = form.querySelector("select[name=inquiry_type]");
+ const inquiry = inquirySel ? inquirySel.value : "n/a";
  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
- if (!name || !email || !message) {
+ if (!name || !email || !message || !inquiry) {
  errorEl.querySelector("p").textContent = "✗ Please fill in all required fields.";
  errorEl.classList.remove("hidden");
  return;
@@ -366,6 +381,7 @@
  });
  if (res.ok) {
  form.reset();
+ applyInquiryType();
  successEl.classList.remove("hidden");
  btn.innerHTML = "Sent ✓";
  if (resetButtonTimer) clearTimeout(resetButtonTimer);

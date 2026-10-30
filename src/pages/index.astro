@@ -4,7 +4,7 @@ import SiteNav from "../components/SiteNav.astro";
 import TrackClicks from "../components/TrackClicks.astro";
 import SiteScripts from "../components/SiteScripts.astro";
 import { ASK_URL } from "../config/site";
-import { RESUME_URL } from "../config/site";
+import { RESUME_URL, INQUIRY_TYPES } from "../config/site";
 import "../styles/global.css";
 import { getPublishedArticles } from "../lib/articles";
 
@@ -429,14 +429,10 @@ const latestArticles = (await getPublishedArticles())
  <input id="contact-email" type="email" name="email" autocomplete="email" placeholder="Email *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
  <label for="contact-company" class="sr-only">Company</label>
  <input id="contact-company" type="text" name="company" autocomplete="organization" placeholder="Company (optional)" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all">
- <label for="contact-inquiry-type" class="sr-only">Role / How can I help?</label>
- <select id="contact-inquiry-type" name="inquiry_type" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
- <option value="" disabled selected>Role / How can I help?</option>
- <option>Leadership role or executive opportunity</option>
- <option>Data or AI initiatives not delivering expected outcomes</option>
- <option>Decision-making and execution challenges</option>
- <option>Architecture or platform strategy review</option>
- <option>Other</option>
+ <label for="contact-inquiry-type" class="sr-only">Inquiry type (required)</label>
+ <select id="contact-inquiry-type" name="inquiry_type" required aria-required="true" class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white transition-all">
+ <option value="" disabled selected>Inquiry type *</option>
+ {INQUIRY_TYPES.map((t) => <option value={t.label} data-type={t.key}>{t.label}</option>)}
  </select>
  <label for="contact-message" class="sr-only">Message</label>
  <textarea id="contact-message" name="message" rows="4" placeholder="Message *" required class="form-input w-full bg-neutral-900/60 border border-white/10 rounded-xl p-3 text-white placeholder-neutral-400 transition-all"></textarea>
