@@ -5,7 +5,9 @@
   /* ── RESET & BASE ── */
   *, *::before, *::after { box-sizing: border-box; }
   a { color: inherit; text-decoration: none; }
-  a:visited { color: inherit; }
+  /* :where() keeps this at zero specificity so text-color utilities on a link
+     (e.g. text-black on the hero buttons) still win after the link is visited. */
+  :where(a:visited) { color: inherit; }
   /* The solid base colour lives on html, not body, and it is load-bearing.
      body's `background` shorthand below resets background-color to transparent,
      so the page's darkness rests entirely on gradient IMAGES. Any moment the
