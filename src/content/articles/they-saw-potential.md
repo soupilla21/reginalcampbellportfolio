@@ -6,7 +6,6 @@ ogImage: "/assets/articles/they-saw-potential-card.jpg"
 ogImageAlt: "Article card for They Saw Potential. I Saw a Leader., an essay on being called promising after already delivering"
 tags: ["leadership"]
 category: "hiring-careers"
-related: ["job-requirement-after-the-interview"]
 draft: false
 ---
 
