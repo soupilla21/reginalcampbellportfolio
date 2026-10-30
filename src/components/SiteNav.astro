@@ -9,7 +9,7 @@
 // variant="page"  : on every other page, section links point back to the homepage.
 interface Props {
   variant?: "home" | "page";
-  active?: "engage" | "case-study" | "portfolio" | "articles" | "contact" | "evidence";
+  active?: "engage" | "record" | "portfolio" | "articles" | "contact" | "evidence";
 }
 
 const { variant = "page", active } = Astro.props;
@@ -17,8 +17,7 @@ const onHome = variant === "home";
 
 const items = [
   { id: "engage", label: "Engage", href: "/engage" },
-  // "Record" points to the Enterprise Delivery Record until the Week 2 career section exists.
-  { id: "case-study", label: "Record", anchor: true },
+  { id: "record", label: "Record", href: "/record" },
   { id: "portfolio", label: "Portfolio", href: "/portfolio" },
   { id: "articles", label: "Articles", href: "/articles" },
   { id: "evidence", label: "Evidence", href: "/evidence" },

@@ -103,7 +103,7 @@
   @media (max-width: 480px) {
     #main-nav .inner { padding: 0.6rem 1rem; flex-wrap: wrap; min-height: auto; gap: 0.5rem; }
     #main-nav .inner > div:last-child {
-      gap: 0.85rem !important;
+      gap: 0.6rem !important;
       overflow-x: auto;
       white-space: nowrap;
       padding-bottom: 0.35rem;
@@ -111,6 +111,11 @@
       -ms-overflow-style: none;
     }
     #main-nav .inner > div:last-child::-webkit-scrollbar { display: none; }
+    #main-nav .nav-link { font-size: 0.8125rem; }
+  }
+  /* Week 2: all six links fit from 375px up, so the scroll hint only shows
+     on narrower phones where the nav still scrolls sideways. */
+  @media (max-width: 374px) {
     /* Fade hint that more links are scrollable to the right */
     #main-nav .inner { position: relative; }
     #main-nav .inner::after {

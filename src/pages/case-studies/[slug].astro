@@ -12,7 +12,7 @@ const { study } = Astro.props;
   title={`${study.title} Case Study | Reginal Campbell`}
   description={study.summary}
   path={`/case-studies/${study.slug}`}
-  active="case-study"
+  active="record"
   noindex={study.status !== "published"}
 >
   <CaseStudy study={study} />
