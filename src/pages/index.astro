@@ -196,6 +196,30 @@ const latestArticles = (await getPublishedArticles())
    </section>
 
    <!-- ══════════════════════════════════════
+        THREE PATHS: one sentence and one link per audience.
+   ══════════════════════════════════════ -->
+   <section id="paths" class="mb-24 reveal" aria-labelledby="paths-heading">
+     <h2 id="paths-heading" class="sr-only">Where to start</h2>
+     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+       <div class="bg-neutral-900/40 rounded-2xl border border-white/10 p-6 flex flex-col">
+         <p class="label-mono text-amber-400 mb-3">Organizations</p>
+         <p class="text-neutral-300 text-sm leading-relaxed flex-grow">You need an AI or data program delivered and governed in a regulated environment.</p>
+         <a href="/engage" data-ga-event="path_click" data-ga-path="organizations" class="mt-4 self-start text-sm font-medium text-amber-300 underline underline-offset-4 decoration-amber-400/40 hover:text-amber-200">See how I work with organizations <span aria-hidden="true">&rarr;</span></a>
+       </div>
+       <div class="bg-neutral-900/40 rounded-2xl border border-white/10 p-6 flex flex-col">
+         <p class="label-mono text-amber-400 mb-3">Hiring leaders</p>
+         <p class="text-neutral-300 text-sm leading-relaxed flex-grow">You are filling a senior AI, data or delivery leadership role.</p>
+         <a href="#case-study" data-ga-event="path_click" data-ga-path="hiring_leaders" class="mt-4 self-start text-sm font-medium text-amber-300 underline underline-offset-4 decoration-amber-400/40 hover:text-amber-200">View my leadership record <span aria-hidden="true">&rarr;</span></a>
+       </div>
+       <div class="bg-neutral-900/40 rounded-2xl border border-white/10 p-6 flex flex-col">
+         <p class="label-mono text-amber-400 mb-3">Readers</p>
+         <p class="text-neutral-300 text-sm leading-relaxed flex-grow">You want direct arguments on AI governance, delivery and hiring.</p>
+         <a href="/articles" data-ga-event="path_click" data-ga-path="readers" class="mt-4 self-start text-sm font-medium text-amber-300 underline underline-offset-4 decoration-amber-400/40 hover:text-amber-200">Read the articles <span aria-hidden="true">&rarr;</span></a>
+       </div>
+     </div>
+   </section>
+
+   <!-- ══════════════════════════════════════
         EXECUTIVE SUMMARY (NEW - Tier 2 #5)
         Sits between hero and case study.
         Answers: who is Reginal, what does he solve, why trust him.
