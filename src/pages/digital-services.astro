@@ -1,11 +1,94 @@
 ---
-import StubLayout from "../layouts/StubLayout.astro";
+import PageLayout from "../layouts/PageLayout.astro";
+import OfferBits from "../components/OfferBits.astro";
+import { contactHref } from "../config/site";
+import { caseStudies } from "../data/case-studies";
+
+// The client case study is linked only once it is published, so a draft
+// with open placeholders never shows up on a live page.
+const clientStudy = caseStudies.find((s) => s.slug === "home-inspection-website" && s.status === "published");
+
+const services = [
+  {
+    name: "Website builds",
+    body: "Proposal, build and production launch. Analytics goes in before launch, so you can see traffic and visitor behavior from the start.",
+  },
+  {
+    name: "AI discoverability assessments",
+    body: "A review of how your business shows up when customers ask an AI assistant or a search engine for a recommendation, and what to correct. You receive a written report with the fixes in priority order.",
+  },
+  {
+    name: "Launch planning",
+    body: "The groundwork before a site or a new business goes live: domain, hosting, business listings, contact forms and analytics, in the order they need to happen.",
+  },
+];
 ---
-<StubLayout
+<PageLayout
   title="Small-Business Digital Services | Reginal Campbell"
-  description="Websites, AI discoverability and launch planning for small businesses."
-  eyebrow="Digital services"
-  heading="Websites, AI discoverability and launch planning for small businesses."
+  description="Website builds, AI discoverability assessments and launch planning for small businesses."
+  path="/digital-services"
+  active="engage"
 >
-  <p class="text-neutral-300 max-w-2xl leading-relaxed">The full description of this offer is being written. To discuss a project now, use the contact form.</p>
-</StubLayout>
+  <header class="mb-14">
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Digital services</span>
+    <h1 class="text-3xl md:text-4xl font-bold mt-2">Websites, AI discoverability and launch planning for small businesses.</h1>
+    <p class="text-neutral-300 max-w-2xl mt-4 leading-relaxed">I build and launch websites for small businesses and make sure customers can find them, including through AI assistants. The work is delivered through InnovatePM Solutions.</p>
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a href={contactHref("small-business")} data-ga-event="engage_contact_click" data-ga-source="digital_services" class="btn-primary px-6 py-3 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition inline-flex items-center gap-2">Discuss a project <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i></a>
+      {clientStudy && (
+        <a href={`/case-studies/${clientStudy.slug}`} class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">Read the case study</a>
+      )}
+    </div>
+  </header>
+
+  <section class="reveal" style="margin-bottom:4rem">
+    <h2 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-5">Who it's for</h2>
+    <ul class="grid md:grid-cols-2 gap-5">
+      <li class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 text-neutral-300 text-sm leading-relaxed">Small businesses launching a first website, or replacing one that no longer works for them.</li>
+      <li class="bg-neutral-900/40 rounded-2xl border border-white/5 p-6 text-neutral-300 text-sm leading-relaxed">Owners who want to know how their business appears when a customer asks an AI assistant for a recommendation.</li>
+    </ul>
+  </section>
+
+  <section class="reveal" style="margin-bottom:4rem">
+    <h2 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-5">Services</h2>
+    <div class="grid md:grid-cols-3 gap-5">
+      {services.map((s, i) => (
+        <div class="bg-neutral-900/40 rounded-2xl border border-white/10 p-6 flex flex-col gap-3">
+          <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-mono text-xs flex items-center justify-center font-bold">{i + 1}</span>
+          <h3 class="text-lg font-bold text-white">{s.name}</h3>
+          <p class="text-neutral-300 text-sm leading-relaxed">{s.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {clientStudy && (
+    <section class="reveal" style="margin-bottom:4rem">
+      <h2 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-5">Recent work</h2>
+      <a href={`/case-studies/${clientStudy.slug}`} class="block bg-neutral-900/40 rounded-2xl border border-white/10 p-6 hover:border-amber-500/40 transition">
+        <p class="text-white font-bold">{clientStudy.title}</p>
+        <p class="text-neutral-400 text-sm mt-2 leading-relaxed">{clientStudy.summary}</p>
+        <p class="mt-4 text-sm font-medium text-amber-300">Read the case study <span aria-hidden="true">&rarr;</span></p>
+      </a>
+    </section>
+  )}
+
+  <section class="reveal" style="margin-bottom:3rem">
+    <h2 class="text-xs font-mono text-amber-400 uppercase tracking-widest mb-5">How to start</h2>
+    <ol class="grid md:grid-cols-3 gap-5">
+      <li class="text-neutral-300 text-sm leading-relaxed"><span class="block font-mono text-amber-400 mb-2">01</span>Send an inquiry with a few lines about your business and what you need.</li>
+      <li class="text-neutral-300 text-sm leading-relaxed"><span class="block font-mono text-amber-400 mb-2">02</span>We talk through the goals, the timeline and what you already have.</li>
+      <li class="text-neutral-300 text-sm leading-relaxed"><span class="block font-mono text-amber-400 mb-2">03</span>You receive a written proposal with scope, deliverables and price.</li>
+    </ol>
+  </section>
+
+  <div class="grid md:grid-cols-2 gap-5">
+    <OfferBits kind="pricing" />
+    <OfferBits kind="firm" />
+  </div>
+
+  <div class="mt-12 border-t border-white/10 pt-8 flex flex-wrap gap-4">
+    <a href={contactHref("small-business")} data-ga-event="engage_contact_click" data-ga-source="digital_services" class="btn-primary px-6 py-3 rounded-full bg-amber-400 text-black font-bold hover:bg-amber-300 transition inline-flex items-center gap-2">Discuss a project <i aria-hidden="true" class="fas fa-arrow-right text-sm"></i></a>
+    <a href="/engage" class="btn-secondary px-6 py-3 rounded-full border border-white/20 text-white font-medium hover:bg-white/5 transition inline-flex items-center gap-2">All ways to work together</a>
+  </div>
+</PageLayout>
