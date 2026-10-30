@@ -18,8 +18,10 @@ interface Props {
   width?: number;
   // Sent once on page load, e.g. offer_view or case_study_view.
   event?: { name: string; params?: Record<string, string> };
+  // Structured data (schema.org) rendered in <head>. Never visible.
+  jsonLd?: Record<string, unknown>;
 }
-const { title, description, path, active = "", noindex = false, width = 960, event } = Astro.props;
+const { title, description, path, active = "", noindex = false, width = 960, event, jsonLd } = Astro.props;
 const url = `https://reginalcampbell.com${path}`;
 ---
 <!DOCTYPE html>
@@ -39,6 +41,7 @@ const url = `https://reginalcampbell.com${path}`;
   <meta property="og:type" content="website">
   <meta property="og:url" content={url}>
   <meta property="og:image" content="https://reginalcampbell.com/assets/reginal-campbell.jpg">
+  {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
