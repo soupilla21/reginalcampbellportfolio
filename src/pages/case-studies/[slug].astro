@@ -3,8 +3,12 @@ import PageLayout from "../../layouts/PageLayout.astro";
 import CaseStudy from "../../components/CaseStudy.astro";
 import { caseStudies } from "../../data/case-studies";
 
+// Drafts build on Vercel previews and locally for review, never on production.
 export function getStaticPaths() {
-  return caseStudies.map((study) => ({ params: { slug: study.slug }, props: { study } }));
+  const isProduction = process.env.VERCEL_ENV === "production";
+  return caseStudies
+    .filter((study) => study.status === "published" || !isProduction)
+    .map((study) => ({ params: { slug: study.slug }, props: { study } }));
 }
 const { study } = Astro.props;
 ---
