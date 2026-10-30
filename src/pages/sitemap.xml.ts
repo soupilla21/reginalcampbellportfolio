@@ -2,6 +2,7 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { getPublishedArticles } from "../lib/articles";
 import { ASK_URL } from "../config/site";
+import { caseStudies } from "../data/case-studies";
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.toString().replace(/\/$/, "") ?? "https://reginalcampbell.com";
@@ -30,6 +31,10 @@ export const GET: APIRoute = async ({ site }) => {
       lastmod: (article.data.updatedDate ?? article.data.pubDate).toISOString().split("T")[0],
     })),
     { loc: `${base}/portfolio`, changefreq: "monthly", priority: "0.8" },
+    // Published case studies only. Drafts build but stay noindex and out of the sitemap.
+    ...caseStudies
+      .filter((s) => s.status === "published")
+      .map((s) => ({ loc: `${base}/case-studies/${s.slug}`, changefreq: "monthly", priority: "0.8" })),
     { loc: `${base}/evidence`, changefreq: "monthly", priority: "0.8" },
     // The assistant's pages are listed only once it is served from this domain
     // (ASK_URL is a same-site path such as "/ask/"), never while it still

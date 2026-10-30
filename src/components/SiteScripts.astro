@@ -133,11 +133,7 @@
  // Back to top button - visible on all devices after scroll
  const backToTop = document.getElementById("back-to-top");
  window.addEventListener("scroll", function() {
- if (window.scrollY > 400) {
- backToTop.style.display = "flex";
- } else {
- backToTop.style.display = "none";
- }
+ if (backToTop) backToTop.style.display = window.scrollY > 400 ? "flex" : "none";
  var nav = document.getElementById("main-nav");
  if (nav) nav.style.boxShadow = window.scrollY > 10 ? "0 2px 20px rgba(0,0,0,0.6)" : "none";
  });

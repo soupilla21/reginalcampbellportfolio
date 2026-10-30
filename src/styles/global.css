@@ -694,3 +694,7 @@
   .prose-article tbody td strong { color: #fff; font-weight: 600; }
   .prose-article .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.75rem 0; }
   .prose-article .table-scroll > table { margin: 0; min-width: 640px; }
+
+/* Week 2: visible placeholder for a fact that still needs Reggie's input.
+   Nothing with this class should reach a published page. */
+.cs-placeholder { display:block; border:1px dashed rgba(245,158,11,.7); background:rgba(245,158,11,.08); color:#fcd34d; font-family:'JetBrains Mono',monospace; font-size:.8rem; line-height:1.5; padding:.6rem .8rem; border-radius:.6rem; }

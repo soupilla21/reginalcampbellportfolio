@@ -1,0 +1,19 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import CaseStudy from "../../components/CaseStudy.astro";
+import { caseStudies } from "../../data/case-studies";
+
+export function getStaticPaths() {
+  return caseStudies.map((study) => ({ params: { slug: study.slug }, props: { study } }));
+}
+const { study } = Astro.props;
+---
+<PageLayout
+  title={`${study.title} Case Study | Reginal Campbell`}
+  description={study.summary}
+  path={`/case-studies/${study.slug}`}
+  active="case-study"
+  noindex={study.status !== "published"}
+>
+  <CaseStudy study={study} />
+</PageLayout>
