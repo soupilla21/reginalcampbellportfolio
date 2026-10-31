@@ -73,7 +73,7 @@ events follow the site's existing behavior.
 
 ## Publication review checklist (HRHS v2.1)
 
-Status is `review`. Do not change it until each item is resolved.
+Status changed to `public` on October 31, 2026 at the owner's direction. Open items below are follow-ups, not blockers.
 
 The site serves the **public edition** of documents 00 to 08: re-exported from
 the v2.1 Word sources with two changes only, verified by text diff and page

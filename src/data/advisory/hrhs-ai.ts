@@ -15,7 +15,7 @@ export const meta: BriefingMeta = {
   packageVersion: "v2.1",
   // Change to "public" only after the publication review in
   // docs/advisory-briefings.md is signed off. See that file.
-  status: "review",
+  status: "public",
   title: "From AI Ambition to Engineering Decisions | HRHS Advisory Case Study | Reginal Campbell",
   description:
     "An executive advisory case study on a fictional health system: how a conditional AI strategy recommendation becomes owned engineering decisions, executable plans and lean governance.",
