@@ -5,7 +5,7 @@
 // nothing is computed or invented here.
 import Sources from "./Sources.astro";
 import {
-  options, optionRefs, scenarios, scenarioRefs, criteria, recommendationChanges,
+  options, optionRefs, scenarios, scenarioRefs, criteria, sharedFloor, pilotNote,
   recommendation, decisionsRequested, objectives,
 } from "../../data/advisory/hrhs-ai";
 
@@ -22,32 +22,77 @@ const pct = (s: number) => `${(s / 5) * 100}%`;
 </div>
 
 <h3 class="hb-h3">Three credible paths, one shared control floor</h3>
-<p class="hb-body">All three options must meet the same mandatory privacy, security and contractual controls (MC-01 to MC-10). The choice is about what each adds beyond that floor, what it costs, and whether the organization can staff it.</p>
+<p class="hb-body">All three options must meet the same mandatory privacy, security and contractual controls (MC-01 to MC-10). The choice is about what each adds beyond that floor, what it costs, and whether the organization can staff it. Select a path to see the case for it, when to choose it, what delivery would look like and what would make you change course.</p>
 
-<ul class="hb-options hb-reveal">
-  {options.map((o) => (
-    <li class="hb-option-li"><article class:list={["hb-option", { "is-recommended": o.recommended }]} aria-labelledby={`opt-${o.key}`}>
-      <header>
-        <span class="hb-option-key" aria-hidden="true">{o.key}</span>
-        <h4 id={`opt-${o.key}`}><span class="sr-only">Option {o.key}: </span>{o.name}</h4>
-        {o.recommended && <p class="hb-badge">Provisional recommendation</p>}
-      </header>
-      <p class="hb-option-idea">{o.idea}</p>
-      <ul class="hb-pm">
-        <li><span class="hb-pm-sign" aria-label="Advantage">+</span>{o.plus}</li>
-        <li><span class="hb-pm-sign" aria-label="Disadvantage">−</span>{o.minus}</li>
-      </ul>
-      <dl class="hb-option-facts">
-        <div><dt>FY2027 cash</dt><dd>{o.cash}</dd></div>
-        <div><dt>3-year cost</dt><dd>{o.threeYear}</dd></div>
-        <div><dt>IT hours, year 1</dt><dd>{o.hours}</dd></div>
-        <div><dt>Specialist hours</dt><dd>{o.specialist}</dd></div>
-        <div class="hb-span2"><dt>Fits the $4.5M envelope</dt><dd>{o.envelope}</dd></div>
-      </dl>
-      <p class="hb-option-position">{o.position}</p>
-    </article></li>
-  ))}
-</ul>
+<div class="hb-paths hb-reveal" data-hb-tabs data-hb-paths>
+  <div class="hb-options" role="tablist" aria-label="Strategic paths" data-hb-tablist>
+    {options.map((o) => (
+      <button type="button" role="tab" id={`tab-path-${o.key}`} aria-controls={`panel-path-${o.key}`}
+        aria-selected={o.recommended ? "true" : "false"} tabindex={o.recommended ? 0 : -1}
+        class:list={["hb-option", { "is-recommended": o.recommended }]} data-path={o.key}>
+        <span class="hb-option-head">
+          <span class="hb-option-key" aria-hidden="true">{o.key}</span>
+          <span class="hb-option-name"><span class="sr-only">Option {o.key}: </span>{o.name}</span>
+          {o.recommended && <span class="hb-badge">Provisional recommendation</span>}
+        </span>
+        <span class="hb-option-idea">{o.idea}</span>
+        <span class="hb-pm">
+          <span class="hb-pm-row"><span class="hb-pm-sign" aria-hidden="true">+</span><span><span class="sr-only">Advantage: </span>{o.plus}</span></span>
+          <span class="hb-pm-row"><span class="hb-pm-sign" aria-hidden="true">−</span><span><span class="sr-only">Disadvantage: </span>{o.minus}</span></span>
+        </span>
+        <span class="hb-option-facts">
+          <span><span class="hb-fact-k">FY2027 cash</span><span class="hb-fact-n">{o.cash}</span></span>
+          <span><span class="hb-fact-k">3-year cost</span><span class="hb-fact-n">{o.threeYear}</span></span>
+          <span><span class="hb-fact-k">IT hours, year 1</span><span class="hb-fact-n">{o.hours}</span></span>
+          <span><span class="hb-fact-k">Specialist hours</span><span class="hb-fact-n">{o.specialist}</span></span>
+          <span class="hb-span2"><span class="hb-fact-k">Fits the $4.5M envelope</span><span class="hb-fact-n">{o.envelope}</span></span>
+        </span>
+        <span class="hb-option-position">{o.position}</span>
+        <span class="hb-option-cta" aria-hidden="true"><span class="hb-cta-idle">See the case for {o.key}</span><span class="hb-cta-on">Showing the case for {o.key}</span></span>
+      </button>
+    ))}
+  </div>
+
+  <div class="hb-path-panels">
+    {options.map((o) => (
+      <div role="tabpanel" id={`panel-path-${o.key}`} aria-labelledby={`tab-path-${o.key}`}
+        class:list={["hb-path-panel", { "is-recommended": o.recommended }]} data-hb-panel data-initial={o.recommended ? "1" : "0"} data-path-panel={o.key}>
+        <div class="hb-path-head">
+          <h4 class="hb-path-title"><span class="hb-option-key sm" aria-hidden="true">{o.key}</span>The case for {o.name}</h4>
+          {o.recommended && <p class="hb-badge">Provisional recommendation</p>}
+        </div>
+        <dl class="hb-path-facts">
+          <div><dt>First controlled use</dt><dd>{o.firstUse}</dd></div>
+          <div><dt>Primary delivery risk</dt><dd>{o.risk}</dd></div>
+          <div><dt>Reusable capability</dt><dd>{o.reuse}</dd></div>
+          <div><dt>Ease of changing course</dt><dd>{o.changeCourse}</dd></div>
+        </dl>
+        <div class="hb-path-grid">
+          <div class="hb-path-block">
+            <h5 class="hb-side-label">The case for it</h5>
+            <ul>{o.caseFor.map((t) => <li>{t}</li>)}</ul>
+            <p class="hb-path-evidence"><span>What the evidence says</span> {o.evidence}</p>
+          </div>
+          <div class="hb-path-block">
+            <h5 class="hb-side-label">When to choose it</h5>
+            <ul>{o.when.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <div class="hb-path-block">
+            <h5 class="hb-side-label">What delivery looks like</h5>
+            <ul>{o.delivery.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <div class="hb-path-block hb-path-switch">
+            <h5 class="hb-side-label">What would make you switch</h5>
+            <ul>{o.switchIf.map((t) => <li>{t}</li>)}</ul>
+          </div>
+        </div>
+        <p class="hb-path-floor">{sharedFloor}</p>
+        <Sources refs={o.refs} tags={o.recommended ? ["E", "J", "R"] : ["E", "J"]} />
+      </div>
+    ))}
+  </div>
+  <p class="hb-muted hb-small hb-pilot-note">{pilotNote}</p>
+</div>
 <Sources refs={optionRefs} tags={["E", "J"]} />
 
 <div class="hb-sensitivity hb-reveal" data-hb-scenarios>
@@ -109,17 +154,6 @@ const pct = (s: number) => `${(s / 5) * 100}%`;
     </div>
   </details>
   <Sources refs={scenarioRefs} tags={["J"]} />
-</div>
-
-<div class="hb-conditions hb-reveal">
-  <h3 class="hb-h3">When the recommendation changes</h3>
-  <p class="hb-body">A recommendation that cannot say what would change it is a preference. These are the published conditions.</p>
-  <ul class="hb-cond-list">
-    {recommendationChanges.map((c) => (
-      <li><p class="hb-cond-prefer">Prefer {c.prefer}</p><p>{c.when}</p></li>
-    ))}
-  </ul>
-  <Sources refs={[{ doc: "03", section: "When the recommendation changes" }]} tags={["J"]} />
 </div>
 
 <div class="hb-callout hb-reveal">

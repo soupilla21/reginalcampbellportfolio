@@ -278,7 +278,30 @@ export const objectives = {
   refs: [{ doc: "03", section: "Decision objectives" }],
 };
 
-export const options = [
+// Each path carries its summary card data plus a full "case" panel. Panel
+// content is paraphrased from 03 (scores, conditions), 05 (delivery pathway,
+// pivot conditions, delivery implications table), 02 (implications for the
+// options) and 06 (first 90 days under A or C). Every path is presented on
+// its own terms; the recommendation stays with B.
+export interface OptionCase {
+  key: "A" | "B" | "C";
+  name: string;
+  idea: string;
+  plus: string;
+  minus: string;
+  cash: string; threeYear: string; hours: string; specialist: string; envelope: string;
+  position: string;
+  recommended?: boolean;
+  firstUse: string; risk: string; reuse: string; changeCourse: string;
+  caseFor: string[];
+  evidence: string;
+  when: string[];
+  delivery: string[];
+  switchIf: string[];
+  refs: SourceRef[];
+}
+
+export const options: OptionCase[] = [
   {
     key: "A", name: "Targeted, Vendor-Led",
     idea: "Buy AI embedded in qualified vendor products; govern each deployment.",
@@ -286,6 +309,31 @@ export const options = [
     minus: "Controls applied product by product; most vendor dependency.",
     cash: "$2.55M", threeYear: "$6.35M", hours: "9,000", specialist: "~1,200", envelope: "Fits",
     position: "Preferred if AI scope stays at one or two use cases, or capacity cannot be released.",
+    firstUse: "Month 4 to 6", risk: "Vendor terms and inconsistent controls", reuse: "Low", changeCourse: "High per product, low for the portfolio",
+    caseFor: [
+      "The fastest route to value: first controlled use in months 4 to 6, at the lowest three-year cost ($6.35M, about $1.4M less than B).",
+      "Needs about 1,200 specialist hours against B's 4,600, so it barely touches the people the ERP and EHR programs depend on.",
+      "Leads the scoring when speed is weighted first (3.59 against 3.44), and is preferred outright if there is no pipeline beyond Wave 1.",
+      "Meets the same mandatory controls as B. The difference is that assurance is applied product by product and leans more on vendor evidence.",
+    ],
+    evidence: "The readiness assessment calls it plausible for speed, but warns that with governance absent each vendor deployment would carry its own risk, and point-to-point sprawl would accelerate.",
+    when: [
+      "Leadership does not intend more than one or two AI use cases in three years.",
+      "Speed outweighs control in the organization's risk posture.",
+      "Specialist capacity cannot be validated and the Document 08 recovery options fail.",
+      "Qualified vendors accept the organization's data-use terms, narrowing the assurance gap further.",
+    ],
+    delivery: [
+      "Two to three vendor-embedded capabilities within 6 to 9 months: a spend analytics AI module for supply chain, and evaluation of the denial-prediction pilot for production.",
+      "About 9,000 IT hours (6,800 internal, 2,200 contracted), one AI coordinator and light central coordination; no shared technical foundations workstream.",
+      "A vendor AI addendum (no training on the organization's data, retention limits, audit rights, change notification) becomes a procurement prerequisite.",
+      "Governance baseline and addendum by month 2; product configured by month 4; controlled use by month 6; production by month 9.",
+    ],
+    switchIf: [
+      "Shift toward B if more than three deployments are requested within 12 months, or conformance audits find repeated gaps.",
+      "Stop any deployment that fails its acceptance criteria twice.",
+    ],
+    refs: [{ doc: "03", section: "Sensitivity; When the recommendation changes" }, { doc: "05", section: "Pathway A" }, { doc: "02", section: "Implications" }],
   },
   {
     key: "B", name: "Governed, Phased",
@@ -295,6 +343,31 @@ export const options = [
     cash: "$3.75M", threeYear: "$7.75M", hours: "14,000", specialist: "4,600", envelope: "Fits, with $0.75M contingency",
     position: "Provisionally recommended, conditional on validated specialist capacity and a pipeline beyond Wave 1.",
     recommended: true,
+    firstUse: "Day 61 to 90, if G3 is passed", risk: "Specialist release and scope discipline", reuse: "Moderate", changeCourse: "High at each tranche",
+    caseFor: [
+      "Builds what A does not: reusable controls, consistent risk evaluation and shared technical capabilities, so each later use case costs less and carries less risk.",
+      "Commits money in tranches: $1.5M now and $2.25M at Day 90 only on evidence, with a $0.75M contingency held by the CFO.",
+      "Leads under base weights (3.52) and equal weights (3.55), with first controlled use between Day 61 and Day 90 if the pilot gate is passed.",
+      "Its advantages are worth about $1.4M only if there is a real pipeline beyond Wave 1 and specialist capacity is validated.",
+    ],
+    evidence: "The readiness assessment finds it matches the evidence: data-ready supply chain use cases can proceed while the governance, vendor-term and integration gaps close in parallel. It is viable only if specialist capacity is committed.",
+    when: [
+      "Leadership intends to pursue use cases beyond Wave 1 within three years.",
+      "Named specialists are provisionally allocated by Day 15 and validated as available in the delivery window by Day 20.",
+      "If specialist capacity is only partly available, run a reduced B: sequence Wave 1, spend classification first (Document 08).",
+    ],
+    delivery: [
+      "Seven workstreams with named owners, from governance and shared foundations through data readiness to value measurement led by Finance.",
+      "About 14,000 IT hours: 6,800 internal, 2,600 contracted, and 4,600 specialist hours released from ERP and EHR and backfilled by replacement contractors.",
+      "The AI gateway is required before any use of patient data, not before the Wave 1 pilot, which keeps scarce security architecture off the critical path.",
+      "Gates at Days 30, 60, ~65 and 90; Wave 1 in production and a Wave 2 decision within 12 months.",
+    ],
+    switchIf: [
+      "Toward A if Tranche 2 is not funded or capacity collapses.",
+      "Toward C if the portfolio expands beyond 15 approved use cases and capacity is freed.",
+      "Stop Wave 1 if acceptance criteria are not met after one revision cycle. If Wave 2 is never authorized, the shared foundations are overbuilt and B becomes the weakest financial choice.",
+    ],
+    refs: [{ doc: "03", section: "Summary; Recommendation; Three-year view" }, { doc: "05", section: "Pathway B" }, { doc: "02", section: "Implications" }, { doc: "08" }],
   },
   {
     key: "C", name: "Platform-First",
@@ -303,8 +376,37 @@ export const options = [
     minus: "Value deferred to 2028; exceeds the envelope and FY2027 capacity.",
     cash: "$7.9M", threeYear: "$12.3M", hours: "30,000", specialist: "~11,000", envelope: "No, ~$3.4M above",
     position: "Only if capacity is freed and a broad portfolio is committed.",
+    firstUse: "Month 9 to 12", risk: "Value delay and capacity", reuse: "High", changeCourse: "Low after month 4",
+    caseFor: [
+      "The strongest long-term foundation: an enterprise platform, data pipelines, model operations and a center of excellence, with controls built into the platform.",
+      "Creates the most reusable capability of the three and rates highest on scalability and sustainability (5 of 5).",
+      "Addresses the vendor-term and integration gaps more thoroughly than either alternative.",
+      "Two reference use cases delivered on the platform within 12 to 18 months, with onboarding cost per use case measured.",
+    ],
+    evidence: "The readiness assessment finds it infeasible in FY2027 without deferring major committed programs, with value unproven for 12 to 18 months. No plausible reweighting makes it preferred; it depends on changed conditions.",
+    when: [
+      "The organization commits to more than 15 use cases in three years.",
+      "ERP or EHR work completes early, freeing about 20,000 hours.",
+      "Incremental funding of about $3.4M above the envelope is available.",
+      "Leadership accepts value deferral into 2028.",
+    ],
+    delivery: [
+      "About 30,000 IT hours in year 1, including ~11,000 specialist hours: committed programs must be re-sequenced, or about 23,200 hours contracted.",
+      "FY2027 cash of about $7.9M, roughly $3.4M above the envelope, released through stage-gate funding at platform milestones.",
+      "Months 1 to 3: architecture, vendor selection and hiring. Months 4 to 9: platform build. Months 9 to 12: first reference use case on the platform.",
+      "No use-case pilot in the first 90 days; Day 90 becomes an architecture and funding gate.",
+    ],
+    switchIf: [
+      "Toward B if funding above the envelope is not sustained, or platform milestones slip more than one quarter.",
+      "Stop platform expansion if fewer than five use cases are in the approved pipeline at month 9.",
+    ],
+    refs: [{ doc: "03", section: "Sensitivity; When the recommendation changes" }, { doc: "05", section: "Pathway C" }, { doc: "02", section: "Implications" }, { doc: "06", section: "Alternatives" }],
   },
 ];
+
+// Shared across every path (03, 04, 05).
+export const sharedFloor = "All three paths meet the same mandatory privacy, security and contractual controls. B's 0.09 lead is within judgment error; the conditions decide.";
+export const pilotNote = "Under any path: pause the clinical documentation pilot if the vendor refuses amended terms and Privacy identifies a reportable issue, or if a major security event diverts IT capacity.";
 export const optionRefs: SourceRef[] = [{ doc: "03", section: "The three options; Costs and capacity" }, { doc: "04" }, { doc: "DECK", section: "Slide 3" }];
 
 // Sensitivity scenarios exactly as published in 03.
@@ -333,13 +435,6 @@ export const criteria = [
   { name: "Delivery capacity and execution risk", weight: 10, A: 4, B: 3, C: 1, basis: "B needs 4,600 specialist hours; C needs ~30,000 total hours." },
   { name: "Scalability and sustainability", weight: 7, A: 2, B: 4, C: 5, basis: "A creates little reusable capability." },
   { name: "Reversibility and exit", weight: 5, A: 3, B: 4, C: 2, basis: "B commits in tranches; C front-loads irreversible spend." },
-];
-
-export const recommendationChanges = [
-  { prefer: "Option A", when: "Leadership does not intend more than one or two AI use cases in three years; or speed outweighs control in its risk posture; or specialist capacity cannot be validated and recovery options fail." },
-  { prefer: "Reduced B", when: "Specialist capacity is partly available: sequence Wave 1, spend classification first." },
-  { prefer: "Option C", when: "More than 15 use cases are committed in three years, ERP or EHR work completes early and frees ~20,000 hours, ~$3.4M above the envelope is available, and leadership accepts value deferral into 2028." },
-  { prefer: "Pause the clinical pilot", when: "The vendor refuses amended terms and Privacy identifies a reportable issue, or a major security event diverts IT capacity." },
 ];
 
 export const recommendation = {

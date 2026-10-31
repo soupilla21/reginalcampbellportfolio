@@ -63,6 +63,7 @@ GA loads only on the production hostnames, so review builds send nothing.
 | `advisory_briefing_view` | page load | `briefing`, `status` |
 | `briefing_entry` | hero buttons | `briefing`, `mode` (guided/direct) |
 | `briefing_chapter_nav` | chapter bar | `briefing`, `chapter` |
+| `briefing_path_select` | strategic path card | `path` (A/B/C) |
 | `briefing_scenario_select` | sensitivity scenario | `scenario` |
 | `advisory_document_open` | Read / preview / hero links | `briefing`, `document`, `method` |
 | `advisory_document_download` | Download links | `briefing`, `document`, `format` |

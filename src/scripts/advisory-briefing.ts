@@ -32,6 +32,7 @@ function init(root: HTMLElement) {
         }
       });
       if (focus) tabs[i].focus();
+      group.dispatchEvent(new CustomEvent("hb:tabchange", { detail: { tab: tabs[i] } }));
     };
     tabs.forEach((t, i) => {
       t.addEventListener("click", () => select(i));
@@ -48,6 +49,29 @@ function init(root: HTMLElement) {
     });
     select(Math.max(0, panels.findIndex((p) => p.dataset.initial === "1")));
   });
+
+  // ── Strategic paths: the selected path is also highlighted in the
+  //    sensitivity chart, so the two visuals read as one. ──
+  const paths = root.querySelector<HTMLElement>("[data-hb-paths]");
+  const markPath = (key: string | undefined, smooth = true) => {
+    root.querySelectorAll<HTMLElement>("[data-hb-scenarios] [data-option]").forEach((row) =>
+      row.classList.toggle("is-selected", row.dataset.option === key));
+    // On phones the cards are a swipe row: keep the selected card in view
+    // (scrolls the row only, never the page).
+    const row = paths?.querySelector<HTMLElement>("[role=tablist]");
+    const card = paths?.querySelector<HTMLElement>(`[data-path="${key}"]`);
+    if (row && card && row.scrollWidth > row.clientWidth) {
+      row.scrollTo({ left: card.offsetLeft - row.offsetLeft - 2, behavior: smooth && !reduceMotion ? "smooth" : "auto" });
+    }
+  };
+  if (paths) {
+    paths.addEventListener("hb:tabchange", (e) => {
+      const key = (e as CustomEvent<{ tab: HTMLElement }>).detail.tab.dataset.path;
+      markPath(key);
+      track("briefing_path_select", { path: key || "" });
+    });
+    markPath(paths.querySelector<HTMLElement>('[role=tab][aria-selected="true"]')?.dataset.path, false);
+  }
 
   // ── Sensitivity scenarios ──
   root.querySelectorAll<HTMLElement>("[data-hb-scenarios]").forEach((wrap) => {
