@@ -7,13 +7,16 @@
 //                   data-section so the scroll observer in index.astro can
 //                   highlight the section currently in view.
 // variant="page"  : on every other page, section links point back to the homepage.
+// variant="minimal": name only, linking home. For focused pages (advisory
+//                   briefings) where the site menu would compete with the content.
 interface Props {
-  variant?: "home" | "page";
+  variant?: "home" | "page" | "minimal";
   active?: "engage" | "record" | "portfolio" | "articles" | "contact" | "evidence";
 }
 
 const { variant = "page", active } = Astro.props;
 const onHome = variant === "home";
+const minimal = variant === "minimal";
 
 const items = [
   { id: "engage", label: "Engage", href: "/engage" },
@@ -29,7 +32,7 @@ function hrefFor(item: (typeof items)[number]) {
   return onHome ? `#${item.id}` : `/#${item.id}`;
 }
 ---
-<nav id="main-nav" aria-label="Main navigation">
+<nav id="main-nav" aria-label={minimal ? "Site" : "Main navigation"}>
   <div class="inner">
     <div class="flex items-center gap-2 min-w-0">
       {onHome ? (
@@ -37,10 +40,10 @@ function hrefFor(item: (typeof items)[number]) {
       ) : (
         <a href="/" class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent whitespace-nowrap">REGINAL CAMPBELL</a>
       )}
-      <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>
-      <span class="hidden md:inline text-sm font-mono text-neutral-400 truncate">AI &amp; Data Strategy</span>
+      {!minimal && <span class="hidden md:inline text-neutral-500 font-mono text-sm">|</span>}
+      {!minimal && <span class="hidden md:inline text-sm font-mono text-neutral-400 truncate">AI &amp; Data Strategy</span>}
     </div>
-    <div class="flex items-center gap-5 text-sm font-medium flex-shrink-0">
+    {!minimal && <div class="flex items-center gap-5 text-sm font-medium flex-shrink-0">
       {items.map((item) => (
         <a
           href={hrefFor(item)}
@@ -51,6 +54,6 @@ function hrefFor(item: (typeof items)[number]) {
           {item.label}
         </a>
       ))}
-    </div>
+    </div>}
   </div>
 </nav>
