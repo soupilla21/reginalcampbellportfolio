@@ -1,0 +1,17 @@
+---
+// Transition between chapters. States the relationship between the idea just
+// finished and the next one; the step marker shows position in the argument.
+interface Props { step: number; from: string; to: string }
+const { step, from, to } = Astro.props;
+const steps = ["Competing priorities", "Structured decision", "Executable plan", "Governance", "Evidence"];
+---
+<div class="hb-bridge hb-reveal" role="note">
+  <ol class="hb-bridge-steps" aria-label="Argument progression">
+    {steps.map((s, i) => (
+      <li class:list={{ "is-done": i < step, "is-next": i === step }} aria-current={i === step ? "step" : undefined}>
+        <span class="hb-bridge-dot" aria-hidden="true"></span><span class="hb-bridge-name">{s}</span>
+      </li>
+    ))}
+  </ol>
+  <p class="hb-bridge-text"><span class="hb-bridge-from">{from}</span> <span class="hb-bridge-to">{to}</span></p>
+</div>

@@ -1,0 +1,146 @@
+---
+// Chapter 3 visuals: capacity states, the 90-day gate sequence, the Day 18
+// conflict and its recovery alternatives, and how issues are routed. Every
+// activity is planned or hypothetical in the source; nothing is shown as done.
+import Sources from "./Sources.astro";
+import {
+  capacityStates, capacityRefs, gates, gateRefs, criticalPath, conflict, alternatives, routing,
+} from "../../data/advisory/hrhs-ai";
+
+const cell = (a: object, k: string) => String((a as Record<string, unknown>)[k] ?? "");
+const maxNeeded = Math.max(...conflict.skills.map((s) => s.needed));
+const totals = conflict.skills.reduce((a, s) => ({ needed: a.needed + s.needed, releasable: a.releasable + s.releasable }), { needed: 0, releasable: 0 });
+---
+<h3 class="hb-h3">Capacity has four states, and only one of them delivers</h3>
+<p class="hb-body">The decision is executable only when the specialist commitments reach the validated state. Authorization moves capacity from the first box. Nothing else does that automatically.</p>
+<ol class="hb-states hb-reveal">
+  {capacityStates.map((s, i) => (
+    <li class="hb-state" style={`--i:${i}`}>
+      <p class="hb-state-day">{s.day}</p>
+      <p class="hb-state-label">{s.label}</p>
+      <p class="hb-state-text">{s.text}</p>
+      <p class="hb-state-owner"><span class="sr-only">Set by: </span>{s.owner}</p>
+    </li>
+  ))}
+</ol>
+<Sources refs={capacityRefs} tags={["E"]} />
+
+<div class="hb-gates hb-reveal" data-hb-tabs>
+  <h3 class="hb-h3">The first 90 days: gates, owners, evidence</h3>
+  <p class="hb-body">{criticalPath.text} Each gate has one owner and a stated test. Select a gate.</p>
+  <div class="hb-gate-track" role="tablist" aria-label="Decision gates" data-hb-tablist>
+    {gates.map((g, i) => (
+      <button type="button" role="tab" id={`tab-gate-${g.id}`} aria-controls={`panel-gate-${g.id}`}
+        aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} class="hb-gate">
+        <span class="hb-gate-dot" aria-hidden="true"></span>
+        <span class="hb-gate-id">{g.id}</span>
+        <span class="hb-gate-day">{g.day}</span>
+      </button>
+    ))}
+  </div>
+  <div class="hb-gate-panels">
+    {gates.map((g, i) => (
+      <div role="tabpanel" id={`panel-gate-${g.id}`} aria-labelledby={`tab-gate-${g.id}`} class="hb-gate-panel" data-hb-panel data-initial={i === 0 ? "1" : "0"}>
+        <p class="hb-gate-title"><span class="hb-mono">{g.id}</span> {g.name} <span class="hb-muted">· {g.day}</span></p>
+        <dl class="hb-gate-dl">
+          <div><dt>Decision</dt><dd>{g.decision}</dd></div>
+          <div><dt>Owner</dt><dd>{g.owner}</dd></div>
+          <div><dt>Evidence required</dt><dd>{g.evidence}</dd></div>
+        </dl>
+      </div>
+    ))}
+  </div>
+  <p class="hb-path"><span class="hb-path-label">Critical path</span>{criticalPath.steps.map((s, i) => <span class="hb-path-step">{i > 0 && <span aria-hidden="true" class="hb-path-arrow">→</span>}{s}</span>)}</p>
+  <p class="hb-muted hb-small">{criticalPath.note} Production deployment is not assumed by Day 90.</p>
+  <Sources refs={[...gateRefs, ...criticalPath.refs]} tags={["E", "J"]} />
+</div>
+
+<div class="hb-conflict hb-reveal" id="day-18">
+  <p class="hb-eyebrow-warm">Hypothetical scenario in the package</p>
+  <h3 class="hb-h3">Day 18: the plan meets the capacity ledger</h3>
+  <p class="hb-body">The package assumes leadership provisionally chose Option B and engineering submitted named allocations on Day 15, as required. Then validation did its job.</p>
+
+  <ol class="hb-timeline">
+    {conflict.timeline.map((t) => (
+      <li><p class="hb-tl-day">{t.day}</p><p class="hb-tl-event">{t.event}</p><p class="hb-tl-state">{t.state}</p></li>
+    ))}
+  </ol>
+
+  <figure class="hb-skills">
+    <figcaption>
+      <span class="hb-fig-title">Specialist hours needed in Days 1 to 120, by skill</span>
+      <span class="hb-legend"><span class="hb-key hb-key-avail" aria-hidden="true"></span>Releasable <span class="hb-key hb-key-short" aria-hidden="true"></span>Shortfall</span>
+    </figcaption>
+    <table class="hb-skill-table">
+      <caption class="sr-only">Needed, releasable and shortfall hours by specialist skill</caption>
+      <thead class="sr-only"><tr><th scope="col">Skill</th><th scope="col">Chart</th><th scope="col">Releasable of needed</th></tr></thead>
+      <tbody>
+        {conflict.skills.map((s) => (
+          <tr>
+            <th scope="row">{s.skill}</th>
+            <td class="hb-skill-bar" aria-hidden="true">
+              <span class="hb-skill-track" style={`width:${(s.needed / maxNeeded) * 100}%`}>
+                <span class="hb-skill-avail" style={`width:${(s.releasable / s.needed) * 100}%`}></span>
+              </span>
+            </td>
+            <td class="hb-skill-num"><strong>{s.releasable.toLocaleString("en-US")}</strong> of {s.needed.toLocaleString("en-US")}<span class="hb-skill-short"> · short {(s.needed - s.releasable).toLocaleString("en-US")}</span></td>
+          </tr>
+        ))}
+        <tr class="hb-skill-total"><th scope="row">Total</th><td aria-hidden="true"></td><td class="hb-skill-num"><strong>{totals.releasable.toLocaleString("en-US")}</strong> of {totals.needed.toLocaleString("en-US")}<span class="hb-skill-short"> · short {(totals.needed - totals.releasable).toLocaleString("en-US")}</span></td></tr>
+      </tbody>
+    </table>
+  </figure>
+  <p class="hb-pull">{conflict.summary}</p>
+  <Sources refs={conflict.refs} tags={["S", "E"]} />
+
+  <h4 class="hb-h4">Three recovery alternatives, compared on the same dimensions</h4>
+  <div class="hb-table-wrap hb-alt-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways on small screens)">
+    <table class="hb-table hb-alt-table">
+      <caption class="sr-only">Recovery alternatives compared</caption>
+      <thead>
+        <tr>
+          <td></td>
+          {alternatives.items.map((a) => (
+            <th scope="col" class:list={{ "is-recommended": a.recommended }}>
+              <span class="hb-alt-n">{a.key}</span> {a.name}
+              {a.recommended && <span class="hb-badge sm">Recommended now</span>}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {alternatives.dimensions.map((d) => (
+          <tr>
+            <th scope="row">{d.label}</th>
+            {alternatives.items.map((a) => (
+              <td class:list={{ "is-recommended": a.recommended }} data-label={`${a.key}. ${a.name}`}>{cell(a, d.id)}</td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <div class="hb-callout">
+    <p class="hb-callout-label">Conditional recommendation</p>
+    <p class="hb-callout-text">{alternatives.decision}</p>
+    <p class="hb-body hb-small">{alternatives.consequence}</p>
+    <Sources refs={alternatives.refs} tags={["E", "J", "R"]} />
+  </div>
+</div>
+
+<div class="hb-routing hb-reveal">
+  <h3 class="hb-h3">Route each issue to the lowest level that can resolve it</h3>
+  <p class="hb-body">{routing.intro}</p>
+  <p class="hb-body hb-muted">{routing.example}</p>
+  <ol class="hb-route-list">
+    {routing.rows.map((r, i) => (
+      <li class:list={["hb-route", { "is-exec": r.type === "Executive decision" }]} style={`--lvl:${i}`}>
+        <p class="hb-route-type">{r.type} <span class="hb-muted">({r.meaning})</span></p>
+        <p class="hb-route-item">{r.item}</p>
+        <p class="hb-route-by">{r.resolvedBy}</p>
+      </li>
+    ))}
+  </ol>
+  <p class="hb-pull hb-pull-sm">{routing.resolution}</p>
+  <Sources refs={routing.refs} tags={["J"]} />
+</div>

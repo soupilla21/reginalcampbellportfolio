@@ -1,0 +1,232 @@
+---
+// /advisory/<slug>: interactive executive briefing for an advisory package.
+//
+// Built only for briefings that pass the publication gate (see
+// src/data/advisory/index.ts). A "review" briefing is excluded from Vercel
+// production builds entirely and is always noindex.
+//
+// Content lives in src/data/advisory/<slug>.ts; this file is layout. One
+// briefing exists today; a second would add its own content module and a
+// branch below (or a shared content interface once two exist to compare).
+import PageLayout from "../../layouts/PageLayout.astro";
+import BriefingNav from "../../components/advisory/BriefingNav.astro";
+import ChapterHeader from "../../components/advisory/ChapterHeader.astro";
+import Bridge from "../../components/advisory/Bridge.astro";
+import Takeaway from "../../components/advisory/Takeaway.astro";
+import Sources from "../../components/advisory/Sources.astro";
+import TensionExplorer from "../../components/advisory/TensionExplorer.astro";
+import OptionsFramework from "../../components/advisory/OptionsFramework.astro";
+import ExecutionPath from "../../components/advisory/ExecutionPath.astro";
+import GovernanceModel from "../../components/advisory/GovernanceModel.astro";
+import DocumentLibrary from "../../components/advisory/DocumentLibrary.astro";
+import { builtBriefings, fileHref } from "../../data/advisory";
+import { hero, perspective, disclaimer, docById } from "../../data/advisory/hrhs-ai";
+import { contactHref } from "../../config/site";
+import "../../styles/advisory-briefing.css";
+
+export function getStaticPaths() {
+  return builtBriefings().map((b) => ({ params: { briefing: b.meta.slug }, props: { briefing: b } }));
+}
+
+const { briefing } = Astro.props;
+const { meta, documents } = briefing;
+const slug = meta.slug;
+const path = `/advisory/${slug}`;
+const isPublic = meta.status === "public";
+const doc = (id: string) => docById(id)!;
+const cap = hero.capacity;
+const pct = (n: number) => `${((n / cap.total) * 100).toFixed(2)}%`;
+
+const chapters = [
+  { id: "challenge", n: 1, label: "Challenge" },
+  { id: "framework", n: 2, label: "Decision" },
+  { id: "execution", n: 3, label: "Execution" },
+  { id: "accountability", n: 4, label: "Governance" },
+  { id: "documents", n: 5, label: "Documents" },
+];
+const direct = [
+  { id: "00A", label: "One-page overview" },
+  { id: "DECK", label: "Executive case study" },
+  { id: "08", label: "Engineering decision brief" },
+];
+---
+<PageLayout
+  title={meta.title}
+  description={meta.description}
+  path={path}
+  active="evidence"
+  noindex={!isPublic}
+  width={1180}
+  ogImage={`https://reginalcampbell.com${fileHref(slug, meta.socialImage)}`}
+  event={{ name: "advisory_briefing_view", params: { briefing: slug, status: meta.status } }}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Report",
+    name: "From AI Ambition to Engineering Decisions: HRHS Enterprise AI Advisory Case Study",
+    description: meta.description,
+    url: `https://reginalcampbell.com${path}`,
+    author: { "@id": "https://reginalcampbell.com/#person" },
+    version: meta.packageVersion,
+    isAccessibleForFree: true,
+    about: ["AI strategy", "Engineering portfolio governance", "Technical program management"],
+    abstract: disclaimer.short,
+  }}
+>
+  <div class="hb" id="top" data-hb-root data-slug={slug}>
+    {!isPublic && (
+      <p class="hb-review-flag" role="note"><strong>Review build.</strong> This briefing is not published. It is excluded from the production site until the publication review is approved.</p>
+    )}
+
+    <!-- OPENING: the executive decision -->
+    <header class="hb-hero">
+      <div class="hb-hero-text">
+        <p class="hb-eyebrow">{hero.eyebrow} <span class="hb-chip">Fictional health system</span></p>
+        <h1 class="hb-title">{hero.title}</h1>
+        <p class="hb-hero-lede">{hero.lede}</p>
+        <p class="hb-hero-pos">{hero.positioning}</p>
+        <div class="hb-hero-actions">
+          <a href="#challenge" class="hb-btn" data-ga-event="briefing_entry" data-ga-briefing={slug} data-ga-mode="guided">Begin the briefing <span aria-hidden="true">↓</span></a>
+          <a href="#documents" class="hb-btn hb-btn-ghost" data-ga-event="briefing_entry" data-ga-briefing={slug} data-ga-mode="direct">Go to the documents</a>
+        </div>
+        <p class="hb-direct" aria-label="Direct access to key documents">
+          <span class="hb-direct-label">Or open directly</span>
+          {direct.map((d) => (
+            <a href={fileHref(slug, doc(d.id).file)} target="_blank" rel="noopener"
+              data-ga-event="advisory_document_open" data-ga-briefing={slug} data-ga-document={doc(d.id).code} data-ga-method="hero">
+              {d.label}<span class="sr-only"> (PDF, opens in new tab)</span>
+            </a>
+          ))}
+        </p>
+      </div>
+
+      <figure class="hb-hero-viz" aria-labelledby="cap-cap">
+        <figcaption id="cap-cap" class="hb-viz-title">FY2027 discretionary IT hours</figcaption>
+        <div class="hb-cap">
+          <div class="hb-cap-row">
+            <p class="hb-cap-label"><span>Already committed</span><strong>{cap.committed.toLocaleString("en-US")}</strong></p>
+            <p class="hb-cap-label hb-cap-free"><span>Uncommitted</span><strong>{cap.uncommitted.toLocaleString("en-US")}</strong></p>
+          </div>
+          <div class="hb-cap-bar" aria-hidden="true">
+            <span class="hb-cap-committed" style={`width:${pct(cap.committed)}`}></span>
+            <span class="hb-cap-uncommitted" style={`width:${pct(cap.uncommitted)}`}></span>
+          </div>
+          <div class="hb-cap-bar hb-cap-need" aria-hidden="true">
+            <span class="hb-cap-need-fill" style={`width:${pct(cap.needed)}`}>
+              <span class="hb-cap-need-spec" style={`width:${((cap.specialist / cap.needed) * 100).toFixed(2)}%`}></span>
+            </span>
+          </div>
+          <p class="hb-cap-need-label"><strong>~{cap.needed.toLocaleString("en-US")}</strong> needed for a governed first phase, including <strong>{cap.specialist.toLocaleString("en-US")}</strong> specialist hours <span class="hb-warm">held by the ERP and EHR programs</span></p>
+          <p class="sr-only">Of {cap.total.toLocaleString("en-US")} discretionary IT hours, {cap.committed.toLocaleString("en-US")} are committed and {cap.uncommitted.toLocaleString("en-US")} are uncommitted. A governed first phase needs about {cap.needed.toLocaleString("en-US")}, including {cap.specialist.toLocaleString("en-US")} specialist hours currently committed to ERP and EHR work.</p>
+        </div>
+        <ul class="hb-facts">
+          {hero.facts.map((f) => <li><span class="hb-fact-v">{f.value}</span><span class="hb-fact-l">{f.label}</span></li>)}
+        </ul>
+        <Sources refs={[...cap.refs, { doc: "DECK", section: "Slide 1" }]} tags={["S", "E"]} />
+      </figure>
+
+      <div class="hb-hero-foot">
+        <p class="hb-attrib">Prepared by <a href="/" class="hb-attrib-name">Reginal Campbell, PMP</a> · Advisory package {meta.packageVersion}, November 2026</p>
+        <p class="hb-disclaimer-short">{disclaimer.short} <a href="#disclaimer">Read the full disclosure</a></p>
+      </div>
+    </header>
+
+    <BriefingNav chapters={chapters} slug={slug} />
+
+    <!-- CHAPTER 1 -->
+    <section class="hb-chapter" id="challenge" aria-labelledby="challenge-title" data-hb-chapter>
+      <ChapterHeader n={1} kicker="The challenge" title="Five tensions that no single option resolves" id="challenge">
+        <p>AI is already in use, arriving department by department without shared controls. The question is not whether the organization should use AI. It is which direction it can responsibly fund, support and execute this budget cycle. Each tension below is documented in the package; select one to see the trade-off and the consideration it creates for the decision.</p>
+      </ChapterHeader>
+      <TensionExplorer />
+      <Takeaway>
+        <p>Every tension points at the same constraint: the scarcest resource is not money or ambition but 4,600 hours of specialist knowledge already promised to ERP and EHR. A credible AI strategy has to start there.</p>
+      </Takeaway>
+    </section>
+
+    <Bridge step={1} from="Five tensions, one question." to="Which approach can this organization actually execute, and what would change the answer?" />
+
+    <!-- CHAPTER 2 -->
+    <section class="hb-chapter" id="framework" aria-labelledby="framework-title" data-hb-chapter>
+      <ChapterHeader n={2} kicker="The decision framework" title="A narrow lead, stated as conditions rather than certainty" id="framework">
+        <p>The package compares three legitimate approaches on objectives leadership set, scores them openly, and then does the less common thing: it shows how easily the answer flips, and names who controls the conditions that flip it.</p>
+      </ChapterHeader>
+      <OptionsFramework />
+      <Takeaway>
+        <p>Option B is provisionally recommended for what it adds beyond a shared control floor, not because it is the safe choice. Its advantage is worth about $1.4M only if two things leadership controls are true: a real pipeline beyond the first wave, and named specialists released from ERP and EHR work.</p>
+      </Takeaway>
+      <p class="hb-deeper">Go deeper: <a href={`#doc-01`}>Executive Issue Brief (01)</a> · <a href={`#doc-03`}>Strategic Options &amp; Advisory Analysis (03)</a> · <a href={`#doc-04`}>Decision &amp; Authorization Record (04)</a></p>
+    </section>
+
+    <Bridge step={2} from="A conditional recommendation is not yet a plan." to="Authorization has to become named people, validated dates and gates with owners." />
+
+    <!-- CHAPTER 3 -->
+    <section class="hb-chapter" id="execution" aria-labelledby="execution-title" data-hb-chapter>
+      <ChapterHeader n={3} kicker="From decision to execution" title="Capacity first, then governance, then a pilot only if the gates are met" id="execution">
+        <p>The execution design treats engineering capacity as something that must be proven, not assumed. It then shows what happens when the proof fails: a specialist conflict found on Day 18 becomes a bounded decision with three priced alternatives, a named decision-maker and a deadline.</p>
+      </ChapterHeader>
+      <ExecutionPath />
+      <Takeaway>
+        <p>Plans slip. What matters is how fast a conflict becomes visible, how precisely it is quantified, and whether it reaches the person with authority to decide, with options, before it reaches the schedule. In the case, the conflict was escalated the same day it was found, and the decision went to the level that owned it.</p>
+      </Takeaway>
+      <p class="hb-deeper">Go deeper: <a href="#doc-08">Engineering Portfolio Decision Brief (08)</a> · <a href="#doc-06">90-Day Mobilization Plan (06)</a> · <a href="#doc-05">Execution Playbook (05)</a></p>
+    </section>
+
+    <Bridge step={3} from="An executable plan still needs a way to change course." to="Governance decides who acts, how fast, and on what evidence." />
+
+    <!-- CHAPTER 4 -->
+    <section class="hb-chapter" id="accountability" aria-labelledby="accountability-title" data-hb-chapter>
+      <ChapterHeader n={4} kicker="Governance and accountability" title="Governance that produces decisions, not more reporting" id="accountability">
+        <p>The operating model is deliberately lean: oversight proportional to risk, one owner per decision, thresholds that trigger escalation automatically, and value that Finance can verify before anyone reports it. Its job is to let leadership answer three questions at any point: where are we, what is at risk, and do we proceed, change direction or stop?</p>
+      </ChapterHeader>
+      <GovernanceModel />
+      <Takeaway>
+        <p>Executive risk acceptance can cover residual business risk. It cannot waive legal, privacy, security or clinical safety requirements, and no log in the program may record a bypass of mandatory controls. That single rule is what lets the rest of the governance stay light.</p>
+      </Takeaway>
+      <p class="hb-deeper">Go deeper: <a href="#doc-07">Governance, Risk &amp; Value Realization Framework (07)</a> · <a href="#doc-04">Decision &amp; Authorization Record (04)</a></p>
+    </section>
+
+    <Bridge step={4} from="Every claim above traces to a document." to="Here is the evidence, in the recommended reading order." />
+
+    <!-- CHAPTER 5 -->
+    <section class="hb-chapter" id="documents" aria-labelledby="documents-title" data-hb-chapter>
+      <ChapterHeader n={5} kicker="Explore the advisory package" title="The original documents, unedited" id="documents">
+        <p>Eleven documents from the version 2.1 review set, in the reading order the package recommends. Start with the one-page overview and the five-slide case study; the rest supports them. Each file is the approved original.</p>
+      </ChapterHeader>
+      <DocumentLibrary slug={slug} documents={documents} />
+    </section>
+
+    <!-- PERSPECTIVE -->
+    <section class="hb-perspective" id="perspective" aria-labelledby="perspective-title">
+      <div class="hb-persp-quote hb-reveal">
+        <p class="hb-kicker">The perspective behind the analysis</p>
+        <h2 id="perspective-title" class="hb-quote">{perspective.quote}</h2>
+        <Sources refs={[perspective.quoteRef]} />
+      </div>
+      <div class="hb-persp-body hb-reveal">
+        {perspective.paragraphs.map((p) => <p>{p}</p>)}
+        <Sources refs={perspective.paragraphRefs} />
+        <p class="hb-principle">{perspective.principle}</p>
+      </div>
+      <aside class="hb-author hb-reveal" aria-label="About the author">
+        <p class="hb-author-name">{perspective.author.name}</p>
+        <p class="hb-muted hb-small">{perspective.author.line}</p>
+        <ul class="hb-focus">{perspective.author.focus.map((f) => <li>{f}</li>)}</ul>
+        <p class="hb-author-links">
+          <a href="/record" data-ga-event="briefing_contact_click" data-ga-briefing={slug} data-ga-target="record">Professional record</a>
+          <a href="/" data-ga-event="briefing_contact_click" data-ga-briefing={slug} data-ga-target="home">reginalcampbell.com</a>
+          <a href={contactHref("role")} data-ga-event="briefing_contact_click" data-ga-briefing={slug} data-ga-target="contact">Get in touch</a>
+        </p>
+      </aside>
+    </section>
+
+    <aside class="hb-disclaimer" id="disclaimer" aria-labelledby="disclaimer-title">
+      <h2 id="disclaimer-title" class="hb-disclaimer-title">Disclosure</h2>
+      <p>{disclaimer.full}</p>
+      <p class="hb-small hb-muted">Evidence tags follow the package: <abbr class="hb-tag hb-tag-S">S</abbr> simulated finding, <abbr class="hb-tag hb-tag-E">E</abbr> estimate, <abbr class="hb-tag hb-tag-A">A</abbr> assumption, <abbr class="hb-tag hb-tag-J">J</abbr> judgment, <abbr class="hb-tag hb-tag-R">R</abbr> recommendation. Estimates are order-of-magnitude, plus or minus 30%.</p>
+    </aside>
+  </div>
+</PageLayout>
+
+<script>
+  import "../../scripts/advisory-briefing";
+</script>

@@ -1,0 +1,74 @@
+---
+// Chapter 5: the document library, driven entirely by the manifest. Previews
+// are first pages rendered from the source PDFs; files are served unmodified.
+// "Read" opens a full-screen viewer on large screens and the browser's own
+// PDF viewer in a new tab everywhere else (and without JS).
+import type { ManifestDocument } from "../../data/advisory/types";
+import { fileHref } from "../../data/advisory";
+import { groups } from "../../data/advisory/hrhs-ai";
+
+interface Props { slug: string; documents: ManifestDocument[] }
+const { slug, documents } = Astro.props;
+const approved = documents.filter((d) => d.status === "approved").sort((a, b) => a.order - b.order);
+const order = Object.keys(groups) as ManifestDocument["group"][];
+---
+<div class="hb-library">
+  {order.map((g) => {
+    const docs = approved.filter((d) => d.group === g);
+    if (!docs.length) return null;
+    return (
+      <div class="hb-lib-group">
+        <div class="hb-lib-group-head">
+          <h3 class="hb-h3">{groups[g].label}</h3>
+          <p class="hb-muted hb-small">{groups[g].note}</p>
+        </div>
+        <ol class="hb-docs">
+          {docs.map((d) => {
+            const href = fileHref(slug, d.file);
+            return (
+              <li class="hb-doc" id={`doc-${d.id}`}>
+                <a href={href} target="_blank" rel="noopener" class="hb-doc-preview" tabindex="-1" aria-hidden="true"
+                  data-ga-event="advisory_document_open" data-ga-briefing={slug} data-ga-document={d.code} data-ga-method="preview">
+                  <img src={fileHref(slug, d.preview)} alt="" width={d.previewSize.width} height={d.previewSize.height}
+                    loading="lazy" decoding="async" class:list={{ "is-landscape": d.previewSize.width > d.previewSize.height }} />
+                </a>
+                <div class="hb-doc-body">
+                  <p class="hb-doc-meta"><span class="hb-doc-order" aria-label={`Reading order ${d.order}`}>{String(d.order).padStart(2, "0")}</span>{d.code} · v{d.version} · {d.pages} {d.pages === 1 ? "page" : "pages"}</p>
+                  <h4 class="hb-doc-title">{d.title}</h4>
+                  <p class="hb-doc-desc">{d.description}</p>
+                  <p class="hb-doc-purpose"><span>Use it to</span> {d.purpose.charAt(0).toLowerCase() + d.purpose.slice(1)}</p>
+                  <div class="hb-doc-actions">
+                    <a href={href} target="_blank" rel="noopener" class="hb-btn hb-btn-sm"
+                      data-hb-view={href} data-hb-view-title={`${d.code}: ${d.title}`}
+                      data-ga-event="advisory_document_open" data-ga-briefing={slug} data-ga-document={d.code} data-ga-method="read">
+                      Read<span class="sr-only"> {d.title} (PDF, opens in new tab)</span>
+                    </a>
+                    <a href={href} download class="hb-link-sm"
+                      data-ga-event="advisory_document_download" data-ga-briefing={slug} data-ga-document={d.code} data-ga-format="pdf">
+                      Download PDF<span class="sr-only">: {d.title}</span>
+                    </a>
+                    {d.original && (
+                      <a href={fileHref(slug, d.original.file)} download class="hb-link-sm"
+                        data-ga-event="advisory_document_download" data-ga-briefing={slug} data-ga-document={d.code} data-ga-format="pptx">
+                        {d.original.label}<span class="sr-only">: {d.title}</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    );
+  })}
+</div>
+
+<dialog class="hb-viewer" data-hb-viewer aria-labelledby="hb-viewer-title">
+  <div class="hb-viewer-bar">
+    <p id="hb-viewer-title" class="hb-viewer-title" data-hb-viewer-title>Document</p>
+    <a href="#" target="_blank" rel="noopener" class="hb-link-sm" data-hb-viewer-newtab>Open in new tab</a>
+    <button type="button" class="hb-btn hb-btn-sm hb-btn-ghost" data-hb-viewer-close>Close<span class="sr-only"> document viewer</span></button>
+  </div>
+  <iframe title="Document viewer" data-hb-viewer-frame></iframe>
+</dialog>

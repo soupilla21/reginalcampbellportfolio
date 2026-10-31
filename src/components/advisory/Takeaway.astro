@@ -1,0 +1,9 @@
+---
+// Executive takeaway: the one thing a reader should carry out of a chapter.
+interface Props { label?: string }
+const { label = "Executive takeaway" } = Astro.props;
+---
+<aside class="hb-takeaway hb-reveal" aria-label={label}>
+  <p class="hb-takeaway-label">{label}</p>
+  <div class="hb-takeaway-body"><slot /></div>
+</aside>

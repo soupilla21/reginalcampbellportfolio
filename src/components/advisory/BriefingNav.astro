@@ -1,0 +1,26 @@
+---
+// Sticky chapter navigation (guided mode) with a persistent documents shortcut
+// (direct mode). Plain anchor links: deep links, back/forward and no-JS all
+// work. The script only marks the current chapter.
+interface Props { chapters: { id: string; n?: number; label: string }[]; slug: string }
+const { chapters, slug } = Astro.props;
+---
+<nav class="hb-nav" aria-label="Briefing chapters">
+  <div class="hb-nav-inner">
+    <a href="#top" class="hb-nav-home" data-ga-event="briefing_chapter_nav" data-ga-briefing={slug} data-ga-chapter="top">Briefing</a>
+    <ol class="hb-nav-list">
+      {chapters.map((c) => (
+        <li>
+          <a href={`#${c.id}`} data-hb-navlink={c.id} data-ga-event="briefing_chapter_nav" data-ga-briefing={slug} data-ga-chapter={c.id}>
+            {c.n && <span class="hb-nav-n" aria-hidden="true">{c.n}</span>}{c.label}
+          </a>
+        </li>
+      ))}
+    </ol>
+    <a href="#documents" class="hb-nav-docs" data-ga-event="briefing_chapter_nav" data-ga-briefing={slug} data-ga-chapter="documents-shortcut">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg>
+      Documents
+    </a>
+  </div>
+  <div class="hb-nav-progress" aria-hidden="true"><span data-hb-progress></span></div>
+</nav>

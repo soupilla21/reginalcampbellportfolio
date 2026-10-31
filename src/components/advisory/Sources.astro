@@ -1,0 +1,30 @@
+---
+// Source line under a claim or diagram: evidence tags plus links to the exact
+// document in the library. Every substantive block on the page carries one.
+import type { EvidenceTag, SourceRef } from "../../data/advisory/types";
+import { docById } from "../../data/advisory/hrhs-ai";
+
+interface Props { refs: SourceRef[]; tags?: EvidenceTag[]; class?: string }
+const { refs, tags = [], class: cls } = Astro.props;
+const TAG_LABEL: Record<EvidenceTag, string> = {
+  S: "Simulated finding", E: "Estimate", A: "Assumption", J: "Judgment", R: "Recommendation",
+};
+---
+<p class:list={["hb-sources", cls]}>
+  {tags.length > 0 && (
+    <span class="hb-tags">
+      {tags.map((t) => <abbr class={`hb-tag hb-tag-${t}`} title={TAG_LABEL[t]}>{t}<span class="sr-only">: {TAG_LABEL[t]}</span></abbr>)}
+    </span>
+  )}
+  <span class="hb-sources-label">Source</span>
+  {refs.map((r, i) => {
+    const d = docById(r.doc);
+    const label = d ? (d.id === "DECK" ? "Executive Case Study" : d.code) : r.doc;
+    return (
+      <span>
+        {i > 0 && <span aria-hidden="true">· </span>}
+        <a href={`#doc-${r.doc}`} data-hb-docref>{label}{r.section && <span class="hb-sources-sec">, {r.section}</span>}</a>
+      </span>
+    );
+  })}
+</p>

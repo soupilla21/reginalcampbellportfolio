@@ -1,0 +1,44 @@
+---
+// Chapter 1 visual: the competing priorities. A tab set on screens with JS;
+// without JS (or when printed) every tension is shown in full.
+import Sources from "./Sources.astro";
+import { tensions } from "../../data/advisory/hrhs-ai";
+---
+<div class="hb-tensions hb-reveal" data-hb-tabs>
+  <div class="hb-tension-map" role="tablist" aria-label="Competing priorities" data-hb-tablist>
+    {tensions.map((t, i) => {
+      const [a, b] = t.title.split(" versus ");
+      return (
+        <button type="button" role="tab" id={`tab-${t.id}`} aria-controls={`panel-${t.id}`}
+          aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} class="hb-tension-tab">
+          <span class="hb-tension-a">{a}</span>
+          <span class="hb-tension-vs" aria-hidden="true"><span></span></span>
+          <span class="hb-tension-b">{b}</span>
+          <span class="sr-only"> versus </span>
+        </button>
+      );
+    })}
+  </div>
+  <div class="hb-tension-panels">
+    {tensions.map((t, i) => (
+      <div role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} class="hb-tension-panel" data-hb-panel data-initial={i === 0 ? "1" : "0"}>
+        <h3 class="hb-tension-title">{t.title}</h3>
+        <div class="hb-tension-grid">
+          <div class="hb-tension-side hb-side-pull">
+            <p class="hb-side-label">{t.pull.label}</p>
+            <p>{t.pull.text}</p>
+          </div>
+          <div class="hb-tension-side hb-side-constraint">
+            <p class="hb-side-label">{t.constraint.label}</p>
+            <p>{t.constraint.text}</p>
+          </div>
+        </div>
+        <div class="hb-consideration">
+          <p class="hb-side-label">Decision consideration</p>
+          <p>{t.consideration}</p>
+        </div>
+        <Sources refs={t.refs} tags={t.tags} />
+      </div>
+    ))}
+  </div>
+</div>

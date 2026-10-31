@@ -1,0 +1,9 @@
+---
+interface Props { n: number; kicker: string; title: string; id: string }
+const { n, kicker, title, id } = Astro.props;
+---
+<header class="hb-chapter-head">
+  <p class="hb-kicker"><span class="hb-kicker-n">Chapter {n}</span><span aria-hidden="true"> / </span>{kicker}</p>
+  <h2 id={`${id}-title`}>{title}</h2>
+  <div class="hb-lede"><slot /></div>
+</header>

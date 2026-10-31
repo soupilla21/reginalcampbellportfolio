@@ -1,0 +1,102 @@
+---
+// Chapter 4 visuals: oversight proportional to risk, cadence, decision rights
+// (with what each authority cannot be overridden by), escalation thresholds,
+// gate outcomes and the scorecard. Source: 07, with 04 and 08.
+import Sources from "./Sources.astro";
+import {
+  tiers, cadence, decisionRights, programDirectorRole, escalations, outcomes, scorecard, leanNote,
+} from "../../data/advisory/hrhs-ai";
+---
+<div class="hb-gov-top hb-reveal">
+  <div>
+    <h3 class="hb-h3">Oversight scales with risk</h3>
+    <p class="hb-body">Low-risk uses get a fast path. Only patient-data, financial and clinical uses go to the Risk Review Board. Engineering teams keep the technical decisions they are best placed to make.</p>
+    <ol class="hb-tiers">
+      {tiers.map((t, i) => (
+        <li style={`--t:${i}`}>
+          <p class="hb-tier-name">{t.tier}</p>
+          <p class="hb-tier-scope">{t.scope}</p>
+          <p class="hb-tier-path">{t.path}</p>
+          <p class="hb-tier-sla">{t.sla}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <div>
+    <h3 class="hb-h3">Four forums, each with one job</h3>
+    <ul class="hb-cadence">
+      {cadence.map((c) => (
+        <li><p class="hb-cad-body">{c.body}</p><p class="hb-cad-rhythm">{c.rhythm} · chair: {c.chair}</p><p class="hb-cad-remit">{c.remit}</p></li>
+      ))}
+    </ul>
+    <p class="hb-muted hb-small">{leanNote.text}</p>
+  </div>
+</div>
+<Sources refs={[{ doc: "07", section: "Design principle; Governance bodies" }]} tags={["J"]} />
+
+<div class="hb-rights hb-reveal" data-hb-tabs data-hb-orientation="vertical">
+  <h3 class="hb-h3">Who decides, and who cannot override them</h3>
+  <p class="hb-body">Select a decision. The second column is the point: authority that a sponsor, a team or a risk acceptance can quietly bypass is not authority.</p>
+  <div class="hb-rights-grid">
+    <div role="tablist" aria-orientation="vertical" aria-label="Decisions" class="hb-rights-list" data-hb-tablist>
+      {decisionRights.map((r, i) => (
+        <button type="button" role="tab" id={`tab-right-${i}`} aria-controls={`panel-right-${i}`}
+          aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{r.decision}</button>
+      ))}
+    </div>
+    <div class="hb-rights-panels">
+      {decisionRights.map((r, i) => (
+        <div role="tabpanel" id={`panel-right-${i}`} aria-labelledby={`tab-right-${i}`} class="hb-right-panel" data-hb-panel data-initial={i === 0 ? "1" : "0"}>
+          <p class="hb-right-decision">{r.decision}</p>
+          <dl>
+            <div><dt>Decided by</dt><dd>{r.authority}</dd></div>
+            <div><dt>Not overridable by</dt><dd>{r.notBy || "Final authority"}</dd></div>
+          </dl>
+        </div>
+      ))}
+    </div>
+  </div>
+  <p class="hb-role-note"><strong>The program director's role.</strong> {programDirectorRole}</p>
+  <Sources refs={[{ doc: "07", section: "Decision authorities" }, { doc: "08", section: "E. Decision rights" }]} tags={["J"]} />
+</div>
+
+<div class="hb-gov-split hb-reveal">
+  <div>
+    <h3 class="hb-h3">Escalation is timed, not discretionary</h3>
+    <div class="hb-table-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways on small screens)">
+      <table class="hb-table hb-table-compact">
+        <caption class="sr-only">Escalation thresholds</caption>
+        <thead><tr><th scope="col">Trigger</th><th scope="col">Escalate to</th><th scope="col">Timing</th></tr></thead>
+        <tbody>{escalations.map((e) => <tr><td>{e.trigger}</td><td>{e.to}</td><td class="hb-nowrap">{e.timing}</td></tr>)}</tbody>
+      </table>
+    </div>
+    <Sources refs={[{ doc: "07", section: "Escalation thresholds" }]} />
+  </div>
+  <div>
+    <h3 class="hb-h3">Every gate has five honest answers</h3>
+    <ul class="hb-outcomes">
+      {outcomes.map((o) => <li class={`hb-out hb-out-${o.id}`}><p class="hb-out-label">{o.label}</p><p>{o.text}</p></li>)}
+    </ul>
+    <Sources refs={[{ doc: "07", section: "Continue, revise, expand, or stop" }]} />
+  </div>
+</div>
+
+<div class="hb-scorecard hb-reveal">
+  <h3 class="hb-h3">What leadership watches</h3>
+  <p class="hb-body">Leading measures say whether execution is on track before value can show. Lagging measures say whether it showed. Targets and baselines are set at the gates, not assumed in advance.</p>
+  <div class="hb-score-grid">
+    <div>
+      <p class="hb-score-head">Leading</p>
+      <ul>{scorecard.leading.map((m) => <li><span class="hb-mono">{m.id}</span><span>{m.measure}</span><span class="hb-score-owner">{m.owner}</span></li>)}</ul>
+    </div>
+    <div>
+      <p class="hb-score-head">Lagging</p>
+      <ul>{scorecard.lagging.map((m) => <li><span class="hb-mono">{m.id}</span><span>{m.measure}</span><span class="hb-score-owner">{m.owner}</span></li>)}</ul>
+    </div>
+    <div class="hb-value-rules">
+      <p class="hb-score-head">Value rules Finance enforces</p>
+      <ul>{scorecard.valueRules.map((r) => <li>{r}</li>)}</ul>
+    </div>
+  </div>
+  <Sources refs={[{ doc: "07", section: "Executive scorecard; Value validation" }]} />
+</div>

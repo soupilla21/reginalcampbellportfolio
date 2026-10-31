@@ -1,0 +1,144 @@
+---
+// Chapter 2 visuals: three options, the sensitivity of the recommendation to
+// leadership's own priorities, the eleven-criterion basis, and the conditions
+// that would change the answer. All scores are the published scores in 03;
+// nothing is computed or invented here.
+import Sources from "./Sources.astro";
+import {
+  options, optionRefs, scenarios, scenarioRefs, criteria, recommendationChanges,
+  recommendation, decisionsRequested, objectives,
+} from "../../data/advisory/hrhs-ai";
+
+const base = scenarios[0];
+const pct = (s: number) => `${(s / 5) * 100}%`;
+---
+<div class="hb-objectives hb-reveal">
+  <p class="hb-objectives-lead">{objectives.text}</p>
+  <ol class="hb-objectives-list">
+    {objectives.items.map((o, i) => <li><span class="hb-obj-n" aria-hidden="true">{i + 1}</span>{o}</li>)}
+  </ol>
+  <p class="hb-muted">{objectives.note}</p>
+  <Sources refs={objectives.refs} />
+</div>
+
+<h3 class="hb-h3">Three credible paths, one shared control floor</h3>
+<p class="hb-body">All three options must meet the same mandatory privacy, security and contractual controls (MC-01 to MC-10). The choice is about what each adds beyond that floor, what it costs, and whether the organization can staff it.</p>
+
+<ul class="hb-options hb-reveal">
+  {options.map((o) => (
+    <li class="hb-option-li"><article class:list={["hb-option", { "is-recommended": o.recommended }]} aria-labelledby={`opt-${o.key}`}>
+      <header>
+        <span class="hb-option-key" aria-hidden="true">{o.key}</span>
+        <h4 id={`opt-${o.key}`}><span class="sr-only">Option {o.key}: </span>{o.name}</h4>
+        {o.recommended && <p class="hb-badge">Provisional recommendation</p>}
+      </header>
+      <p class="hb-option-idea">{o.idea}</p>
+      <ul class="hb-pm">
+        <li><span class="hb-pm-sign" aria-label="Advantage">+</span>{o.plus}</li>
+        <li><span class="hb-pm-sign" aria-label="Disadvantage">−</span>{o.minus}</li>
+      </ul>
+      <dl class="hb-option-facts">
+        <div><dt>FY2027 cash</dt><dd>{o.cash}</dd></div>
+        <div><dt>3-year cost</dt><dd>{o.threeYear}</dd></div>
+        <div><dt>IT hours, year 1</dt><dd>{o.hours}</dd></div>
+        <div><dt>Specialist hours</dt><dd>{o.specialist}</dd></div>
+        <div class="hb-span2"><dt>Fits the $4.5M envelope</dt><dd>{o.envelope}</dd></div>
+      </dl>
+      <p class="hb-option-position">{o.position}</p>
+    </article></li>
+  ))}
+</ul>
+<Sources refs={optionRefs} tags={["E", "J"]} />
+
+<div class="hb-sensitivity hb-reveal" data-hb-scenarios>
+  <div class="hb-sens-head">
+    <h3 class="hb-h3">How fragile is the recommendation?</h3>
+    <p class="hb-body">The package scores each option 1 to 5 on eleven weighted criteria, then tests the result against leadership's own priorities. Choose a scenario to see which option leads under it.</p>
+  </div>
+  <div class="hb-seg" role="group" aria-label="Weighting scenario" data-hb-scenario-buttons>
+    {scenarios.map((s, i) => (
+      <button type="button" aria-pressed={i === 0 ? "true" : "false"} data-scenario={s.id}
+        data-scores={JSON.stringify(s.scores)} data-note={s.note}>{s.label}</button>
+    ))}
+  </div>
+  <div class="hb-bars" aria-live="polite">
+    {(["A", "B", "C"] as const).map((k) => {
+      const o = options.find((x) => x.key === k)!;
+      return (
+        <div class="hb-bar-row" data-option={k}>
+          <span class="hb-bar-label"><span class="hb-option-key sm" aria-hidden="true">{k}</span>{o.name}</span>
+          <span class="hb-bar-track" aria-hidden="true">
+            <span class="hb-bar-fill" style={`width:${pct(base.scores[k])}`}></span>
+            <span class="hb-bar-mark" style="left:60%" title="3.0"></span>
+          </span>
+          <span class="hb-bar-value" data-value>{base.scores[k].toFixed(2)}</span>
+        </div>
+      );
+    })}
+    <p class="hb-bars-note" data-hb-scenario-note>{base.note}</p>
+  </div>
+  <p class="hb-muted hb-small">Weighted score out of 5.00. The package's own reading rule: differences below about 0.3 should be read as close.</p>
+
+  <details class="hb-details">
+    <summary>All four scenarios as a table</summary>
+    <div class="hb-table-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways on small screens)">
+      <table class="hb-table">
+        <caption class="sr-only">Weighted scores by scenario</caption>
+        <thead><tr><th scope="col">Scenario</th><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th></tr></thead>
+        <tbody>
+          {scenarios.map((s) => (
+            <tr><th scope="row">{s.label}</th><td>{s.scores.A.toFixed(2)}</td><td>{s.scores.B.toFixed(2)}</td><td>{s.scores.C.toFixed(2)}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </details>
+  <details class="hb-details">
+    <summary>The eleven criteria, weights and ratings</summary>
+    <div class="hb-table-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways on small screens)">
+      <table class="hb-table hb-table-criteria">
+        <caption class="sr-only">Evaluation criteria with weights and 1 to 5 ratings</caption>
+        <thead><tr><th scope="col">Criterion</th><th scope="col">Weight</th><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th><th scope="col">Basis</th></tr></thead>
+        <tbody>
+          {criteria.map((c) => (
+            <tr><th scope="row">{c.name}</th><td>{c.weight}%</td><td>{c.A}</td><td>{c.B}</td><td>{c.C}</td><td class="hb-basis">{c.basis}</td></tr>
+          ))}
+          <tr class="hb-total"><th scope="row">Weighted total</th><td>100%</td><td>3.43</td><td>3.52</td><td>2.51</td><td class="hb-basis">Ratings are judgments grounded in the readiness assessment.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+  <Sources refs={scenarioRefs} tags={["J"]} />
+</div>
+
+<div class="hb-conditions hb-reveal">
+  <h3 class="hb-h3">When the recommendation changes</h3>
+  <p class="hb-body">A recommendation that cannot say what would change it is a preference. These are the published conditions.</p>
+  <ul class="hb-cond-list">
+    {recommendationChanges.map((c) => (
+      <li><p class="hb-cond-prefer">Prefer {c.prefer}</p><p>{c.when}</p></li>
+    ))}
+  </ul>
+  <Sources refs={[{ doc: "03", section: "When the recommendation changes" }]} tags={["J"]} />
+</div>
+
+<div class="hb-callout hb-reveal">
+  <p class="hb-callout-label">{recommendation.label}</p>
+  <p class="hb-callout-text">{recommendation.text}</p>
+  <Sources refs={recommendation.refs} tags={["R"]} />
+</div>
+
+<div class="hb-decisions hb-reveal">
+  <h3 class="hb-h3">What leadership is asked to authorize</h3>
+  <div class="hb-table-wrap" tabindex="0" role="region" aria-label="Table (scrolls sideways on small screens)">
+    <table class="hb-table">
+      <caption class="sr-only">Decisions requested at the December 9 scenario meeting</caption>
+      <thead><tr><th scope="col">ID</th><th scope="col">Decision</th><th scope="col">Approver</th></tr></thead>
+      <tbody>
+        {decisionsRequested.map((d) => <tr><th scope="row" class="hb-mono">{d.id}</th><td>{d.decision}</td><td>{d.approver}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="hb-muted hb-small">D-03 and D-04 reduce unresolved risk at little cost and should proceed even if D-01 is deferred. No decision has been made; the decision record in Document 04 is intentionally blank.</p>
+  <Sources refs={[{ doc: "01", section: "Leadership action requested" }, { doc: "04" }]} tags={["R"]} />
+</div>

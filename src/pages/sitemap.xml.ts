@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { getPublishedArticles } from "../lib/articles";
 import { ASK_URL } from "../config/site";
 import { caseStudies } from "../data/case-studies";
+import { publicBriefings } from "../data/advisory";
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.toString().replace(/\/$/, "") ?? "https://reginalcampbell.com";
@@ -33,6 +34,8 @@ export const GET: APIRoute = async ({ site }) => {
     { loc: `${base}/record`, changefreq: "monthly", priority: "0.9" },
     { loc: `${base}/engage`, changefreq: "monthly", priority: "0.8" },
     { loc: `${base}/advisory`, changefreq: "monthly", priority: "0.9" },
+    // Advisory briefings appear only once their status is "public".
+    ...publicBriefings().map((b) => ({ loc: `${base}/advisory/${b.meta.slug}`, changefreq: "monthly", priority: "0.8" })),
     { loc: `${base}/digital-services`, changefreq: "monthly", priority: "0.8" },
     { loc: `${base}/portfolio`, changefreq: "monthly", priority: "0.8" },
     // Published case studies only. Drafts build but stay noindex and out of the sitemap.
