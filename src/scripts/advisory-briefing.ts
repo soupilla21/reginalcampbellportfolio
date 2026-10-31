@@ -82,8 +82,14 @@ function init(root: HTMLElement) {
   root.querySelectorAll<HTMLAnchorElement>("[data-hb-navlink]").forEach((a) => links.set(a.dataset.hbNavlink!, a));
   const chapters = Array.from(root.querySelectorAll<HTMLElement>("[data-hb-chapter]"));
   const visible = new Set<string>();
+  let lastCurrent: string | undefined;
   const mark = () => {
     const current = chapters.find((c) => visible.has(c.id));
+    // Back above the first chapter: return the scrolling bar to its start.
+    if (!current && lastCurrent) {
+      root.querySelector<HTMLElement>(".hb-nav-list")?.scrollTo({ left: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+    lastCurrent = current?.id;
     links.forEach((a, id) => {
       if (current && id === current.id) {
         if (!a.hasAttribute("aria-current")) {
@@ -129,32 +135,36 @@ function init(root: HTMLElement) {
   });
 
   // ── Full-screen viewer for large screens; new tab everywhere else ──
+  // The viewer never touches browser history. A fresh iframe is created with
+  // its src set before insertion (an initial load adds no history entry) and
+  // removed on close, so one click on Close or one Escape always closes it,
+  // and the Back button keeps working normally.
   const dialog = root.querySelector<HTMLDialogElement>("[data-hb-viewer]");
-  const frame = dialog?.querySelector<HTMLIFrameElement>("[data-hb-viewer-frame]");
+  const holder = dialog?.querySelector<HTMLElement>("[data-hb-viewer-frame]");
   const title = dialog?.querySelector<HTMLElement>("[data-hb-viewer-title]");
   const newTab = dialog?.querySelector<HTMLAnchorElement>("[data-hb-viewer-newtab]");
   const canEmbed = () => window.matchMedia("(min-width: 900px) and (hover: hover)").matches && typeof HTMLDialogElement === "function";
   let opener: HTMLElement | null = null;
-  if (dialog && frame && title && newTab) {
+  if (dialog && holder && title && newTab) {
     root.querySelectorAll<HTMLAnchorElement>("[data-hb-view]").forEach((a) => {
       a.addEventListener("click", (e) => {
         if (!canEmbed() || e.metaKey || e.ctrlKey || e.shiftKey) return; // let the link open normally
         e.preventDefault();
         opener = a;
         const href = a.dataset.hbView!;
+        const label = a.dataset.hbViewTitle || "Document";
+        const frame = document.createElement("iframe");
+        frame.title = label;
         frame.src = href;
-        frame.title = a.dataset.hbViewTitle || "Document";
-        title.textContent = a.dataset.hbViewTitle || "Document";
+        holder.replaceChildren(frame);
+        title.textContent = label;
         newTab.href = href;
         dialog.showModal();
-        history.pushState({ hbViewer: true }, "", location.href);
       });
     });
-    const close = () => { if (dialog.open) dialog.close(); };
-    dialog.querySelector("[data-hb-viewer-close]")?.addEventListener("click", () => history.back());
-    dialog.addEventListener("cancel", (e) => { e.preventDefault(); history.back(); });
-    dialog.addEventListener("close", () => { frame.src = "about:blank"; opener?.focus(); });
-    window.addEventListener("popstate", close);
+    dialog.querySelector("[data-hb-viewer-close]")?.addEventListener("click", () => dialog.close());
+    // Escape fires "cancel" and the dialog closes itself; nothing to add.
+    dialog.addEventListener("close", () => { holder.replaceChildren(); opener?.focus(); });
   }
 
   // ── Reveal on scroll (skipped entirely for reduced motion) ──

@@ -25,7 +25,7 @@
   color: var(--hb-body);
   font-size: 1rem;
   margin-top: -48px;
-  padding-top: 40px;
+  padding-top: 0;
 }
 /* Full-bleed navy band behind the briefing without changing the layout.
    A single painted pseudo-element: cheaper than a 100vmax shadow + clip. */
@@ -44,7 +44,7 @@
 .hb .hb-body { color: var(--hb-body); line-height: 1.7; max-width: 68ch; margin-bottom: 1.25rem; }
 
 .hb-review-flag {
-  margin: 0 0 1.5rem; padding: 0.6rem 0.9rem; border: 1px dashed rgba(208,165,106,0.6);
+  margin: 1.5rem 0 0; padding: 0.6rem 0.9rem; border: 1px dashed rgba(208,165,106,0.6);
   border-radius: 10px; color: var(--hb-warm); font-size: 0.85rem; background: rgba(198,155,97,0.06);
 }
 
@@ -438,7 +438,8 @@
 .hb-viewer[open] { display: flex; flex-direction: column; }
 .hb-viewer-bar { display: flex; align-items: center; gap: 1rem; padding: 0.7rem 0.9rem 0.7rem 1.1rem; border-bottom: 1px solid var(--hb-line); }
 .hb-viewer-title { flex: 1; font-size: 0.9rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hb-viewer iframe { flex: 1; width: 100%; border: 0; background: #525659; }
+.hb-viewer-frame { flex: 1; display: flex; min-height: 0; }
+.hb-viewer-frame iframe { flex: 1; width: 100%; height: 100%; border: 0; background: #525659; }
 
 /* ── Perspective, author, disclaimer ── */
 .hb-perspective { margin-top: 5rem; padding: 3.5rem 0 1rem; border-top: 1px solid var(--hb-line); display: grid; grid-template-columns: 1.1fr 1fr; grid-template-areas: "quote quote" "body author"; gap: 2rem 4rem; }
@@ -487,7 +488,7 @@
   .hb-bridge { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .hb { margin-top: -32px; padding-top: 24px; }
+  .hb { margin-top: -48px; padding-top: 0; }
   .hb-hero { padding-top: 1.25rem; gap: 2rem; }
   .hb-hero-lede { font-size: 1.02rem; }
   .hb-hero-actions .hb-btn { flex: 1 1 100%; justify-content: center; }

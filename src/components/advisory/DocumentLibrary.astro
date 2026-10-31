@@ -33,7 +33,7 @@ const order = Object.keys(groups) as ManifestDocument["group"][];
                     loading="lazy" decoding="async" class:list={{ "is-landscape": d.previewSize.width > d.previewSize.height }} />
                 </a>
                 <div class="hb-doc-body">
-                  <p class="hb-doc-meta"><span class="hb-doc-order" aria-label={`Reading order ${d.order}`}>{String(d.order).padStart(2, "0")}</span>{d.code} · v{d.version} · {d.pages} {d.pages === 1 ? "page" : "pages"}</p>
+                  <p class="hb-doc-meta"><span class="hb-doc-order" aria-label={`Reading order ${d.order}`}>{String(d.order).padStart(2, "0")}</span>{d.code} · {d.pages} {d.pages === 1 ? "page" : "pages"}</p>
                   <h4 class="hb-doc-title">{d.title}</h4>
                   <p class="hb-doc-desc">{d.description}</p>
                   <p class="hb-doc-purpose"><span>Use it to</span> {d.purpose.charAt(0).toLowerCase() + d.purpose.slice(1)}</p>
@@ -70,5 +70,5 @@ const order = Object.keys(groups) as ManifestDocument["group"][];
     <a href="#" target="_blank" rel="noopener" class="hb-link-sm" data-hb-viewer-newtab>Open in new tab</a>
     <button type="button" class="hb-btn hb-btn-sm hb-btn-ghost" data-hb-viewer-close>Close<span class="sr-only"> document viewer</span></button>
   </div>
-  <iframe title="Document viewer" data-hb-viewer-frame></iframe>
+  <div class="hb-viewer-frame" data-hb-viewer-frame></div>
 </dialog>

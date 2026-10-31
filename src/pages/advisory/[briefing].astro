@@ -73,6 +73,9 @@ const direct = [
   }}
 >
   <div class="hb" id="top" data-hb-root data-slug={slug}>
+    <!-- Chapter bar first, so it is pinned under the site header from the moment the page loads. -->
+    <BriefingNav chapters={chapters} slug={slug} />
+
     {!isPublic && (
       <p class="hb-review-flag" role="note"><strong>Review build.</strong> This briefing is not published. It is excluded from the production site until the publication review is approved.</p>
     )}
@@ -125,12 +128,10 @@ const direct = [
       </figure>
 
       <div class="hb-hero-foot">
-        <p class="hb-attrib">Prepared by <a href="/" class="hb-attrib-name">Reginal Campbell, PMP</a> · Advisory package {meta.packageVersion}, November 2026</p>
+        <p class="hb-attrib">Prepared by <a href="/" class="hb-attrib-name">Reginal Campbell, PMP</a> · November 2026</p>
         <p class="hb-disclaimer-short">{disclaimer.short} <a href="#disclaimer">Read the full disclosure</a></p>
       </div>
     </header>
-
-    <BriefingNav chapters={chapters} slug={slug} />
 
     <!-- CHAPTER 1 -->
     <section class="hb-chapter" id="challenge" aria-labelledby="challenge-title" data-hb-chapter>
@@ -190,7 +191,7 @@ const direct = [
     <!-- CHAPTER 5 -->
     <section class="hb-chapter" id="documents" aria-labelledby="documents-title" data-hb-chapter>
       <ChapterHeader n={5} kicker="Explore the advisory package" title="The original documents, unedited" id="documents">
-        <p>Eleven documents from the version 2.1 review set, in the reading order the package recommends. Start with the one-page overview and the five-slide case study; the rest supports them. Each file is the approved original.</p>
+        <p>Eleven documents from the review set, in the reading order the package recommends. Start with the one-page overview and the five-slide case study; the rest supports them. Each file is the approved original.</p>
       </ChapterHeader>
       <DocumentLibrary slug={slug} documents={documents} />
     </section>
