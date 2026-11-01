@@ -86,6 +86,9 @@
 .hb-attrib-name { color: var(--hb-text); font-weight: 600; }
 .hb-disclaimer-short { font-size: 0.85rem; color: var(--hb-muted); max-width: 70ch; }
 .hb-disclaimer-short a { text-decoration: underline; text-underline-offset: 3px; }
+.hb-about { flex: 1 1 100%; font-size: 0.9rem; line-height: 1.6; color: var(--hb-body); max-width: 78ch; }
+.hb-about strong { color: var(--hb-text); font-weight: 600; }
+.hb-about a { color: var(--hb-blue); text-decoration: underline; text-underline-offset: 3px; }
 
 .hb-hero-viz { background: var(--hb-panel); border: 1px solid var(--hb-line); border-radius: var(--hb-radius); padding: 1.5rem; }
 .hb-viz-title { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hb-muted); margin-bottom: 1rem; }
@@ -485,6 +488,7 @@
 .hb-quote { font-size: clamp(1.5rem, 3vw, 2.15rem); line-height: 1.25; font-weight: 600; letter-spacing: -0.025em; color: var(--hb-text); margin: 0; }
 .hb-persp-body { grid-area: body; }
 .hb-persp-body > p { line-height: 1.75; margin-bottom: 1.1rem !important; max-width: 64ch; }
+.hb-motive { margin-top: 1.25rem !important; padding-left: 1rem; border-left: 2px solid var(--hb-warm); color: var(--hb-text); }
 .hb-principle { margin-top: 1.5rem !important; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; letter-spacing: 0.08em; color: var(--hb-warm); }
 .hb-author { grid-area: author; align-self: start; padding: 1.5rem; border: 1px solid var(--hb-line); border-radius: var(--hb-radius); background: var(--hb-panel); }
 .hb-author-name { font-size: 1.1rem; font-weight: 650; color: var(--hb-text); }

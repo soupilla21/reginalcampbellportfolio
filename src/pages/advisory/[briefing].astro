@@ -129,7 +129,7 @@ const direct = [
 
       <div class="hb-hero-foot">
         <p class="hb-attrib">Prepared by <a href="/" class="hb-attrib-name">Reginal Campbell, PMP</a> · November 2026</p>
-        <p class="hb-disclaimer-short">{disclaimer.short} <a href="#disclaimer">Read the full disclosure</a></p>
+        <p class="hb-about"><strong>About this briefing.</strong> {hero.about} <a href="#documents">Go to the documents</a> · <a href="#disclaimer">Read the full disclosure</a></p>
       </div>
     </header>
 
@@ -206,6 +206,7 @@ const direct = [
       <div class="hb-persp-body hb-reveal">
         {perspective.paragraphs.map((p) => <p>{p}</p>)}
         <Sources refs={perspective.paragraphRefs} />
+        <p class="hb-motive">{perspective.motive}</p>
         <p class="hb-principle">{perspective.principle}</p>
       </div>
       <aside class="hb-author hb-reveal" aria-label="About the author">
