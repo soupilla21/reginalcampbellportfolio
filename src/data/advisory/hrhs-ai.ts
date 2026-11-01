@@ -18,7 +18,7 @@ export const meta: BriefingMeta = {
   status: "public",
   title: "From AI Ambition to Engineering Decisions | HRHS Advisory Case Study | Reginal Campbell",
   description:
-    "An executive advisory case study on a fictional health system: how a conditional AI strategy recommendation becomes owned engineering decisions, executable plans and lean governance.",
+    "A fictional healthcare AI case study showing how an executive decision moves from evidence, to a conditional recommendation, to a plan leaders can deliver.",
   socialImage: "hrhs-ai-social-card.png",
 };
 
@@ -155,6 +155,9 @@ export const hero = {
   lede:
     "A fictional regional health system has eleven proposed AI use cases, two pilots running without enterprise review, and 92% of next year's discretionary IT capacity already committed. Leadership has to decide how to approach enterprise AI, and what it can actually commit to in FY2027.",
   positioning: "A case study in conditional recommendations, engineering portfolio trade-offs and delivery accountability.",
+  // Context note for a first-time visitor, shown under the attribution line.
+  about:
+    "This briefing follows one advisory approach from evidence, to a conditional recommendation, to a plan the organization can deliver. Halcyon Ridge Health System is fictional, and every figure, finding and decision is simulated.",
   thesis: {
     text: "A defensible recommendation is only valuable when leaders understand its tradeoffs and the organization can execute the resulting decision.",
     refs: [{ doc: "00", section: "The case" }],
@@ -640,6 +643,9 @@ export const perspective = {
     "Before a decision, the advisor owes leadership an independent recommendation. After it, the obligation is to deliver the option leadership chose, with the same controls and honest reporting, and to come back when the evidence says the chosen path is no longer working. That is why every pathway carries its own pivot conditions: changing course should be a planned governance decision, not a failure narrative.",
   ],
   paragraphRefs: [{ doc: "03" }, { doc: "05", section: "Advisory to delivery" }] as SourceRef[],
+  // Author's own statement of why the briefing exists (first person).
+  motive:
+    "I built this because a résumé can say I lead strategy and delivery, but it can't show how I reason through a hard decision. This is that reasoning, laid out so you can check it.",
   principle: "AI informs. Humans decide. Leaders own.",
   author: {
     name: "Reginal Campbell, PMP",
