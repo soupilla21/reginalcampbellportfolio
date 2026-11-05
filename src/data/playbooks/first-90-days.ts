@@ -23,7 +23,7 @@ export const meta = {
   slug: "first-90-days",
   // "review": built locally and on Vercel previews, never on production.
   // Flip to "public" to publish (see docs/advisory-briefings.md, same gate).
-  status: "review" as Status,
+  status: "public" as Status,
   title: "First Decision by Day 90 | How I'd Run Technology Enablement Governance | Reginal Campbell",
   description:
     "A 90-day plan for governing technology enablement across functions: decision rights, an operating rhythm, and the first executive decision, shown through illustrative sample artifacts.",
