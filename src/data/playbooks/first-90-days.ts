@@ -35,6 +35,14 @@ export const files = {
   kit: "governance-starter-kit.pdf",
 };
 
+// The leave-behinds as shown in "Take it with you". Each opens in an on-page
+// reader (large screens) or the browser's PDF viewer (phones), with download
+// as the secondary action. Previews are first pages rendered from the PDFs.
+export const documents = [
+  { key: "summary", file: files.summary, preview: "summary-preview.webp", title: "One-page summary", meta: "PDF · 1 page", text: "The whole plan on a single page: the three phases, the Day 60 trade-off, the roles and the working agreement." },
+  { key: "kit", file: files.kit, preview: "kit-preview.webp", title: "Governance Starter Kit", meta: "PDF · 7 pages", text: "The six core artifacts, filled in: decision rights, RAG card, RAID log, steering pre-read, executive one-pager and decision log." },
+];
+
 export const hero = {
   eyebrow: "90-day governance plan",
   title: "First Decision by Day 90",

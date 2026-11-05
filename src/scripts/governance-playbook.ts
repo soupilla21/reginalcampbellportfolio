@@ -85,6 +85,41 @@ function init(root: HTMLElement) {
   window.addEventListener("hashchange", openFromHash);
   openFromHash();
 
+  // ── Document reader ──
+  // Large screens: the PDF opens in an on-page dialog. Phones, tablets and
+  // modified clicks: the link opens the browser's own PDF viewer in a new tab.
+  // A fresh iframe is created per open and removed on close, so the viewer
+  // never adds browser history and Back keeps working.
+  const dialog = root.querySelector<HTMLDialogElement>("[data-gp-viewer]");
+  const holder = dialog?.querySelector<HTMLElement>("[data-gp-viewer-frame]");
+  const vTitle = dialog?.querySelector<HTMLElement>("[data-gp-viewer-title]");
+  const vTab = dialog?.querySelector<HTMLAnchorElement>("[data-gp-viewer-newtab]");
+  const vDl = dialog?.querySelector<HTMLAnchorElement>("[data-gp-viewer-download]");
+  const canEmbed = () => window.matchMedia("(min-width: 900px) and (hover: hover)").matches && typeof HTMLDialogElement === "function";
+  let opener: HTMLElement | null = null;
+  if (dialog && holder && vTitle && vTab && vDl) {
+    root.querySelectorAll<HTMLAnchorElement>("[data-gp-view]").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        if (!canEmbed() || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        e.preventDefault();
+        opener = a.classList.contains("gp-doc-thumb") ? a.closest(".gp-doc")?.querySelector<HTMLElement>("[data-gp-view].gp-btn") ?? a : a;
+        const href = a.dataset.gpView!;
+        const label = a.dataset.gpViewTitle || "Document";
+        const frame = document.createElement("iframe");
+        frame.title = label;
+        frame.src = href;
+        holder.replaceChildren(frame);
+        vTitle.textContent = label;
+        vTab.href = href;
+        vDl.href = href;
+        dialog.showModal();
+      });
+    });
+    dialog.querySelector("[data-gp-viewer-close]")?.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (e) => { if (e.target === dialog) dialog.close(); }); // backdrop click
+    dialog.addEventListener("close", () => { holder.replaceChildren(); opener?.focus(); });
+  }
+
   // ── Current section marker ──
   const links = Array.from(root.querySelectorAll<HTMLAnchorElement>("[data-gp-navlink]"));
   const sections = Array.from(root.querySelectorAll<HTMLElement>("[data-gp-section]"));
