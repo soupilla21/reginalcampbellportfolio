@@ -28,7 +28,8 @@ export const meta: BriefingMeta = {
 // Documents 00 to 08 are the PUBLIC EDITION: re-exported from the v2.1 Word
 // sources with only the evaluation-use header marking and the hiring-
 // organization reference removed (verified by text diff; same page counts).
-// 00A and the deck never carried either and are the v2.1 originals.
+// 00A never carried either and is the v2.1 original. The deck is v2.3
+// (benefits shown, plain language, slides 4 and 5 swapped); it carries neither.
 // The Reader's Guide marks 09 (interview preparation) and the QA records as
 // private and outside the review set; they are listed here as `private` so the
 // omission is explicit, and their files are not in this repository.
@@ -46,12 +47,12 @@ export const documents: ManifestDocument[] = [
   },
   {
     id: "DECK", code: "Executive Case Study", title: "Five-Slide Executive Case Study",
-    description: "The dilemma, the evidence, three paths, the engineering reality and how leadership will know execution is working.",
+    description: "The dilemma, the evidence, three paths, how leadership will know execution is working, and the engineering reality that tests the plan.",
     purpose: "Discuss the case in 6 to 8 minutes.",
-    version: "2.1", date: "November 2026", pages: 5, group: "start", order: 2,
-    file: "HRHS-AI_Executive_Case_Study_v2.1.pdf", preview: "HRHS-AI_Executive_Case_Study_v2.1.webp",
+    version: "2.3", date: "November 2026", pages: 5, group: "start", order: 2,
+    file: "HRHS-AI_Executive_Case_Study_v2.3.pdf", preview: "HRHS-AI_Executive_Case_Study_v2.3.webp",
     previewSize: { width: 480, height: 270 },
-    original: { file: "HRHS-AI_Executive_Case_Study_v2.1.pptx", label: "PowerPoint original" },
+    original: { file: "HRHS-AI_Executive_Case_Study_v2.3.pptx", label: "PowerPoint original" },
     status: "approved", featured: true,
   },
   {
@@ -471,7 +472,7 @@ export const gates = [
   { id: "G3", day: "~Day 65", name: "Pilot go / no-go", owner: "Risk Review Board and product owner", decision: "Start the controlled pilot, or not.", evidence: "Controls MC-01 to MC-06 evidenced; release readiness check passed. A no-go is valid and triggers remediation, not schedule pressure." },
   { id: "G4", day: "Day 90", name: "Scale, revise or stop", owner: "CFO and ELT", decision: "Scale, revise or stop Wave 1; release Tranche 2 ($2.25M) or not.", evidence: "Pilot results against acceptance criteria; Finance-confirmed baselines; restated financial case." },
 ];
-export const gateRefs: SourceRef[] = [{ doc: "06", section: "Decision checkpoints" }, { doc: "DECK", section: "Slide 5" }];
+export const gateRefs: SourceRef[] = [{ doc: "06", section: "Decision checkpoints" }, { doc: "DECK", section: "Slide 4" }];
 
 export const criticalPath = {
   text: "The Wave 1 critical path runs through specialist capacity and data, not technology.",
@@ -495,7 +496,7 @@ export const conflict = {
     { skill: "Enterprise architecture", needed: 300, releasable: 200 },
   ],
   summary: "The total hours still reconcile. The skills and the timing do not.",
-  refs: [{ doc: "08", section: "A. Decision required" }, { doc: "DECK", section: "Slide 4" }],
+  refs: [{ doc: "08", section: "A. Decision required" }, { doc: "DECK", section: "Slide 5" }],
 };
 
 export const alternatives = {
