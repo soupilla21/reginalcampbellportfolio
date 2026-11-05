@@ -1,0 +1,589 @@
+---
+// /advisory/first-90-days: "First Decision by Day 90".
+//
+// Same publication gate as the advisory briefings: while meta.status is
+// "review", Vercel production builds emit no page and no files (a build-time
+// exclusion through getStaticPaths). Content lives in
+// src/data/playbooks/first-90-days.ts; this file is layout.
+import PageLayout from "../../../layouts/PageLayout.astro";
+import { isBuiltStatus } from "../../../data/playbooks";
+import {
+  meta, files, hero, principles, checkpoints, programs, phases,
+  raciRoles, raci, raciNote, ragRows, ragMeaning, ragRules, thresholds, routing,
+  raid, raidNote, steering, exec, decisions, forums, weeklyStatus, scorecard, readiness,
+  artifacts, roles, agreement, disclosure,
+} from "../../../data/playbooks/first-90-days";
+import { contactHref } from "../../../config/site";
+import "../../../styles/governance-playbook.css";
+
+export function getStaticPaths() {
+  return isBuiltStatus(meta.status) ? [{ params: { p: undefined } }] : [];
+}
+
+const slug = meta.slug;
+const path = `/advisory/${slug}`;
+const isPublic = meta.status === "public";
+const fileHref = (name: string) => `${path}/files/${name}`;
+const ragLabel = { g: "Green", a: "Amber", r: "Red" } as const;
+const roleNames = Object.fromEntries(roles.map((r) => [r.key, r.name]));
+const cap = steering.capacity;
+const capMax = cap.b + cap.c; // 1,680: the widest bar
+const w = (n: number) => `${((n / capMax) * 100).toFixed(2)}%`;
+const fmt = (n: number) => n.toLocaleString("en-US");
+
+const navItems = [
+  { id: "day-30", label: "Day 30" },
+  { id: "day-60", label: "Day 60" },
+  { id: "day-90", label: "Day 90" },
+  { id: "seat", label: "Your seat" },
+  { id: "artifacts", label: "Artifacts" },
+  { id: "agreement", label: "Working agreement" },
+];
+---
+<PageLayout
+  title={meta.title}
+  description={meta.description}
+  path={path}
+  nav="minimal"
+  noindex={!isPublic}
+  width={1180}
+  event={{ name: "playbook_view", params: { playbook: slug, status: meta.status } }}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: "First Decision by Day 90: How I'd Run Technology Enablement Governance",
+    description: meta.description,
+    url: `https://reginalcampbell.com${path}`,
+    author: { "@id": "https://reginalcampbell.com/#person" },
+    isAccessibleForFree: true,
+    about: ["Technology enablement", "Program governance", "Steering committees", "Executive reporting"],
+  }}
+>
+  <div class="gp" id="top" data-gp-root data-slug={slug}>
+    <nav class="gp-nav" aria-label="Page sections">
+      <div class="gp-nav-inner">
+        <a href="#top" class="gp-nav-home">Day 90 plan</a>
+        <ol class="gp-nav-list">
+          {navItems.map((n) => (
+            <li><a href={`#${n.id}`} data-gp-navlink={n.id} data-ga-event="playbook_nav" data-ga-playbook={slug} data-ga-section={n.id}>{n.label}</a></li>
+          ))}
+        </ol>
+        <a href="#downloads" class="gp-nav-dl" data-ga-event="playbook_nav" data-ga-playbook={slug} data-ga-section="downloads">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 13.5h11"/></svg>
+          Download
+        </a>
+      </div>
+    </nav>
+
+    {!isPublic && (
+      <p class="gp-review-flag" role="note"><strong>Review build.</strong> This page is not published. It is excluded from the production site until its status is set to public.</p>
+    )}
+
+    <!-- ── OPENING ── -->
+    <header class="gp-hero">
+      <div class="gp-hero-text">
+        <p class="gp-eyebrow">{hero.eyebrow} <span class="gp-chip">Illustrative examples</span></p>
+        <h1 class="gp-title">{hero.title}</h1>
+        <p class="gp-subtitle">{hero.subtitle}</p>
+        <p class="gp-hook">{hero.hook}</p>
+        <p class="gp-lede">{hero.lede}</p>
+        <div class="gp-actions">
+          <a href="#day-30" class="gp-btn" data-ga-event="playbook_entry" data-ga-playbook={slug} data-ga-mode="guided">Start at Day 1 <span aria-hidden="true">↓</span></a>
+          <a href="#steering-2" class="gp-btn gp-btn-ghost" data-ga-event="playbook_entry" data-ga-playbook={slug} data-ga-mode="trade-off">Jump to the Day 60 trade-off</a>
+        </div>
+      </div>
+
+      <figure class="gp-timeline" aria-labelledby="tl-cap">
+        <figcaption id="tl-cap" class="gp-viz-title">The first 90 days</figcaption>
+        <ol class="gp-tl-bands">
+          {phases.map((p) => (
+            <li class="gp-tl-band">
+              <a href={`#${p.id}`}>
+                <span class="gp-tl-days">{p.days}</span>
+                <span class="gp-tl-name">{p.band}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <ol class="gp-tl-checks">
+          {checkpoints.map((c) => (
+            <li>
+              <a href={c.href} class="gp-tl-check">
+                <span class="gp-tl-dot" aria-hidden="true"></span>
+                <span class="gp-tl-day">Day {c.day}</span>
+                <span class="gp-tl-label">{c.label}</span>
+                <span class="gp-tl-text">{c.text}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div class="gp-portfolio">
+          <p class="gp-viz-title">The sample portfolio</p>
+          <ul>
+            {programs.map((p) => (
+              <li><span class="gp-prog-key">{p.key}</span><span><strong>{p.name}</strong> <span class="gp-muted">{p.note}</span></span></li>
+            ))}
+          </ul>
+          <p class="gp-small gp-muted">One shared integration engineering team serves B and C. That's where the trouble starts.</p>
+        </div>
+      </figure>
+
+      <ul class="gp-principles" aria-label="Operating principles">
+        {principles.map((p) => (
+          <li><strong>{p.label}</strong><span>{p.text}</span></li>
+        ))}
+      </ul>
+    </header>
+
+    <!-- ── PHASES ── -->
+    {phases.map((p, i) => (
+      <section class="gp-phase" id={p.id} aria-labelledby={`${p.id}-title`} data-gp-section>
+        <div class="gp-phase-head gp-reveal">
+          <p class="gp-kicker"><span class="gp-phase-n">{i + 1}</span>{p.days} · {p.band}</p>
+          <h2 id={`${p.id}-title`} class="gp-h2">{p.title}</h2>
+          <p class="gp-outcome">{p.outcome}</p>
+        </div>
+
+        <div class="gp-imo gp-reveal">
+          <div class="gp-imo-col">
+            <h3 class="gp-imo-h">Input</h3>
+            <ul>{p.input.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <div class="gp-imo-col">
+            <h3 class="gp-imo-h">Mechanism</h3>
+            <ul>{p.mechanism.map((t) => <li>{t}</li>)}</ul>
+          </div>
+          <div class="gp-imo-col gp-imo-out">
+            <h3 class="gp-imo-h">Output</h3>
+            <p>{p.output}</p>
+            <p class="gp-gives"><span>What this gives you</span>{p.gives}</p>
+          </div>
+        </div>
+
+        {p.id === "day-30" && (
+          <figure class="gp-artifact gp-reveal" id="art-raci-full" aria-labelledby="raci-cap">
+            <figcaption class="gp-art-head">
+              <span class="gp-art-n">Artifact 1</span>
+              <span id="raci-cap" class="gp-art-name">Decision rights matrix</span>
+              <span class="gp-sample">Illustrative</span>
+            </figcaption>
+            <p class="gp-small gp-muted gp-art-key"><abbr title="Responsible">R</abbr> does the work · <abbr title="Accountable">A</abbr> decides (one per row) · <abbr title="Consulted">C</abbr> consulted · <abbr title="Informed">I</abbr> informed</p>
+            <p class="gp-swipe" aria-hidden="true">Swipe sideways to see every column →</p>
+<div class="gp-scroll" tabindex="0" role="region" aria-label="Decision rights matrix, scrolls horizontally">
+              <table class="gp-table gp-raci">
+                <thead><tr><th scope="col">Decision</th>{raciRoles.map((r) => <th scope="col">{r}</th>)}</tr></thead>
+                <tbody>
+                  {raci.map((row) => (
+                    <tr class={row.highlight ? "is-hl" : undefined}>
+                      <th scope="row">{row.decision}</th>
+                      {row.cells.map((c) => <td class={c.includes("A") ? "is-a" : undefined}>{c || <span class="sr-only">none</span>}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="gp-callout">{raciNote}</p>
+          </figure>
+        )}
+
+        {p.id === "day-60" && (
+          <>
+            <div class="gp-pair gp-reveal">
+              <figure class="gp-artifact" id="art-rag-full" aria-labelledby="rag-cap">
+                <figcaption class="gp-art-head">
+                  <span class="gp-art-n">Artifact 2</span>
+                  <span id="rag-cap" class="gp-art-name">RAG definition card: no watermelon statuses</span>
+                  <span class="gp-sample">Illustrative</span>
+                </figcaption>
+                <p class="gp-small gp-muted">A watermelon status is green on the outside and red on the inside. These criteria make status a measurement, not a mood.</p>
+                <p class="gp-swipe" aria-hidden="true">Swipe sideways to see every column →</p>
+<div class="gp-scroll" tabindex="0" role="region" aria-label="RAG criteria, scrolls horizontally">
+                  <table class="gp-table gp-rag">
+                    <thead><tr><th scope="col"><span class="sr-only">Dimension</span></th><th scope="col"><span class="gp-dot gp-g"></span>Green</th><th scope="col"><span class="gp-dot gp-a"></span>Amber</th><th scope="col"><span class="gp-dot gp-r"></span>Red</th></tr></thead>
+                    <tbody>
+                      {ragRows.map((r) => <tr><th scope="row">{r.dim}</th><td>{r.g}</td><td>{r.a}</td><td>{r.r}</td></tr>)}
+                      <tr class="gp-rag-meaning"><th scope="row">What it means</th><td>{ragMeaning.g}</td><td>{ragMeaning.a}</td><td>{ragMeaning.r}</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ol class="gp-rules">{ragRules.map((r) => <li>{r}</li>)}</ol>
+              </figure>
+
+              <div class="gp-side">
+                <div class="gp-mini">
+                  <h3 class="gp-mini-h">Escalation thresholds <span class="gp-sample">Illustrative</span></h3>
+                  <ul class="gp-thresholds">
+                    {thresholds.map((t) => <li><span class="gp-th-when">{t.within}</span><span>{t.trigger}{t.limit !== "Any" && <> ({t.limit.toLowerCase()})</>}<span class="gp-muted"> → {t.to}</span></span></li>)}
+                  </ul>
+                </div>
+                <div class="gp-mini">
+                  <h3 class="gp-mini-h">Where an issue gets decided</h3>
+                  <ol class="gp-ladder">
+                    {routing.map((r) => <li><strong>{r.level}</strong><span>{r.decides}</span></li>)}
+                  </ol>
+                  <p class="gp-small gp-muted">Each problem lands at the lowest level that can solve it. Steering sees only what needs steering.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEERING 2: the centerpiece -->
+            <div class="gp-steer" id="steering-2" aria-labelledby="steer-title">
+              <div class="gp-steer-head gp-reveal">
+                <p class="gp-kicker gp-kicker-warm">Steering 2 in practice · Day 60</p>
+                <h3 id="steer-title" class="gp-h3">Two programs, one integration team, six weeks</h3>
+                <p class="gp-body">On Day 47, the shared RAID log showed the integration engineering team booked by Program B and Program C in the same window. Here is how that conflict becomes a decision.</p>
+              </div>
+
+              <div class="gp-tabs" data-gp-tabs>
+                <div class="gp-tablist" role="tablist" aria-label="Steering 2: before, during and after the meeting">
+                  <button type="button" role="tab" id="st-tab-1" aria-controls="st-before" aria-selected="true" data-ga-event="playbook_steering_step" data-ga-step="before"><span class="gp-step-n">1</span>Before<span class="gp-step-sub">The pre-read</span></button>
+                  <button type="button" role="tab" id="st-tab-2" aria-controls="st-during" aria-selected="false" tabindex="-1" data-ga-event="playbook_steering_step" data-ga-step="during"><span class="gp-step-n">2</span>During<span class="gp-step-sub">The 25-minute meeting</span></button>
+                  <button type="button" role="tab" id="st-tab-3" aria-controls="st-after" aria-selected="false" tabindex="-1" data-ga-event="playbook_steering_step" data-ga-step="after"><span class="gp-step-n">3</span>After<span class="gp-step-sub">The record</span></button>
+                </div>
+
+                <!-- BEFORE -->
+                <div class="gp-panel" id="st-before" role="tabpanel" aria-labelledby="st-tab-1" data-gp-panel>
+                  <h4 class="gp-panel-h">Before: the pre-read, sent three business days ahead</h4>
+                  <div class="gp-preread" id="art-preread-full">
+                    <p class="gp-art-head"><span class="gp-art-n">Artifact 4</span><span class="gp-art-name">Steering pre-read</span><span class="gp-sample">Illustrative</span></p>
+                    <p class="gp-ask"><span>Decision requested</span>{steering.decision}</p>
+
+                    <div class="gp-pre-grid">
+                      <div>
+                        <h5 class="gp-h5">Situation</h5>
+                        <ul class="gp-list">{steering.situation.map((s) => <li>{s}</li>)}</ul>
+                        <p class="gp-small gp-muted">{steering.cause}</p>
+                      </div>
+                      <figure class="gp-capchart" aria-labelledby="capchart-cap">
+                        <figcaption id="capchart-cap" class="gp-viz-title">Integration engineering, Weeks 10–15 (hours)</figcaption>
+                        <div class="gp-cap-row">
+                          <span class="gp-cap-l">Committed</span>
+                          <span class="gp-cap-bar"><span class="gp-cap-b" style={`width:${w(cap.b)}`}>B {fmt(cap.b)}</span><span class="gp-cap-c" style={`width:${w(cap.c)}`}>C {fmt(cap.c)}</span></span>
+                        </div>
+                        <div class="gp-cap-row">
+                          <span class="gp-cap-l">Available</span>
+                          <span class="gp-cap-bar"><span class="gp-cap-avail" style={`width:${w(cap.available)}`}>{fmt(cap.available)}</span><span class="gp-cap-short" style={`width:${w(capMax - cap.available)}`}>−{fmt(capMax - cap.available)}</span></span>
+                        </div>
+                        <div class="gp-cap-row">
+                          <span class="gp-cap-l">Option 2</span>
+                          <span class="gp-cap-bar"><span class="gp-cap-b" style={`width:${w(cap.phasedB)}`}>B {fmt(cap.phasedB)}</span><span class="gp-cap-c" style={`width:${w(cap.phasedC)}`}>C {fmt(cap.phasedC)}</span><span class="gp-cap-buffer" style={`width:${w(cap.available - cap.phasedB - cap.phasedC)}`}>+{cap.available - cap.phasedB - cap.phasedC}</span></span>
+                        </div>
+                        <p class="gp-cap-legend"><span><i class="gp-cap-short"></i>Shortfall {capMax - cap.available} hours</span><span><i class="gp-cap-buffer"></i>Option 2 buffer {cap.available - cap.phasedB - cap.phasedC} hours</span></p>
+                        <p class="sr-only">B needs {fmt(cap.b)} hours and C needs {fmt(cap.c)}, a total of {fmt(capMax)}, against {fmt(cap.available)} available: a {capMax - cap.available}-hour shortfall. Under option 2, B needs {cap.phasedB} and C needs {cap.phasedC}, leaving a {cap.available - cap.phasedB - cap.phasedC}-hour buffer.</p>
+                      </figure>
+                    </div>
+
+                    <h5 class="gp-h5">Options</h5>
+                    <div class="gp-options">
+                      {steering.options.map((o) => (
+                        <article class={`gp-option${o.recommended ? " is-rec" : ""}`}>
+                          <p class="gp-opt-n">Option {o.n}{o.recommended && <span class="gp-rec-tag">Recommended</span>}</p>
+                          <h6 class="gp-opt-name">{o.name}</h6>
+                          <p class="gp-opt-short">{o.short}</p>
+                          <dl class="gp-opt-dl">
+                            <div><dt>Hours</dt><dd>{o.hours}</dd></div>
+                            <div><dt>Schedule</dt><dd>{o.schedule}</dd></div>
+                            <div><dt>Cost</dt><dd>{o.cost}</dd></div>
+                            <div><dt>Risk</dt><dd>{o.risk}</dd></div>
+                            <div><dt>Reversible?</dt><dd>{o.reversible}</dd></div>
+                          </dl>
+                        </article>
+                      ))}
+                    </div>
+
+                    <div class="gp-pre-grid gp-pre-foot">
+                      <div>
+                        <h5 class="gp-h5">Recommendation</h5>
+                        <p>{steering.recommendation}</p>
+                      </div>
+                      <div>
+                        <h5 class="gp-h5">What we need from you</h5>
+                        <ul class="gp-asks">{steering.asks.map((a) => <li><strong>{a.who}:</strong> {a.ask}</li>)}</ul>
+                        <p class="gp-small gp-muted"><strong>If we don't decide on Day 60:</strong> {steering.noDecision}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <details class="gp-raid-wrap" id="art-raid-full">
+                    <summary><span class="gp-art-n">Artifact 3</span> RAID log excerpt, as of Day 52 <span class="gp-sample">Illustrative</span></summary>
+                    <p class="gp-small gp-muted">One log for every program: risks, assumptions, issues and dependencies.</p>
+                    <p class="gp-swipe" aria-hidden="true">Swipe sideways to see every column →</p>
+<div class="gp-scroll" tabindex="0" role="region" aria-label="RAID log excerpt, scrolls horizontally">
+                      <table class="gp-table gp-raid">
+                        <thead><tr><th scope="col">ID</th><th scope="col">Type</th><th scope="col">Program</th><th scope="col">Description</th><th scope="col">Owner</th><th scope="col">Impact</th><th scope="col">Status</th><th scope="col">Next action</th></tr></thead>
+                        <tbody>
+                          {raid.map((r) => (
+                            <tr class={r.key ? "is-hl" : undefined}>
+                              <th scope="row" class="gp-mono">{r.id}</th><td>{r.type}</td><td>{r.prog}</td><td>{r.text}</td><td>{r.owner}</td><td>{r.impact}</td>
+                              <td><span class={`gp-dot gp-${r.rag}`}></span>{ragLabel[r.rag]}</td><td>{r.next}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                    <p class="gp-callout">{raidNote}</p>
+                  </details>
+                </div>
+
+                <!-- DURING -->
+                <div class="gp-panel" id="st-during" role="tabpanel" aria-labelledby="st-tab-2" data-gp-panel>
+                  <h4 class="gp-panel-h">During: 25 minutes, one decision</h4>
+                  <div class="gp-pre-grid">
+                    <ol class="gp-agenda">
+                      {steering.meeting.map((m) => <li><span class="gp-agenda-t">{m.min}</span>{m.what}</li>)}
+                    </ol>
+                    <div class="gp-rec-box">
+                      <p class="gp-kicker gp-kicker-warm">The recommendation, stated plainly</p>
+                      <p class="gp-rec-text">Phase the scope. B launches on its date with its core features; C cleans up what the auditors will test first. Both external commitments hold, at no added cost.</p>
+                      <p class="gp-small gp-muted">The trade-off it accepts: B's business owner launches with two integrations deferred to Week 20. That is their call, which is why they're in the room.</p>
+                    </div>
+                  </div>
+                  <p class="gp-body gp-mt">The meeting doesn't re-present the pre-read. Members arrive having read it, the discussion is about the trade-off each option accepts, and the decision is made before anyone leaves.</p>
+                </div>
+
+                <!-- AFTER -->
+                <div class="gp-panel" id="st-after" role="tabpanel" aria-labelledby="st-tab-3" data-gp-panel>
+                  <h4 class="gp-panel-h">After: recorded and sent within 24 hours</h4>
+                  <div class="gp-pre-grid">
+                    {(() => {
+                      const d = decisions.find((x) => x.key)!;
+                      return (
+                        <div class="gp-log-entry">
+                          <p class="gp-log-n">Decision #{d.n} · Day {d.day} · {d.forum}</p>
+                          <p class="gp-log-d">{d.decision}</p>
+                          <dl class="gp-opt-dl">
+                            <div><dt>Decided by</dt><dd>{d.by}</dd></div>
+                            <div><dt>Basis</dt><dd>{d.basis}</dd></div>
+                            <div><dt>Revisit if</dt><dd>{d.revisit}</dd></div>
+                          </dl>
+                        </div>
+                      );
+                    })()}
+                    <ul class="gp-checks">{steering.after.map((a) => <li>{a}</li>)}</ul>
+                  </div>
+                  <p class="gp-body gp-mt">Program C goes to amber with an owner and a recovery date, which is exactly what amber is for. The status changed because the plan changed, not because someone felt nervous.</p>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {p.id === "day-90" && (
+          <div class="gp-pair gp-pair-90 gp-reveal">
+            <figure class="gp-artifact gp-onepager" id="art-exec-full" aria-labelledby="exec-cap">
+              <figcaption class="gp-art-head">
+                <span class="gp-art-n">Artifact 5</span>
+                <span id="exec-cap" class="gp-art-name">Executive one-pager · Day 90</span>
+                <span class="gp-sample">Illustrative</span>
+              </figcaption>
+              <p class="gp-ask"><span>Decision needed</span>{exec.decision}</p>
+              <ul class="gp-exec-progs">
+                {exec.programs.map((x) => {
+                  const prog = programs.find((q) => q.key === x.key)!;
+                  return (
+                    <li>
+                      <span class={`gp-dot gp-${x.rag}`} aria-hidden="true"></span>
+                      <span><strong>{x.key}. {prog.name}</strong><span class="sr-only"> ({ragLabel[x.rag]})</span><br /><span class="gp-muted">{x.line}</span></span>
+                      <span class="gp-exec-conf">{x.confidence} <span aria-label={x.trend === "↑" ? "improving" : "steady"}>{x.trend}</span></span>
+                    </li>
+                  );
+                })}
+              </ul>
+              <div class="gp-exec-grid">
+                <div><h4 class="gp-h5">Value at risk</h4><p>{exec.valueAtRisk}</p></div>
+                <div><h4 class="gp-h5">Top three risks</h4><ol class="gp-list">{exec.risks.map((r) => <li>{r.text} <span class="gp-muted">Owner: {r.owner}.</span></li>)}</ol></div>
+                <div><h4 class="gp-h5">What changed since Steering 2</h4><p>{exec.changed}</p></div>
+              </div>
+              <ul class="gp-score">
+                {exec.scorecard.map((s) => <li><span class="gp-score-area">{s.area}</span><span class="gp-score-v">{s.value}</span><span class="gp-score-t">{s.text}</span></li>)}
+              </ul>
+            </figure>
+
+            <div class="gp-side">
+              <div class="gp-mini">
+                <h3 class="gp-mini-h">Four calls, decided against the criteria</h3>
+                <dl class="gp-calls">
+                  <div><dt>Proceed</dt><dd>Criteria met and controls in place.</dd></div>
+                  <div><dt>Pivot</dt><dd>The evidence favors a different approach.</dd></div>
+                  <div><dt>Slow</dt><dd>Capacity or adoption is short, so scope is sequenced.</dd></div>
+                  <div><dt>Stop</dt><dd>Criteria still unmet after one revision.</dd></div>
+                </dl>
+              </div>
+              <div class="gp-mini">
+                <h3 class="gp-mini-h">Then a governance retro</h3>
+                <p class="gp-small">Cut any meeting that didn't produce a decision. Measure decision turnaround. Adjust the cadence. Governance should get lighter after Day 90, not heavier.</p>
+              </div>
+            </div>
+
+            <figure class="gp-artifact gp-span" id="art-log-full" aria-labelledby="log-cap">
+              <figcaption class="gp-art-head">
+                <span class="gp-art-n">Artifact 6</span>
+                <span id="log-cap" class="gp-art-name">Decision log, Days 1–90</span>
+                <span class="gp-sample">Illustrative</span>
+              </figcaption>
+              <p class="gp-swipe" aria-hidden="true">Swipe sideways to see every column →</p>
+<div class="gp-scroll" tabindex="0" role="region" aria-label="Decision log, scrolls horizontally">
+                <table class="gp-table gp-log">
+                  <thead><tr><th scope="col">#</th><th scope="col">Day</th><th scope="col">Forum</th><th scope="col">Decision</th><th scope="col">Decided by</th><th scope="col">Basis</th><th scope="col">Revisit if</th></tr></thead>
+                  <tbody>
+                    {decisions.map((d) => (
+                      <tr class={d.key ? "is-hl" : undefined}>
+                        <th scope="row" class="gp-mono">{d.n}</th><td>{d.day}</td><td>{d.forum}</td><td>{d.decision}</td><td>{d.by}</td><td>{d.basis}</td><td>{d.revisit}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p class="gp-callout">The "Revisit if" column is the point: a decision should change when the evidence changes, and everyone should know in advance what evidence that is.</p>
+            </figure>
+          </div>
+        )}
+      </section>
+    ))}
+
+    <!-- ── YOUR SEAT ── -->
+    <section class="gp-section" id="seat" aria-labelledby="seat-title" data-gp-section>
+      <div class="gp-phase-head gp-reveal">
+        <p class="gp-kicker">Your seat at the table</p>
+        <h2 id="seat-title" class="gp-h2">Find yourself by role, not by department</h2>
+        <p class="gp-body">Every director holds at least one of these roles in technology enablement, often more than one. Pick a role to see what you'd give, what you'd get, and which artifacts land on your desk.</p>
+      </div>
+      <div class="gp-rolepick" role="group" aria-label="Choose a governance role" data-gp-roles>
+        <button type="button" aria-pressed="true" data-role="all">All roles</button>
+        {roles.map((r) => <button type="button" aria-pressed="false" data-role={r.key} data-ga-event="playbook_role_select" data-ga-role={r.key}>{r.name}</button>)}
+      </div>
+      <div class="gp-scroll gp-roles-wrap">
+        <table class="gp-table gp-roles">
+          <thead><tr><th scope="col">If you are…</th><th scope="col">You give</th><th scope="col">You get</th><th scope="col">Where you decide</th></tr></thead>
+          <tbody>
+            {roles.map((r) => <tr data-role-row={r.key}><th scope="row">{r.name}</th><td data-label="You give">{r.give}</td><td data-label="You get">{r.get}</td><td data-label="Where you decide">{r.decide}</td></tr>)}
+          </tbody>
+        </table>
+      </div>
+      <p class="gp-role-status gp-small gp-muted" aria-live="polite" data-gp-role-status></p>
+    </section>
+
+    <!-- ── ARTIFACTS ── -->
+    <section class="gp-section" id="artifacts" aria-labelledby="artifacts-title" data-gp-section>
+      <div class="gp-phase-head gp-reveal">
+        <p class="gp-kicker">Artifact gallery</p>
+        <h2 id="artifacts-title" class="gp-h2">Twelve artifacts, all filled in</h2>
+        <p class="gp-body">Each one exists to support a decision. Six are shown in full in the sections above; the other six open here. Every example uses the same sample portfolio and the same numbers.</p>
+      </div>
+      <ol class="gp-gallery">
+        {artifacts.map((a) => (
+          <li class="gp-card" id={a.id} data-roles={a.roles.join(" ")}>
+            <details>
+              <summary data-ga-event="playbook_artifact_open" data-ga-artifact={a.id}>
+                <span class="gp-card-n">{String(a.n).padStart(2, "0")}</span>
+                <span class="gp-card-name">{a.name}</span>
+                <span class="gp-badge" data-gp-badge hidden>You receive this</span>
+                <span class="gp-card-meta"><span>For: {a.who}</span><span>When: {a.when}</span><span>Supports: {a.supports}</span></span>
+              </summary>
+              <div class="gp-card-body">
+                {a.full && <p><a href={a.shownIn} class="gp-link">Shown in full in the {a.shownIn === "#steering-2" ? "Steering 2 walkthrough" : a.shownIn!.replace("#day-", "Day ") + " section"} <span aria-hidden="true">↑</span></a></p>}
+                {a.id === "art-inventory" && (
+                  <div class="gp-scroll" tabindex="0" role="region" aria-label="Portfolio inventory">
+                    <table class="gp-table">
+                      <thead><tr><th scope="col">Program</th><th scope="col">Sponsor</th><th scope="col">Stage</th><th scope="col">Tier</th><th scope="col">Budget</th><th scope="col">Status</th></tr></thead>
+                      <tbody>{programs.map((p) => <tr><th scope="row">{p.key}. {p.name}</th><td>{p.sponsor}</td><td>{p.stage}</td><td>{p.tier}</td><td>{p.budget}</td><td><span class={`gp-dot gp-${p.rag}`}></span>{ragLabel[p.rag]}</td></tr>)}</tbody>
+                    </table>
+                  </div>
+                )}
+                {a.id === "art-forums" && (
+                  <ol class="gp-forums">
+                    {forums.map((f) => <li><strong>{f.name}</strong> <span class="gp-muted">· {f.cadence}</span><br />Decides: {f.decides}<br /><span class="gp-muted gp-small">Who: {f.members}</span></li>)}
+                  </ol>
+                )}
+                {a.id === "art-thresholds" && (
+                  <div class="gp-scroll" tabindex="0" role="region" aria-label="Escalation thresholds">
+                    <table class="gp-table">
+                      <thead><tr><th scope="col">Trigger</th><th scope="col">Threshold</th><th scope="col">Goes to</th><th scope="col">Within</th></tr></thead>
+                      <tbody>{thresholds.map((t) => <tr><th scope="row">{t.trigger}</th><td>{t.limit}</td><td>{t.to}</td><td>{t.within}</td></tr>)}</tbody>
+                    </table>
+                  </div>
+                )}
+                {a.id === "art-status" && (
+                  <div class="gp-status">
+                    <p class="gp-status-h"><span class={`gp-dot gp-${weeklyStatus.overall}`}></span><strong>{weeklyStatus.program}</strong> <span class="gp-muted">· {weeklyStatus.asOf} · Overall {ragLabel[weeklyStatus.overall]}</span></p>
+                    <ul class="gp-status-dims">{weeklyStatus.dims.map((d) => <li><span class={`gp-dot gp-${d.rag}`}></span><strong>{d.dim}</strong> <span class="sr-only">({ragLabel[d.rag]})</span>{d.note}</li>)}</ul>
+                    <p class="gp-small"><strong>Recovery:</strong> {weeklyStatus.recovery}</p>
+                    <p class="gp-small"><strong>Done this week:</strong> {weeklyStatus.done}</p>
+                    <p class="gp-small"><strong>Next week:</strong> {weeklyStatus.next}</p>
+                    <p class="gp-small"><strong>Decisions needed:</strong> {weeklyStatus.needs}</p>
+                  </div>
+                )}
+                {a.id === "art-scorecard" && (
+                  <div class="gp-scoregrid">
+                    {scorecard.map((g) => <div><h4 class="gp-h5">{g.group}</h4><dl>{g.rows.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl></div>)}
+                    <p class="gp-small gp-muted gp-span">Three groups, never rolled into one score. Go-live is not success; usage is.</p>
+                  </div>
+                )}
+                {a.id === "art-readiness" && (
+                  <div>
+                    <p class="gp-small gp-muted">{readiness.program} · {readiness.asOf}</p>
+                    <ul class="gp-ready">{readiness.items.map((it) => <li class={it.done ? "is-done" : "is-open"}><span aria-hidden="true">{it.done ? "✓" : "○"}</span><span>{it.item}{it.note && <span class="gp-muted"> ({it.note})</span>}<span class="sr-only">{it.done ? " (done)" : " (open)"}</span></span></li>)}</ul>
+                  </div>
+                )}
+                <p class="gp-card-roles gp-small gp-muted">Received by: {a.roles.length === 5 ? "every role" : a.roles.map((r) => roleNames[r]).join(", ")}</p>
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- ── WORKING AGREEMENT ── -->
+    <section class="gp-section" id="agreement" aria-labelledby="agreement-title" data-gp-section>
+      <div class="gp-phase-head gp-reveal">
+        <p class="gp-kicker">Working agreement</p>
+        <h2 id="agreement-title" class="gp-h2">What you can hold me to, and what I'd propose we agree on</h2>
+      </div>
+      <div class="gp-agree gp-reveal">
+        <div>
+          <h3 class="gp-imo-h">My commitments</h3>
+          <ul class="gp-checks">{agreement.commitments.map((c) => <li>{c}</li>)}</ul>
+        </div>
+        <div>
+          <h3 class="gp-imo-h">What I'd propose we agree on</h3>
+          <ul class="gp-list">{agreement.proposals.map((c) => <li>{c}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CLOSE ── -->
+    <section class="gp-close" id="downloads" aria-labelledby="close-title">
+      <div class="gp-close-quote gp-reveal">
+        <p class="gp-kicker">The principle behind the plan</p>
+        <h2 id="close-title" class="gp-quote">{agreement.close}</h2>
+      </div>
+      <div class="gp-downloads gp-reveal">
+        <h3 class="gp-imo-h">Take it with you</h3>
+        <a class="gp-dl" href={fileHref(files.summary)} download data-ga-event="playbook_download" data-ga-playbook={slug} data-ga-file="summary">
+          <span class="gp-dl-name">One-page summary</span><span class="gp-dl-meta">PDF · the plan on a single page</span>
+        </a>
+        <a class="gp-dl" href={fileHref(files.kit)} download data-ga-event="playbook_download" data-ga-playbook={slug} data-ga-file="starter-kit">
+          <span class="gp-dl-name">Governance Starter Kit</span><span class="gp-dl-meta">PDF · the six core artifacts, filled in</span>
+        </a>
+      </div>
+      <aside class="gp-author gp-reveal" aria-label="About the author">
+        <p class="gp-author-name">Reginal Campbell, PMP</p>
+        <p class="gp-muted gp-small">Enterprise transformation leader · U.S. Army veteran</p>
+        <p class="gp-author-links">
+          <a href="/record" data-ga-event="playbook_contact_click" data-ga-target="record">Professional record</a>
+          <a href="/" data-ga-event="playbook_contact_click" data-ga-target="home">reginalcampbell.com</a>
+          <a href={contactHref("role")} data-ga-event="playbook_contact_click" data-ga-target="contact">Get in touch</a>
+        </p>
+      </aside>
+    </section>
+
+    <aside class="gp-disclaimer" aria-label="Disclosure">
+      <p><strong>About these examples.</strong> {disclosure}</p>
+      <p class="gp-small gp-muted">Prepared by Reginal Campbell, PMP · {meta.date}</p>
+    </aside>
+  </div>
+</PageLayout>
+
+<script>
+  import "../../../scripts/governance-playbook";
+</script>
