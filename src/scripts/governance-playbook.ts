@@ -1,6 +1,6 @@
 // Behavior for /advisory/first-90-days. Progressive enhancement only: every
 // panel, row and artifact is in the HTML and readable without this script.
-// Adds the Steering 2 stepper (WAI-ARIA tabs), the role picker, the current
+// Adds the delivery-path tabs (WAI-ARIA tabs), the Day 60 decision, the role picker, the current
 // section marker, hash-to-card opening and restrained reveal effects.
 
 const root = document.querySelector<HTMLElement>("[data-gp-root]");
@@ -10,7 +10,7 @@ function init(root: HTMLElement) {
   root.classList.add("gp-js");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ── Steering 2 stepper ──
+  // ── Tabs (the technical delivery path) ──
   root.querySelectorAll<HTMLElement>("[data-gp-tabs]").forEach((group) => {
     const tabs = Array.from(group.querySelectorAll<HTMLButtonElement>("[role=tab]"));
     const panels = Array.from(group.querySelectorAll<HTMLElement>("[data-gp-panel]"));
@@ -43,7 +43,7 @@ function init(root: HTMLElement) {
     select(0);
   });
 
-  // ── Role picker: highlights the role's row and marks its artifacts ──
+  // ── Role picker: highlights the role's card and marks its artifacts ──
   const picker = root.querySelector<HTMLElement>("[data-gp-roles]");
   const status = root.querySelector<HTMLElement>("[data-gp-role-status]");
   const rows = Array.from(root.querySelectorAll<HTMLElement>("[data-role-row]"));
@@ -67,11 +67,44 @@ function init(root: HTMLElement) {
         if (badge) badge.hidden = !mine;
       });
       if (status) {
-        const name = buttons.find((b) => b.dataset.role === role)?.textContent ?? "";
-        status.textContent = all ? "" : `${name}: you'd receive ${count} of the 12 artifacts below. They're marked "You receive this."`;
+        status.replaceChildren();
+        if (!all) {
+          const name = buttons.find((b) => b.dataset.role === role)?.textContent ?? "";
+          status.append(`${name}: ${count} of the 12 artifacts would land on your desk. `);
+          const a = document.createElement("a");
+          a.href = "#artifacts"; a.className = "gp-link"; a.textContent = "See them in the operating model";
+          status.append(a);
+        }
       }
     };
     buttons.forEach((b) => b.addEventListener("click", () => apply(b.dataset.role!)));
+  }
+
+  // ── The Day 60 decision: the visitor picks an option ──
+  // Without JS every option and the recommendation are simply shown.
+  const choose = root.querySelector<HTMLElement>("[data-gp-choose]");
+  if (choose) {
+    const choices = Array.from(choose.querySelectorAll<HTMLButtonElement>("[data-gp-choice]"));
+    const panels = Array.from(choose.querySelectorAll<HTMLElement>("[data-gp-optpanel]"));
+    const rec = choose.querySelector<HTMLElement>("[data-gp-rec]");
+    const showRec = choose.querySelector<HTMLButtonElement>("[data-gp-show-rec]");
+    const hint = choose.querySelector<HTMLElement>("[data-gp-choose-hint]");
+    panels.forEach((p) => (p.hidden = true));
+    if (rec) rec.hidden = true;
+    const reveal = () => { if (rec) rec.hidden = false; if (showRec) showRec.hidden = true; };
+    choices.forEach((c) => c.addEventListener("click", () => {
+      const key = c.dataset.gpChoice;
+      choices.forEach((x) => x.setAttribute("aria-pressed", String(x === c)));
+      panels.forEach((p) => {
+        const on = p.dataset.gpOptpanel === key;
+        p.hidden = !on;
+        if (on && !reduceMotion) { p.classList.remove("gp-panel-in"); void p.offsetWidth; p.classList.add("gp-panel-in"); }
+      });
+      if (hint) hint.hidden = true;
+      reveal();
+    }));
+    showRec?.addEventListener("click", () => { reveal(); rec?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); });
+    if (location.hash === "#recommendation") reveal();
   }
 
   // ── Opening an artifact card from a link or a deep link ──

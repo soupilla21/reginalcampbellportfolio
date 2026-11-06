@@ -1,9 +1,12 @@
 // Publication gate for playbook pages (/advisory/first-90-days and any later
-// ones). Identical rule to the advisory briefings (src/data/advisory/index.ts):
-// a "review" page is built locally and on Vercel previews, never on Vercel
-// production, so merging to main publishes nothing until status is "public".
+// ones). Builds on the advisory briefing rule (src/data/advisory/index.ts):
+//   review    built locally and on Vercel previews, never on production
+//   unlisted  built everywhere, but noindex/nofollow and out of the sitemap
+//             (live at its URL for people who are given the link)
+//   public    built everywhere, indexable, in the sitemap
 import { isBuilt } from "../advisory";
-import type { BriefingStatus } from "../advisory/types";
 
-export const isBuiltStatus = (status: BriefingStatus) =>
-  isBuilt({ status } as Parameters<typeof isBuilt>[0]);
+export type PlaybookStatus = "review" | "unlisted" | "public";
+
+export const isBuiltStatus = (status: PlaybookStatus) =>
+  status === "review" ? isBuilt({ status: "review" } as Parameters<typeof isBuilt>[0]) : true;

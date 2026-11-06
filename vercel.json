@@ -3,11 +3,36 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "redirects": [
-    { "source": "/ask", "destination": "/ask/", "permanent": true },
-    { "source": "/articles/why-this-platform-exists", "destination": "/articles", "permanent": true }
+    {
+      "source": "/ask",
+      "destination": "/ask/",
+      "permanent": true
+    },
+    {
+      "source": "/articles/why-this-platform-exists",
+      "destination": "/articles",
+      "permanent": true
+    }
   ],
   "rewrites": [
-    { "source": "/ask/", "destination": "https://portfolio-intelligence-bot.netlify.app/" },
-    { "source": "/ask/:path+", "destination": "https://portfolio-intelligence-bot.netlify.app/:path+" }
+    {
+      "source": "/ask/",
+      "destination": "https://portfolio-intelligence-bot.netlify.app/"
+    },
+    {
+      "source": "/ask/:path+",
+      "destination": "https://portfolio-intelligence-bot.netlify.app/:path+"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/advisory/first-90-days/files/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ]
 }

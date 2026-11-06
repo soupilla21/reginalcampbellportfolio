@@ -109,3 +109,18 @@ off the website, not out of GitHub.
 
 When approved: set `status: "public"`, build, review the preview deployment,
 then merge.
+
+## Playbook pages (`/advisory/first-90-days`)
+
+A separate page type that shares the briefing gate and adds a third state.
+Content: `src/data/playbooks/first-90-days.ts`; gate: `src/data/playbooks/index.ts`.
+
+| Status | Production | Indexing | Sitemap |
+| --- | --- | --- | --- |
+| `review` | Not built | noindex | No |
+| `unlisted` | Built (live at its URL) | noindex; PDFs send `X-Robots-Tag: noindex, nofollow` (vercel.json) | No |
+| `public` | Built | Indexable | Yes |
+
+The page is tailored to one hiring panel, so it is `unlisted`: share the link
+directly. Run `npx tsx scripts/check-first-90-days.ts` after copy changes, and
+regenerate the PDFs with `scripts/first-90-days-pdfs/` (render.ts, then print.py).

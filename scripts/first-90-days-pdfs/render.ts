@@ -70,37 +70,37 @@ const footer = (label: string) =>
   `<div class="foot"><span>${esc(label)} · Reginal Campbell, PMP · reginalcampbell.com/advisory/${d.meta.slug}</span><span>Illustrative examples. ${esc(d.meta.date)}</span></div>`;
 
 // ── One-page summary ──
-const summary = `<!doctype html><html><head><meta charset="utf-8"><title>First Decision by Day 90: One-Page Summary</title><style>${css}</style></head><body class="one">
-<div class="eyebrow">90-day governance plan · Reginal Campbell, PMP</div>
+const evid = d.evidence;
+const summary = `<!doctype html><html><head><meta charset="utf-8"><title>90 Days to a Decision-Ready Technology Portfolio: One-Page Summary</title><style>${css}</style></head><body class="one">
+<div class="eyebrow">90-day plan · Reginal Campbell, PMP · Illustrative scenario</div>
 <h1>${esc(d.hero.title)}</h1>
 <p class="sub">${esc(d.hero.subtitle)}</p>
-<p class="hook">${esc(d.hero.hook)}</p>
 <div class="grid3">
-${d.phases.map((p) => `<div class="box phase"><div class="days">${p.days} · ${p.band}</div><div class="t">${esc(p.title)}</div><div class="o">${esc(p.outcome)}</div><ul>${p.mechanism.map((m) => `<li>${esc(m)}</li>`).join("")}</ul><p style="margin-top:5pt"><b>Output:</b> ${esc(p.output)}</p></div>`).join("")}
+${d.phases.map((p, i) => { const o = d.hero.outcomes[i]; return `<div class="box phase"><div class="days">Day ${o.day} · ${p.days}</div><div class="t" style="font-size:13pt">${o.word}</div><div class="o">${esc(o.text)}</div><p style="margin:0"><b>${esc(p.title)}.</b> ${esc(p.output)}</p></div>`; }).join("")}
 </div>
 <div class="sec grid2">
   <div class="box warm">
-    <h3>The Day 60 trade-off (illustrative)</h3>
-    <p>Programs B and C both need the 6-person integration team in Weeks 10–15: ${cap.b.toLocaleString()} + ${cap.c} hours against ${cap.available.toLocaleString()} available, a ${cap.b + cap.c - cap.available}-hour shortfall.</p>
-    <p><b>Options:</b> sequence (C slips, audit risk), phase scope (B launches core scope, C does audit-critical work first), or add capacity (about $72K, over the 10% threshold).</p>
-    <p style="margin:0"><b>Decision #005:</b> phase scope. Both external commitments hold at no added cost, with a ${cap.available - cap.phasedB - cap.phasedC}-hour buffer and a contractor fallback to decide by Day 74.</p>
+    <h3>The Day 60 decision</h3>
+    <p>Programs B (spend analytics release) and C (supplier and contract data platform) both need the 6-person integration team in Weeks 10–15: ${cap.b.toLocaleString()} + ${cap.c} hours against ${cap.available.toLocaleString()} available, a ${cap.b + cap.c - cap.available}-hour shortfall.</p>
+    <p><b>Options:</b> sequence (C slips, audit finding likely), phase scope (B launches core scope, C does audit-critical work first), or add capacity (about $72K, over the 10% threshold).</p>
+    <p style="margin:0"><b>Recommended:</b> phase scope. Both external commitments hold at no added cost, with a ${cap.available - cap.phasedB - cap.phasedC}-hour buffer and a contractor fallback to decide by Day 74.</p>
   </div>
   <div class="box">
-    <h3>Operating principles</h3>
-    <ul>${d.principles.map((p) => `<li><b>${esc(p.label)}.</b> ${esc(p.text)}</li>`).join("")}</ul>
+    <h3>Technical delivery path</h3>
+    <ol>${d.deliveryPath.map((n) => `<li><b>${esc(n.name)}.</b> ${esc(n.done)}</li>`).join("")}</ol>
   </div>
 </div>
 <div class="sec grid2">
-  <div><h3>What you'd receive</h3>
+  <div><h3>What each seat gets</h3>
     <table><tbody>${d.roles.map((r) => `<tr><th>${esc(r.name)}</th><td>${esc(r.get)}</td></tr>`).join("")}</tbody></table>
   </div>
-  <div><h3>Working agreement</h3>
+  <div><h3>What you can hold me to</h3>
     <ul>${d.agreement.commitments.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
-    <p style="margin-top:5pt"><b>I'd propose we agree on:</b> ${d.agreement.proposals.map((p, i) => { const t = p.replace(/\.$/, ""); return esc(i ? t[0].toLowerCase() + t.slice(1) : t); }).join("; ")}.</p>
   </div>
 </div>
-<p class="hook" style="margin-top:12pt;font-size:10.5pt">${esc(d.agreement.close)}</p>
-<p style="font-size:7.6pt;color:#5b6573">${esc(d.disclosure)}</p>
+<div class="sec box"><h3>Evidence from my work</h3><p style="margin:0"><b>${esc(evid.title)}</b> (${esc(evid.org)}), ${esc(evid.role)}. ${evid.results.map((r) => `${r.value} ${esc(r.label)}`).join("; ")}.</p></div>
+<p class="hook" style="margin-top:10pt;font-size:10.5pt">${esc(d.agreement.close)} ${esc(d.agreement.invitation)}</p>
+<p style="font-size:7.4pt;color:#5b6573">${esc(d.disclosure)}</p>
 ${footer("One-page summary")}
 </body></html>`;
 
@@ -111,11 +111,11 @@ const a = (id: string) => d.artifacts.find((x) => x.id === id)!;
 const metaOf = (id: string) => { const x = a(id); return `For: ${x.who}. When: ${x.when}. Supports: ${x.supports}.`; };
 
 const kitPages = [
-  `<section class="page"><div class="eyebrow">Governance Starter Kit</div><h1>Six artifacts, filled in</h1><p class="sub">From "First Decision by Day 90" · Reginal Campbell, PMP</p>
-   <p class="hook">${esc(d.hero.hook)}</p>
+  `<section class="page"><div class="eyebrow">Governance Starter Kit</div><h1>Six artifacts, filled in</h1><p class="sub">From "90 Days to a Decision-Ready Technology Portfolio" · Reginal Campbell, PMP</p>
+   <p class="hook">${esc(d.hero.subtitle)}</p>
    <p>Every artifact in this kit supports a decision, and every one uses the same sample portfolio and numbers:</p>
    <table><thead><tr><th>Program</th><th>Sponsor</th><th>Budget</th><th>Why it matters</th></tr></thead><tbody>${d.programs.map((p) => `<tr><th>${p.key}. ${esc(p.name)}</th><td>${esc(p.sponsor)}</td><td>${p.budget}</td><td>${esc(p.note)}</td></tr>`).join("")}</tbody></table>
-   <p style="margin-top:8pt">One 6-person integration engineering team serves B and C. On Day 47 the shared RAID log shows both booking it for Weeks 10–15. The artifacts follow that conflict from first signal to executive decision.</p>
+   <p style="margin-top:8pt">Illustrative scenario set in healthcare supply chain and spend technology. One 6-person integration engineering team serves B and C. On Day 47 the shared RAID log shows both booking it for Weeks 10–15. The artifacts follow that conflict from first signal to executive decision.</p>
    <div class="sec"><h3>Contents</h3><ol>${["Decision rights matrix", "Stoplight status card and escalation thresholds", "RAID log excerpt", "Steering pre-read", "Executive one-pager", "Decision log"].map((t) => `<li>${t}</li>`).join("")}</ol></div>
    <p style="margin-top:12pt;font-size:8pt;color:#5b6573">${esc(d.disclosure)}</p>${footer("Governance Starter Kit")}</section>`,
 
@@ -126,7 +126,7 @@ const kitPages = [
      <div class="callout">${esc(d.raciNote)}</div>`, true),
 
   page(2, "Stoplight status card: no watermelon statuses", metaOf("art-rag"),
-    `<p>A watermelon status is green on the outside and red on the inside. These criteria make status a measurement, not a mood.</p>
+    `<p>A watermelon status is green on the outside and red on the inside. These criteria make status a measurement, not a mood. ${esc(d.tierNote)}</p>
      <table><thead><tr><th></th><th>${dot("g")}</th><th>${dot("a")}</th><th>${dot("r")}</th></tr></thead><tbody>
      ${d.ragRows.map((r) => `<tr><th>${r.dim}</th><td>${esc(r.g)}</td><td>${esc(r.a)}</td><td>${esc(r.r)}</td></tr>`).join("")}
      <tr class="hl"><th>What it means</th><td>${esc(d.ragMeaning.g)}</td><td>${esc(d.ragMeaning.a)}</td><td>${esc(d.ragMeaning.r)}</td></tr></tbody></table>
