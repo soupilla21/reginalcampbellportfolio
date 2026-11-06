@@ -17,7 +17,7 @@
   --gp-warm: #d0a56a;
   --gp-warm-dim: rgba(198, 155, 97, 0.16);
   --gp-green: #6fbf8e;
-  --gp-amber: #e0a94a;
+  --gp-amber: #e8c547; /* shown as "Yellow" */
   --gp-red: #e07a6e;
   --gp-radius: 14px;
   --gp-ease: cubic-bezier(.2, .7, .2, 1);

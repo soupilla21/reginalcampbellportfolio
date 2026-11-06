@@ -24,7 +24,7 @@ const slug = meta.slug;
 const path = `/advisory/${slug}`;
 const isPublic = meta.status === "public";
 const fileHref = (name: string) => `${path}/files/${name}`;
-const ragLabel = { g: "Green", a: "Amber", r: "Red" } as const;
+const ragLabel = { g: "Green", a: "Yellow", r: "Red" } as const;
 const roleNames = Object.fromEntries(roles.map((r) => [r.key, r.name]));
 const cap = steering.capacity;
 const capMax = cap.b + cap.c; // 1,680: the widest bar
@@ -192,14 +192,14 @@ const navItems = [
               <figure class="gp-artifact" id="art-rag-full" aria-labelledby="rag-cap">
                 <figcaption class="gp-art-head">
                   <span class="gp-art-n">Artifact 2</span>
-                  <span id="rag-cap" class="gp-art-name">RAG definition card: no watermelon statuses</span>
+                  <span id="rag-cap" class="gp-art-name">Stoplight status card: no watermelon statuses</span>
                   <span class="gp-sample">Illustrative</span>
                 </figcaption>
                 <p class="gp-small gp-muted">A watermelon status is green on the outside and red on the inside. These criteria make status a measurement, not a mood.</p>
                 <p class="gp-swipe" aria-hidden="true">Swipe sideways to see every column →</p>
-<div class="gp-scroll" tabindex="0" role="region" aria-label="RAG criteria, scrolls horizontally">
+<div class="gp-scroll" tabindex="0" role="region" aria-label="Stoplight status criteria, scrolls horizontally">
                   <table class="gp-table gp-rag">
-                    <thead><tr><th scope="col"><span class="sr-only">Dimension</span></th><th scope="col"><span class="gp-dot gp-g"></span>Green</th><th scope="col"><span class="gp-dot gp-a"></span>Amber</th><th scope="col"><span class="gp-dot gp-r"></span>Red</th></tr></thead>
+                    <thead><tr><th scope="col"><span class="sr-only">Dimension</span></th><th scope="col"><span class="gp-dot gp-g"></span>Green</th><th scope="col"><span class="gp-dot gp-a"></span>Yellow</th><th scope="col"><span class="gp-dot gp-r"></span>Red</th></tr></thead>
                     <tbody>
                       {ragRows.map((r) => <tr><th scope="row">{r.dim}</th><td>{r.g}</td><td>{r.a}</td><td>{r.r}</td></tr>)}
                       <tr class="gp-rag-meaning"><th scope="row">What it means</th><td>{ragMeaning.g}</td><td>{ragMeaning.a}</td><td>{ragMeaning.r}</td></tr>
@@ -361,7 +361,7 @@ const navItems = [
                     })()}
                     <ul class="gp-checks">{steering.after.map((a) => <li>{a}</li>)}</ul>
                   </div>
-                  <p class="gp-body gp-mt">Program C goes to amber with an owner and a recovery date, which is exactly what amber is for. The status changed because the plan changed, not because someone felt nervous.</p>
+                  <p class="gp-body gp-mt">Program C goes to yellow with an owner and a recovery date, which is exactly what yellow is for. The status changed because the plan changed, not because someone felt nervous.</p>
                 </div>
               </div>
             </div>

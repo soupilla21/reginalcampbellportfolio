@@ -11,7 +11,7 @@ const out = process.argv[2] ?? "/tmp/first-90-days-pdf";
 mkdirSync(out, { recursive: true });
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const rag = { g: "Green", a: "Amber", r: "Red" } as const;
+const rag = { g: "Green", a: "Yellow", r: "Red" } as const;
 const dot = (r: "g" | "a" | "r") => `<span class="dot ${r}"></span>${rag[r]}`;
 const cap = d.steering.capacity;
 
@@ -45,13 +45,13 @@ tr.hl > * { background: #fff1db; }
 .raci td { text-align: center; font-family: "JetBrains Mono", Menlo, monospace; color: #5b6573; }
 .raci td.a { color: #8a5d22; font-weight: 700; }
 .dot { display: inline-block; width: 7pt; height: 7pt; border-radius: 50%; margin-right: 3pt; vertical-align: -0.5pt; }
-.dot.g { background: #3f9b63; } .dot.a { background: #d2952a; } .dot.r { background: #c24d40; }
+.dot.g { background: #3f9b63; } .dot.a { background: #e3b51c; } .dot.r { background: #c24d40; }
 .foot { margin-top: 12pt; padding-top: 6pt; border-top: 1px solid #d4dae1; font-size: 7.4pt; color: #5b6573; display: flex; justify-content: space-between; gap: 12pt; }
 .page { page-break-after: always; }
 .page:last-child { page-break-after: auto; }
 .wide { page: wide; }
 .tight > *:not(.foot) { zoom: 0.88; }
-body.one { zoom: 0.86; }
+body.one { zoom: 0.84; }
 .callout { border-left: 3px solid #c08a3e; background: #fff6e8; padding: 5pt 8pt; margin-top: 8pt; font-size: 8.6pt; }
 .ask { background: #fff6e8; border: 1px solid #e3c08d; border-radius: 6pt; padding: 6pt 9pt; margin: 6pt 0 9pt; font-weight: 600; color: #0f1a28; }
 .ask span { display: block; font-size: 6.8pt; letter-spacing: 0.14em; text-transform: uppercase; color: #8a5d22; font-weight: 600; }
@@ -116,7 +116,7 @@ const kitPages = [
    <p>Every artifact in this kit supports a decision, and every one uses the same sample portfolio and numbers:</p>
    <table><thead><tr><th>Program</th><th>Sponsor</th><th>Budget</th><th>Why it matters</th></tr></thead><tbody>${d.programs.map((p) => `<tr><th>${p.key}. ${esc(p.name)}</th><td>${esc(p.sponsor)}</td><td>${p.budget}</td><td>${esc(p.note)}</td></tr>`).join("")}</tbody></table>
    <p style="margin-top:8pt">One 6-person integration engineering team serves B and C. On Day 47 the shared RAID log shows both booking it for Weeks 10–15. The artifacts follow that conflict from first signal to executive decision.</p>
-   <div class="sec"><h3>Contents</h3><ol>${["Decision rights matrix", "RAG definition card and escalation thresholds", "RAID log excerpt", "Steering pre-read", "Executive one-pager", "Decision log"].map((t) => `<li>${t}</li>`).join("")}</ol></div>
+   <div class="sec"><h3>Contents</h3><ol>${["Decision rights matrix", "Stoplight status card and escalation thresholds", "RAID log excerpt", "Steering pre-read", "Executive one-pager", "Decision log"].map((t) => `<li>${t}</li>`).join("")}</ol></div>
    <p style="margin-top:12pt;font-size:8pt;color:#5b6573">${esc(d.disclosure)}</p>${footer("Governance Starter Kit")}</section>`,
 
   page(1, "Decision rights matrix", metaOf("art-raci"),
@@ -125,7 +125,7 @@ const kitPages = [
      ${d.raci.map((r) => `<tr class="${r.highlight ? "hl" : ""}"><th>${esc(r.decision)}</th>${r.cells.map((c) => `<td class="${c.includes("A") ? "a" : ""}">${c}</td>`).join("")}</tr>`).join("")}</tbody></table>
      <div class="callout">${esc(d.raciNote)}</div>`, true),
 
-  page(2, "RAG definition card: no watermelon statuses", metaOf("art-rag"),
+  page(2, "Stoplight status card: no watermelon statuses", metaOf("art-rag"),
     `<p>A watermelon status is green on the outside and red on the inside. These criteria make status a measurement, not a mood.</p>
      <table><thead><tr><th></th><th>${dot("g")}</th><th>${dot("a")}</th><th>${dot("r")}</th></tr></thead><tbody>
      ${d.ragRows.map((r) => `<tr><th>${r.dim}</th><td>${esc(r.g)}</td><td>${esc(r.a)}</td><td>${esc(r.r)}</td></tr>`).join("")}

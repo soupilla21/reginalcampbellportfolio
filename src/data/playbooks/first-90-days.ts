@@ -40,7 +40,7 @@ export const files = {
 // as the secondary action. Previews are first pages rendered from the PDFs.
 export const documents = [
   { key: "summary", file: files.summary, preview: "summary-preview.webp", title: "One-page summary", meta: "PDF · 1 page", text: "The whole plan on a single page: the three phases, the Day 60 trade-off, the roles and the working agreement." },
-  { key: "kit", file: files.kit, preview: "kit-preview.webp", title: "Governance Starter Kit", meta: "PDF · 7 pages", text: "The six core artifacts, filled in: decision rights, RAG card, RAID log, steering pre-read, executive one-pager and decision log." },
+  { key: "kit", file: files.kit, preview: "kit-preview.webp", title: "Governance Starter Kit", meta: "PDF · 7 pages", text: "The six core artifacts, filled in: decision rights, stoplight status card, RAID log, steering pre-read, executive one-pager and decision log." },
 ];
 
 export const hero = {
@@ -102,7 +102,7 @@ export const phases = [
       "The existing status formats, consolidated into one.",
     ],
     mechanism: [
-      "RAG criteria set by thresholds, not judgment calls.",
+      "Stoplight status (green, yellow, red) set by thresholds, not judgment calls.",
       "Escalation thresholds published before anyone needs them.",
       "An issue-routing ladder, so each problem lands at the lowest level that can solve it.",
     ],
@@ -156,8 +156,8 @@ export const ragMeaning = {
   r: "Recovery needs a decision at steering.",
 };
 export const ragRules = [
-  "Nothing goes red without going amber first.",
-  "Every amber has an owner and a recovery date. An amber without both is reported as red.",
+  "Nothing goes red without going yellow first.",
+  "Every yellow has an owner and a recovery date. A yellow without both is reported as red.",
   "Status describes the forecast, not just today.",
   "The program lead reports the color; the criteria decide it. Anyone can challenge a color by pointing to the criteria.",
 ];
@@ -229,7 +229,7 @@ export const steering = {
   after: [
     "Decision Log #005 recorded and sent within 24 hours.",
     "B's two deferred integrations get a Week 20 date and an owner.",
-    "C re-baselined: audit-critical scope first. Status moves to amber with a recovery date.",
+    "C re-baselined: audit-critical scope first. Status moves to yellow with a recovery date.",
     "I-007 closed in the RAID log. Contractor fallback added to the Day 74 agenda.",
     "Intake for integration engineering reopens.",
   ],
@@ -249,7 +249,7 @@ export const exec = {
     { text: "C's legacy connector proof of concept passed for one of two finance apps; the second needs a workaround.", owner: "Program Lead, C" },
     { text: "B's payment certification is on track; the fallback date is held.", owner: "Program Lead, B" },
   ],
-  changed: "Option 2 was carried out. The contractor fallback wasn't needed and was closed on Day 74. C moved from amber to green.",
+  changed: "Option 2 was carried out. The contractor fallback wasn't needed and was closed on Day 74. C moved from yellow to green.",
   scorecard: [
     { area: "Delivery", value: "9 of 10", text: "milestones on time; decision turnaround averages 3 days" },
     { area: "Adoption", value: "70%", text: "of A's users active, against an 80% target" },
@@ -260,7 +260,7 @@ export const exec = {
 // ── Artifact 6: decision log ──
 export const decisions = [
   { n: "001", day: 30, forum: "Steering 1", decision: "Approved the governance charter, decision rights and cadence.", by: "Steering", basis: "Stakeholder intake; portfolio inventory", revisit: "Governance retro at Day 90" },
-  { n: "002", day: 30, forum: "Steering 1", decision: "Adopted the RAG criteria and escalation thresholds.", by: "Steering", basis: "Inconsistent status formats found in intake", revisit: "Two or more color disputes in a month" },
+  { n: "002", day: 30, forum: "Steering 1", decision: "Adopted the stoplight status criteria and escalation thresholds.", by: "Steering", basis: "Inconsistent status formats found in intake", revisit: "Two or more color disputes in a month" },
   { n: "003", day: 41, forum: "Program review", decision: "Moved A's Wave 2 by one week to finish training (within tolerance).", by: "TPM Director", basis: "R-011; slip under 2 weeks", revisit: "Training completion below 90%" },
   { n: "004", day: 48, forum: "TPM escalation", decision: "Paused new requests to integration engineering until Steering 2.", by: "TPM Director", basis: "I-007; 1-business-day rule", revisit: "Steering 2 decision" },
   { n: "005", day: 60, forum: "Steering 2", decision: "Approved Option 2: phased scope for B, audit-critical scope first for C.", by: "Steering, with B's business owner", basis: "Pre-read options analysis", revisit: "Buffer falls below 80 hours", key: true },
@@ -318,7 +318,7 @@ export const artifacts: {
   n: number; id: string; name: string; who: string; when: string; supports: string; roles: RoleKey[]; full: boolean; shownIn?: string;
 }[] = [
   { n: 1, id: "art-raci", name: "Decision rights matrix", who: "Everyone in governance", when: "Set at Day 30; reviewed at the retro", supports: "Who owns each yes and no", roles: ["sponsor", "delivery", "resource", "control", "consumer"], full: true, shownIn: "#day-30" },
-  { n: 2, id: "art-rag", name: "RAG definition card", who: "Everyone who reports or reads status", when: "Set at Day 30", supports: "What every color means", roles: ["sponsor", "delivery", "resource", "control", "consumer"], full: true, shownIn: "#day-60" },
+  { n: 2, id: "art-rag", name: "Stoplight status card", who: "Everyone who reports or reads status", when: "Set at Day 30", supports: "What every color means", roles: ["sponsor", "delivery", "resource", "control", "consumer"], full: true, shownIn: "#day-60" },
   { n: 3, id: "art-raid", name: "RAID log", who: "Program leads, shared-resource and control owners", when: "Live; reviewed every two weeks", supports: "What needs escalating, and when", roles: ["delivery", "resource", "control"], full: true, shownIn: "#steering-2" },
   { n: 4, id: "art-preread", name: "Steering pre-read", who: "Steering members", when: "Three business days before each steering", supports: "The one decision on the agenda", roles: ["sponsor", "resource", "control", "consumer"], full: true, shownIn: "#steering-2" },
   { n: 5, id: "art-exec", name: "Executive one-pager", who: "Exec sponsor and business owners", when: "Each executive readout", supports: "Proceed, pivot, slow or stop", roles: ["sponsor", "consumer"], full: true, shownIn: "#day-90" },
@@ -342,11 +342,11 @@ export const roles: { key: RoleKey; name: string; give: string; get: string; dec
 
 export const agreement = {
   commitments: [
-    "Nothing goes red without going amber first.",
+    "Nothing goes red without going yellow first.",
     "Risks reach the sponsor the day they cross a threshold.",
     "Decisions are logged and sent within 24 hours.",
     "No meeting without a decision on the agenda.",
-    "One status format, with one RAG definition, for every program.",
+    "One status format, with one set of color definitions, for every program.",
   ],
   proposals: [
     "Decision turnaround times by severity, for example 48 hours on critical-path items.",

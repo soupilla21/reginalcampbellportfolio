@@ -16,5 +16,7 @@ ok(d.decisions.map((x) => x.n).join() === "001,002,003,004,005,006,007", "decisi
 ok(d.decisions.find((x) => x.n === "005")!.day === 60 && d.decisions.find((x) => x.n === "007")!.day === 90, "#005 at Day 60, #007 at Day 90");
 ok(d.artifacts.length === 12 && d.artifacts.filter((a) => a.full).length === 6, "12 artifacts, 6 full");
 ok(!/—/.test(text), "no em dashes in copy");
+// Mixed audience: "RAG" also means retrieval-augmented generation to data teams.
+ok(!/\bRAG\b|[Aa]mber/.test(text), 'status colors are green / yellow / red, never "RAG" or "amber"');
 if (fails.length) { console.error("FAIL\n- " + fails.join("\n- ")); process.exit(1); }
 console.log("All consistency checks pass.");
