@@ -5,10 +5,14 @@
 // healthcare supply chain and spend portfolio (programs A, B and C). Every
 // artifact uses one recurring conflict, so the numbers agree everywhere:
 //
-//   Integration engineering: 6 people, Weeks 10-15, 1,440 hours available.
+//   Integration engineering: 8 engineers x 40 hrs x 6 weeks (Weeks 10-15)
+//   planned at 75% focus time = 1,440 hours available.
 //   Program B needs 960, Program C needs 720: a 240-hour shortfall.
 //   Option 2 (phase scope): B 660 + C 600 = 1,260, a 180-hour buffer.
-//   Contractor option: about 480 hours, about $72K, 12% of C's $600K budget.
+//   The 420 deferred hours are B's two features (300) and C's non-audit
+//   feed migrations (120).
+//   Contractor option: 480 billed hours (2 x 40 x 6), about 360 productive
+//   at 75% focus; about $72K, 12% of C's $600K budget; 120-hour buffer.
 //   Thresholds (Tier 1): 1 business day, 2 weeks, 10%, 24 hours.
 //   B launches Week 16. C's audit fieldwork starts Week 18. B's deferred
 //   scope ships by Week 20.
@@ -20,7 +24,7 @@
 
 export type Status = "review" | "unlisted" | "public";
 export type Rag = "g" | "a" | "r";
-export type RoleKey = "sponsor" | "delivery" | "resource" | "control" | "consumer";
+export type RoleKey = "sponsor" | "delivery" | "resource" | "control" | "consumer" | "team";
 
 export const meta = {
   slug: "first-90-days",
@@ -67,7 +71,7 @@ export const hero = {
 };
 
 export const routes = [
-  { href: "#decision", label: "Executive view", time: "About 3 minutes", text: "The Day 60 decision, the 90-day plan, the delivery path, what success looks like, and evidence from my work." },
+  { href: "#decision", label: "Executive view", time: "About 3 minutes", text: "The Day 60 decision, the 90-day plan, how it works with the team already here, what success looks like, and evidence from my work." },
   { href: "#operating-model", label: "Explore the operating model", time: "Optional deep dive", text: "Decision rights, stoplight status, RAID log, steering pre-read, decision log, all twelve artifacts and the PDFs." },
 ];
 
@@ -84,7 +88,7 @@ export const programs = [
   { key: "B", name: "Spend analytics release", note: "Launch date committed to customers: Week 16.", budget: "$900K", tier: "Tier 1", sponsor: "VP, Analytics Products", stage: "Build, launch Week 16", rag: "g" as Rag },
   { key: "C", name: "Supplier and contract data platform", note: "Feeds A and B. Audit fieldwork starts Week 18.", budget: "$600K", tier: "Tier 1", sponsor: "VP, Data Platform", stage: "Migration and controls", rag: "a" as Rag },
 ];
-export const portfolioNote = "One six-person integration engineering team serves B and C. That's where the trouble starts.";
+export const portfolioNote = "One eight-person integration engineering team serves B and C. That's where the trouble starts.";
 
 // ── Roles (moved near the top) ──
 export const roles: { key: RoleKey; name: string; examples: string; give: string; get: string; decide: string }[] = [
@@ -93,6 +97,7 @@ export const roles: { key: RoleKey; name: string; examples: string; give: string
   { key: "resource", name: "Shared-resource owner", examples: "Engineering, data platform, architecture", give: "Capacity commitments", get: "Early warning of conflicts, and no surprise demands", decide: "Steering, when a conflict is escalated" },
   { key: "control", name: "Control owner", examples: "Security, privacy, compliance, finance", give: "Criteria and sign-off", get: "Evidence before release, not after", decide: "Release gates and risk acceptance" },
   { key: "consumer", name: "Business owner", examples: "The leader accountable for adoption", give: "Adoption and feedback", get: "The readiness checklist and the adoption scorecard", decide: "Go-live sign-off" },
+  { key: "team", name: "Delivery team", examples: "Engineers, analysts and PMs whose work changes", give: "Honest signal on progress and blockers", get: "Fewer status requests, clear priorities, and a say in what gets retired", decide: "How the work gets done" },
 ];
 
 // ── The Day 60 decision (interactive) ──
@@ -100,12 +105,12 @@ export const steering = {
   question: "Two programs. One integration team. Capacity for 1,440 hours against 1,680 hours of demand. What would you approve?",
   decision: "Choose how to resolve the integration engineering conflict between Program B and Program C in Weeks 10–15.",
   situation: [
-    "The 6-person integration team is committed to Program B's launch (960 hours) and Program C's controls and migration work (720 hours) in the same six weeks.",
-    "Available capacity is 1,440 hours. The shortfall is 240 hours.",
+    "The 8-person integration team is committed to Program B's launch (960 hours) and Program C's controls and migration work (720 hours) in the same six weeks.",
+    "Capacity is planned at 75% focus time, to allow for meetings, support and time off: 8 engineers × 40 hours × 6 weeks × 75% = 1,440 hours. The shortfall is 240 hours.",
     "B's Week 16 launch date is committed to customers. C's access controls and data lineage for contract-pricing data must be in place before audit fieldwork starts in Week 18.",
   ],
   cause: "Both plans assumed the team's full availability. Neither could see the other's peak. The shared RAID log is what surfaced it, on Day 47.",
-  capacity: { available: 1440, b: 960, c: 720, phasedB: 660, phasedC: 600, contract: 480 },
+  capacity: { team: 8, focus: 0.75, weeks: 6, available: 1440, b: 960, c: 720, phasedB: 660, phasedC: 600, contractBilled: 480, contract: 360 },
   options: [
     {
       n: 1, key: "sequence", name: "Sequence delivery", tagline: "Protect B, accept C's delay",
@@ -120,7 +125,7 @@ export const steering = {
     },
     {
       n: 2, key: "phase", name: "Phase scope", tagline: "Preserve both critical commitments",
-      short: "B launches with core scope; two non-critical features (scheduled exports, benchmark drill-down) follow by Week 20. C does its audit-critical work first: access controls and lineage for contract-pricing data.",
+      short: "B launches with core scope; two non-critical features (scheduled exports, benchmark drill-down, 300 hours) follow by Week 20. C does its audit-critical work first: access controls and lineage for contract-pricing data. Its non-audit feed migrations (120 hours) follow after Week 16.",
       bars: { b: 660, c: 600, capacity: 1440 },
       hours: "B 660 + C 600 = 1,260 (180-hour buffer)", schedule: "B's date holds. C's audit-critical work holds. The rest of C follows after Week 16.", cost: "None added",
       risk: "The business owner launches with less scope. Customers get two features four weeks later.",
@@ -133,17 +138,17 @@ export const steering = {
     {
       n: 3, key: "capacity", name: "Add capacity", tagline: "Authorize contractor spending",
       short: "Two contract integration engineers for six weeks.",
-      bars: { b: 960, c: 720, capacity: 1920 },
-      hours: "1,440 + about 480 contract hours", schedule: "Both hold, if onboarding takes under 2 weeks.", cost: "About $72K: 12% of C's budget, over the 10% threshold",
+      bars: { b: 960, c: 720, capacity: 1800 },
+      hours: "1,440 + about 360 productive contract hours (480 billed): 120-hour buffer", schedule: "Both hold, if onboarding takes under 2 weeks.", cost: "About $72K: 12% of C's budget, over the 10% threshold",
       risk: "Onboarding uses a third of the window. Knowledge of the contract-data model leaves with the contractors.",
       approvers: "Steering, because the spend is over the 10% threshold.",
       fallback: "If onboarding runs past 2 weeks, fall back to phasing scope.",
       reversible: "Partly. Spend is committed.",
-      consequence: "Keeps every feature on schedule on paper, but pays $72K for hours that arrive late in the window.",
+      consequence: "Keeps every feature on schedule on paper, but pays $72K for 480 hours to get about 360 productive ones, arriving late in the window, with the thinnest buffer of the three.",
     },
   ],
   assumptions: [
-    "Hour estimates are within plus or minus 10%.",
+    "Hour estimates are within plus or minus 10%, and the 75% focus factor holds for this team.",
     "Contractor onboarding takes about two weeks.",
     "The control owner confirms which controls the auditors will test.",
   ],
@@ -165,17 +170,18 @@ export const steering = {
 // ── The 90-day plan (summary in the executive view, detail in the deep dive) ──
 export const phases = [
   {
-    id: "day-30", days: "Days 1–30", band: "Clarity", title: "Map the portfolio and set decision rights",
+    id: "day-30", days: "Days 1–30", band: "Clarity", title: "Learn what's here, then set decision rights",
     outcome: "Everyone knows who owns the yes and the no.",
     input: [
-      "A 30-minute intake with each stakeholder: What decision is stuck? Which status report do you no longer trust? What would make governance worth your time?",
+      "Learn the cadence, tools and forums already in place. Adopt what works. Add an artifact only where a decision is actually stuck.",
+      "A 30-minute intake with each stakeholder and fellow TPM director: What decision is stuck? Which status report do you no longer trust? What would make governance worth your time?",
       "Current roadmaps, architecture and release plans, status reports and standing meetings.",
       "Dependencies between programs, shared engineering and data teams, and vendors.",
     ],
     mechanism: [
       "A portfolio inventory with sponsor, stage, budget exposure and risk tier.",
       "A dependency map from data to release, with an owner on every node.",
-      "A decision rights matrix for scope, budget, schedule, risk acceptance and go-live.",
+      "A decision rights matrix for scope, budget, schedule, risk acceptance and go-live, built from how decisions are made today.",
     ],
     output: "Steering 1 approves the charter and decision rights. Decision Log #001.",
     gives: "One 30-minute conversation, then a one-page charter to react to. Not a template to fill in.",
@@ -389,18 +395,54 @@ export const readiness = {
 // ── The gallery: all twelve artifacts ──
 export const artifacts: { n: number; id: string; name: string; who: string; when: string; supports: string; roles: RoleKey[] }[] = [
   { n: 1, id: "art-raci", name: "Decision rights matrix", who: "Everyone in governance", when: "Set at Day 30; reviewed at the retro", supports: "Who owns each yes and no", roles: ["sponsor", "delivery", "resource", "control", "consumer"] },
-  { n: 2, id: "art-rag", name: "Stoplight status card", who: "Everyone who reports or reads status", when: "Set at Day 30", supports: "What every color means", roles: ["sponsor", "delivery", "resource", "control", "consumer"] },
+  { n: 2, id: "art-rag", name: "Stoplight status card", who: "Everyone who reports or reads status", when: "Set at Day 30", supports: "What every color means", roles: ["sponsor", "delivery", "resource", "control", "consumer", "team"] },
   { n: 3, id: "art-raid", name: "RAID log", who: "Program leads, shared-resource and control owners", when: "Live; reviewed every two weeks", supports: "What needs escalating, and when", roles: ["delivery", "resource", "control"] },
   { n: 4, id: "art-preread", name: "Steering pre-read", who: "Steering members", when: "Three business days before each steering", supports: "The one decision on the agenda", roles: ["sponsor", "resource", "control", "consumer"] },
   { n: 5, id: "art-exec", name: "Executive one-pager", who: "Exec sponsor and business owners", when: "Each executive readout", supports: "Proceed, pivot, slow or stop", roles: ["sponsor", "consumer"] },
-  { n: 6, id: "art-log", name: "Decision log", who: "Everyone in governance", when: "Updated within 24 hours of each decision", supports: "What was decided, on what evidence, and when to revisit it", roles: ["sponsor", "delivery", "resource", "control", "consumer"] },
+  { n: 6, id: "art-log", name: "Decision log", who: "Everyone in governance, and the teams the decisions affect", when: "Updated within 24 hours of each decision", supports: "What was decided, on what evidence, and when to revisit it", roles: ["sponsor", "delivery", "resource", "control", "consumer", "team"] },
   { n: 7, id: "art-inventory", name: "Portfolio inventory", who: "Sponsors and shared-resource owners", when: "Built by Day 30; refreshed monthly", supports: "Where money, risk and people are committed", roles: ["sponsor", "resource"] },
-  { n: 8, id: "art-forums", name: "Forum map", who: "Everyone in governance", when: "Set at Day 30", supports: "Which meeting decides what", roles: ["sponsor", "delivery", "resource", "control", "consumer"] },
+  { n: 8, id: "art-forums", name: "Forum map", who: "Everyone in governance, and the teams", when: "Set at Day 30", supports: "Which meeting decides what", roles: ["sponsor", "delivery", "resource", "control", "consumer", "team"] },
   { n: 9, id: "art-thresholds", name: "Escalation thresholds", who: "Program leads, shared-resource and control owners", when: "Published by Day 45", supports: "When an issue must move up, and how fast", roles: ["delivery", "resource", "control"] },
-  { n: 10, id: "art-status", name: "Weekly status report", who: "Program leads, shared-resource owners, business owners", when: "Weekly, same format for every program", supports: "What changed, and what's needed", roles: ["delivery", "resource", "consumer"] },
+  { n: 10, id: "art-status", name: "Weekly status report", who: "Program leads, shared-resource owners, business owners", when: "Weekly, same format for every program", supports: "What changed, and what's needed", roles: ["delivery", "resource", "consumer", "team"] },
   { n: 11, id: "art-scorecard", name: "Delivery and adoption scorecard", who: "Sponsors and business owners", when: "Monthly; baselined by Day 90", supports: "Whether the investment is being used", roles: ["sponsor", "consumer"] },
   { n: 12, id: "art-readiness", name: "Release readiness checklist", who: "Business owners, control owners, program leads", when: "Two weeks before each release", supports: "Whether to launch", roles: ["delivery", "control", "consumer"] },
 ];
+
+// ── How this works with the team already here ──
+export const together = {
+  title: "How this works with the team already here",
+  lede: "A plan like this fails if it lands as a new system on top of a working one. Three things keep it from doing that.",
+  blocks: [
+    {
+      key: "people", kicker: "People and adoption", title: "Governance changes how people work, so it has to earn its place",
+      points: [
+        "Every forum and artifact has a named audience, a stated reason, and a feedback loop with the people who use it.",
+        "Anything nobody uses after 30 days gets retired. The Day 90 retro makes that a standing rule, not a one-off.",
+        "The teams whose work changes hear why before they hear what, and get a say in what stays.",
+        "PMs get coaching on the decisions behind the artifacts, not just templates to fill in.",
+      ],
+    },
+    {
+      key: "agile", kicker: "Agile and SAFe delivery", title: "The checkpoints ride the cadence you already run",
+      points: [
+        "Steering checkpoints attach to the existing program increment (PI) and release cadence. There's no parallel approval track.",
+        "\"Done when\" on the delivery path maps to PI objectives and release readiness, so teams report once.",
+        "A shared-capacity conflict like the Day 60 one should surface at PI planning. When it surfaces mid-increment, this is the path to a decision.",
+        "Predictability comes from planned-versus-delivered PI objectives and dependency aging, not from extra status meetings.",
+      ],
+    },
+    {
+      key: "peers", kicker: "Fellow TPM directors and the PMO", title: "I'd strengthen the system that's here, not install a new one",
+      points: [
+        "Shared-resource conflicts get worked peer to peer first. Steering sees only what we can't settle between us.",
+        "One status format and one set of thresholds, agreed together across portfolios.",
+        "Lessons learned and reusable artifacts move between portfolios, in both directions.",
+        "Where a colleague already has a better version of something on this page, I'd use theirs.",
+      ],
+    },
+  ],
+  tools: "Everything here lives in the tools teams already use, such as Jira, Azure DevOps and Power BI. No new tooling.",
+};
 
 // ── Evidence from my work (facts only from the published case study) ──
 export const evidence = {
@@ -423,6 +465,7 @@ export const evidence = {
 
 export const agreement = {
   commitments: [
+    "I adopt what's already working before I add anything.",
     "Risks are raised at the earliest credible warning. Control failures are reported immediately.",
     "Decisions are logged and sent within 24 hours.",
     "No meeting without a decision on the agenda.",

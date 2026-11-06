@@ -397,7 +397,7 @@ ol.gp-list li::before { content: counter(n) "."; background: none; width: auto; 
 .gp-seat { padding: 2rem 0 0.5rem; border-top: 1px solid var(--gp-line); }
 .gp-seat-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1.25rem; margin-bottom: 1rem; }
 .gp-seat-title { font-size: 1.15rem; font-weight: 600; color: var(--gp-text); margin: 0; }
-.gp-rolecards { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; }
+.gp-rolecards { list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.55rem; }
 .gp-rolecard { padding: 0.9rem 0.95rem; border: 1px solid var(--gp-line); border-radius: 12px; transition: opacity .25s, border-color .25s, background .25s; }
 .gp-rolecard.is-on { border-color: var(--gp-warm); background: var(--gp-warm-dim); }
 .gp-rolecard.is-dim { opacity: 0.4; }
@@ -545,6 +545,24 @@ ol.gp-list li::before { content: counter(n) "."; background: none; width: auto; 
 @media (max-width: 420px) {
   .gp-rolecards { grid-template-columns: 1fr; }
 }
+
+/* Working together */
+.gp-onepager-link { grid-area: note; font-size: 0.9rem; margin-bottom: -0.75rem !important; }
+.gp-hero2 { grid-template-areas: "text teaser" "routes routes" "one one" "note note"; }
+.gp-onepager-link { grid-area: one; }
+.gp-together { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.gp-tg { padding: 1.4rem; border: 1px solid var(--gp-line-2); border-radius: var(--gp-radius); background: var(--gp-panel); }
+.gp-tg-kicker { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gp-warm); margin-bottom: 0.4rem !important; }
+.gp-tg-title { font-size: 1.08rem; font-weight: 700; color: var(--gp-text); line-height: 1.35; margin: 0 0 0.9rem; }
+.gp-tg .gp-checks li { font-size: 0.9rem; }
+.gp-tools { margin-top: 1rem !important; display: flex; flex-wrap: wrap; gap: 0.4rem 0.8rem; align-items: baseline; font-size: 0.92rem; padding: 0.8rem 1rem; border: 1px dashed var(--gp-line-2); border-radius: 10px; }
+.gp-tools-k { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gp-blue); }
+@media (max-width: 1000px) {
+  .gp-hero2 { grid-template-areas: "text" "teaser" "routes" "one" "note"; }
+  .gp-together { grid-template-columns: 1fr; }
+  .gp-rolecards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) { .gp-rolecards { grid-template-columns: 1fr; } }
 
 /* Reveal (JS adds .gp-motion; nothing is hidden without it or under reduced motion). */
 .gp.gp-motion .gp-reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s var(--gp-ease), transform .6s var(--gp-ease); }

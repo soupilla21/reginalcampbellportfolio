@@ -51,7 +51,7 @@ tr.hl > * { background: #fff1db; }
 .page:last-child { page-break-after: auto; }
 .wide { page: wide; }
 .tight > *:not(.foot) { zoom: 0.88; }
-body.one { zoom: 0.84; }
+body.one { zoom: 0.8; }
 .callout { border-left: 3px solid #c08a3e; background: #fff6e8; padding: 5pt 8pt; margin-top: 8pt; font-size: 8.6pt; }
 .ask { background: #fff6e8; border: 1px solid #e3c08d; border-radius: 6pt; padding: 6pt 9pt; margin: 6pt 0 9pt; font-weight: 600; color: #0f1a28; }
 .ask span { display: block; font-size: 6.8pt; letter-spacing: 0.14em; text-transform: uppercase; color: #8a5d22; font-weight: 600; }
@@ -81,8 +81,8 @@ ${d.phases.map((p, i) => { const o = d.hero.outcomes[i]; return `<div class="box
 <div class="sec grid2">
   <div class="box warm">
     <h3>The Day 60 decision</h3>
-    <p>Programs B (spend analytics release) and C (supplier and contract data platform) both need the 6-person integration team in Weeks 10–15: ${cap.b.toLocaleString()} + ${cap.c} hours against ${cap.available.toLocaleString()} available, a ${cap.b + cap.c - cap.available}-hour shortfall.</p>
-    <p><b>Options:</b> sequence (C slips, audit finding likely), phase scope (B launches core scope, C does audit-critical work first), or add capacity (about $72K, over the 10% threshold).</p>
+    <p>Programs B (spend analytics release) and C (supplier and contract data platform) both need the 8-person integration team in Weeks 10–15: ${cap.b.toLocaleString()} + ${cap.c} hours against ${cap.available.toLocaleString()} available (planned at 75% focus time), a ${cap.b + cap.c - cap.available}-hour shortfall.</p>
+    <p><b>Options:</b> sequence (C slips, audit finding likely), phase scope (defer 300 hours of B features and 120 hours of C migrations), or add capacity (about $72K for 480 billed hours, about 360 productive).</p>
     <p style="margin:0"><b>Recommended:</b> phase scope. Both external commitments hold at no added cost, with a ${cap.available - cap.phasedB - cap.phasedC}-hour buffer and a contractor fallback to decide by Day 74.</p>
   </div>
   <div class="box">
@@ -91,8 +91,8 @@ ${d.phases.map((p, i) => { const o = d.hero.outcomes[i]; return `<div class="box
   </div>
 </div>
 <div class="sec grid2">
-  <div><h3>What each seat gets</h3>
-    <table><tbody>${d.roles.map((r) => `<tr><th>${esc(r.name)}</th><td>${esc(r.get)}</td></tr>`).join("")}</tbody></table>
+  <div><h3>${esc(d.together.title)}</h3>
+    <ul>${d.together.blocks.map((x) => `<li><b>${esc(x.kicker)}.</b> ${esc(x.points[0])}</li>`).join("")}<li><b>Tools.</b> ${esc(d.together.tools)}</li></ul>
   </div>
   <div><h3>What you can hold me to</h3>
     <ul>${d.agreement.commitments.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>
@@ -115,7 +115,7 @@ const kitPages = [
    <p class="hook">${esc(d.hero.subtitle)}</p>
    <p>Every artifact in this kit supports a decision, and every one uses the same sample portfolio and numbers:</p>
    <table><thead><tr><th>Program</th><th>Sponsor</th><th>Budget</th><th>Why it matters</th></tr></thead><tbody>${d.programs.map((p) => `<tr><th>${p.key}. ${esc(p.name)}</th><td>${esc(p.sponsor)}</td><td>${p.budget}</td><td>${esc(p.note)}</td></tr>`).join("")}</tbody></table>
-   <p style="margin-top:8pt">Illustrative scenario set in healthcare supply chain and spend technology. One 6-person integration engineering team serves B and C. On Day 47 the shared RAID log shows both booking it for Weeks 10–15. The artifacts follow that conflict from first signal to executive decision.</p>
+   <p style="margin-top:8pt">Illustrative scenario set in healthcare supply chain and spend technology. One 8-person integration engineering team, planned at 75% focus time, serves B and C. On Day 47 the shared RAID log shows both booking it for Weeks 10–15. The artifacts follow that conflict from first signal to executive decision.</p>
    <div class="sec"><h3>Contents</h3><ol>${["Decision rights matrix", "Stoplight status card and escalation thresholds", "RAID log excerpt", "Steering pre-read", "Executive one-pager", "Decision log"].map((t) => `<li>${t}</li>`).join("")}</ol></div>
    <p style="margin-top:12pt;font-size:8pt;color:#5b6573">${esc(d.disclosure)}</p>${footer("Governance Starter Kit")}</section>`,
 

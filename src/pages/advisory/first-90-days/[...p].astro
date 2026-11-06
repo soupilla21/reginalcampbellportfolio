@@ -15,7 +15,7 @@ import {
   meta, documents, hero, routes, principles, programs, portfolioNote, roles, steering, phases,
   deliveryPath, indicators, raciRoles, raci, raciNote, tierNote, ragRows, ragMeaning, ragRules,
   thresholds, routing, raid, raidNote, exec, decisions, forums, weeklyStatus, scorecard, readiness,
-  artifacts, evidence, agreement, disclosure,
+  artifacts, evidence, agreement, disclosure, together,
 } from "../../../data/playbooks/first-90-days";
 import { contactHref } from "../../../config/site";
 import "../../../styles/governance-playbook.css";
@@ -33,13 +33,14 @@ const roleNames = Object.fromEntries(roles.map((r) => [r.key, r.name]));
 const cap = steering.capacity;
 const fmt = (n: number) => n.toLocaleString("en-US");
 const demand = cap.b + cap.c; // 1,680
-const scaleMax = 1920; // widest bar: capacity with contractors
+const scaleMax = 1800; // widest bar: capacity with productive contractor hours
 const w = (n: number) => `${((n / scaleMax) * 100).toFixed(2)}%`;
 const recommended = steering.options.find((o) => o.recommended)!;
 
 const navItems = [
   { id: "decision", label: "Day 60 decision" },
   { id: "plan", label: "Plan" },
+  { id: "together", label: "Working together" },
   { id: "delivery", label: "Delivery path" },
   { id: "success", label: "Day 90" },
   { id: "evidence", label: "Evidence" },
@@ -108,7 +109,7 @@ const navItems = [
           <span class="gp-tb-cap" style={`width:${((cap.available / demand) * 100).toFixed(2)}%`}></span>
           <span class="gp-tb-short"></span>
         </div>
-        <p class="gp-teaser-cap gp-small">{fmt(demand)} hours of demand · {fmt(cap.available)} hours of capacity</p>
+        <p class="gp-teaser-cap gp-small">{fmt(demand)} hours of demand · {fmt(cap.available)} hours of capacity ({cap.team} engineers at {cap.focus * 100}% focus)</p>
         <a href="#decision" class="gp-btn" data-ga-event="playbook_entry" data-ga-playbook={slug} data-ga-mode="decision">Make the Day 60 call <span aria-hidden="true">↓</span></a>
       </aside>
 
@@ -121,6 +122,7 @@ const navItems = [
           </a>
         ))}
       </div>
+      <p class="gp-onepager-link">Short on time? <a href={fileHref(documents[0].file)} target="_blank" rel="noopener" class="gp-link" data-gp-view={fileHref(documents[0].file)} data-gp-view-title={documents[0].title} data-ga-event="playbook_document_open" data-ga-playbook={slug} data-ga-file="summary-hero">Read the one-page summary</a> <span class="gp-muted">(PDF)</span></p>
       <p class="gp-scenario-note">{meta.preparedFor} · {hero.scenarioNote}</p>
     </header>
 
@@ -276,6 +278,25 @@ const navItems = [
         ))}
       </ol>
       <p class="gp-small gp-muted gp-mt">Inputs and mechanisms for each phase are in the <a href="#operating-model" class="gp-link">operating model</a>.</p>
+    </section>
+
+    <!-- 2b. How this works with the team already here -->
+    <section class="gp-section" id="together" aria-labelledby="together-title" data-gp-section>
+      <div class="gp-phase-head gp-reveal">
+        <p class="gp-kicker">Working together</p>
+        <h2 id="together-title" class="gp-h2">{together.title}</h2>
+        <p class="gp-body">{together.lede}</p>
+      </div>
+      <div class="gp-together gp-reveal">
+        {together.blocks.map((b) => (
+          <article class="gp-tg" id={`together-${b.key}`}>
+            <p class="gp-tg-kicker">{b.kicker}</p>
+            <h3 class="gp-tg-title">{b.title}</h3>
+            <ul class="gp-checks">{b.points.map((t) => <li>{t}</li>)}</ul>
+          </article>
+        ))}
+      </div>
+      <p class="gp-tools gp-reveal"><span class="gp-tools-k">Tools</span>{together.tools}</p>
     </section>
 
     <!-- 3. Technical delivery path -->
@@ -439,7 +460,7 @@ const navItems = [
       </div>
 
       <h3 class="gp-deep-h" id="artifacts">Twelve artifacts, all filled in</h3>
-      <p class="gp-small gp-muted gp-deep-sub">Every example uses the same illustrative portfolio and the same numbers. If you picked a role above, yours are marked.</p>
+      <p class="gp-small gp-muted gp-deep-sub">These are examples of what good looks like, not a system to install. Where an equivalent already exists, I'd use it. Every example uses the same illustrative portfolio and numbers; if you picked a role above, yours are marked.</p>
       <ol class="gp-gallery">
         {artifacts.map((a) => (
           <li class="gp-card" id={a.id} data-roles={a.roles.join(" ")}>
@@ -596,7 +617,7 @@ const navItems = [
                     <ul class="gp-ready">{readiness.items.map((it) => <li class={it.done ? "is-done" : "is-open"}><span aria-hidden="true">{it.done ? "✓" : "○"}</span><span>{it.item}{it.note && <span class="gp-muted"> ({it.note})</span>}<span class="sr-only">{it.done ? " (done)" : " (open)"}</span></span></li>)}</ul>
                   </div>
                 )}
-                <p class="gp-card-roles gp-small gp-muted">Received by: {a.roles.length === 5 ? "every role" : a.roles.map((r) => roleNames[r]).join(", ")}</p>
+                <p class="gp-card-roles gp-small gp-muted">Received by: {a.roles.length === roles.length ? "every role" : a.roles.map((r) => roleNames[r]).join(", ")}</p>
               </div>
             </details>
           </li>
