@@ -17,7 +17,15 @@
   "rewrites": [
     {
       "source": "/clients/tia-brown",
-      "destination": "https://tig-brown-coaching-portal.vercel.app/clients/tia-brown/"
+      "destination": "https://tig-brown-coaching-portal.vercel.app/clients/tia-brown/index.html"
+    },
+    {
+      "source": "/clients/tia-brown/",
+      "destination": "https://tig-brown-coaching-portal.vercel.app/clients/tia-brown/index.html"
+    },
+    {
+      "source": "/clients/tia-brown/:path*/",
+      "destination": "https://tig-brown-coaching-portal.vercel.app/clients/tia-brown/:path*/index.html"
     },
     {
       "source": "/clients/tia-brown/:path*",
