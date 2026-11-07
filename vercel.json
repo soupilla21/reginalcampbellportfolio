@@ -16,6 +16,14 @@
   ],
   "rewrites": [
     {
+      "source": "/clients/tia-brown",
+      "destination": "https://tig-brown-coaching-portal.vercel.app/clients/tia-brown/"
+    },
+    {
+      "source": "/clients/tia-brown/:path*",
+      "destination": "https://tig-brown-coaching-portal.vercel.app/clients/tia-brown/:path*"
+    },
+    {
       "source": "/ask/",
       "destination": "https://portfolio-intelligence-bot.netlify.app/"
     },
