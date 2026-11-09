@@ -10,7 +10,7 @@ const articles = defineCollection({
     updatedDate: z.coerce.date().optional(),
     ogImage: z.string(),
     ogImageAlt: z.string(),
-    tags: z.array(z.enum(['ai-governance', 'enterprise-transformation', 'delivery', 'leadership'])).optional(),
+    tags: z.array(z.enum(['ai-governance', 'enterprise-transformation', 'delivery', 'leadership', 'personal-essay'])).optional(),
     // One primary category per article. Drives the /articles filters and related
     // reading. `tags` stays for finer grouping and is not used for filtering.
     category: z.enum(['leadership', 'ai-technology', 'hiring-careers', 'life-society']),
