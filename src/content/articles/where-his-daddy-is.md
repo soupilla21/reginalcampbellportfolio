@@ -6,7 +6,7 @@ ogImage: "/assets/articles/where-his-daddy-is-card.jpg"
 ogImageAlt: "Dark title card reading Where His Daddy Is?, an essay by Reginal Campbell on leadership and the people outside the room"
 tags: ["leadership"]
 category: "leadership"
-draft: true
+draft: false
 ---
 
 *What my younger cousin remembered about the walks she couldn’t join.*
