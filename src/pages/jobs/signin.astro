@@ -1,0 +1,53 @@
+---
+import JobsLayout from "../../layouts/JobsLayout.astro";
+import { REVIEWERS } from "../../lib/jobs/env";
+import { readSession, safeNext, SESSION_COOKIE } from "../../lib/jobs/session";
+
+export const prerender = false;
+
+const next = safeNext(Astro.url.searchParams.get("next"));
+if (readSession(Astro.cookies.get(SESSION_COOKIE)?.value)) return Astro.redirect(next, 302);
+
+const error = Astro.url.searchParams.get("error");
+const messages: Record<string, string> = {
+  password: "That password didn't match.",
+  reviewer: "Choose who's reviewing.",
+  config: "Sign-in isn't configured on the server yet (JOBS_PASSWORD is missing).",
+};
+---
+<JobsLayout title="Sign in · Job matches">
+  <div class="max-w-md mx-auto mt-6">
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Private</span>
+    <h1 class="text-3xl font-bold mt-2 text-white">Job matches</h1>
+    <p class="text-neutral-400 mt-3 text-sm leading-relaxed">Daily matches for review. Sign in with the shared password and choose who's reviewing. Your choice is saved with every status you set.</p>
+
+    {error && messages[error] && (
+      <p role="alert" class="mt-6 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{messages[error]}</p>
+    )}
+
+    <form method="post" action="/api/jobs/signin" class="mt-6 bg-neutral-900/40 rounded-2xl border border-white/10 p-6 space-y-5">
+      <input type="hidden" name="next" value={next} />
+      <fieldset>
+        <legend class="label-mono text-amber-400 mb-3">Reviewing as</legend>
+        <div class="grid grid-cols-2 gap-3">
+          {REVIEWERS.map((r) => (
+            <label class="reviewer-option flex items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-3 cursor-pointer hover:border-amber-500/40 transition">
+              <input type="radio" name="reviewer" value={r} required class="accent-amber-500" />
+              <span class="text-white font-medium">{r}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <label class="block">
+        <span class="label-mono text-amber-400">Password</span>
+        <input type="password" name="password" required autocomplete="current-password" autofocus
+          class="mt-2 w-full rounded-xl bg-black/40 border border-white/15 px-4 py-3 text-white focus:outline-none focus:border-amber-500/60" />
+      </label>
+      <button type="submit" class="w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold py-3 transition">Sign in</button>
+    </form>
+    <p class="text-neutral-500 text-xs mt-4">You stay signed in on this device for 30 days.</p>
+  </div>
+</JobsLayout>
+<style>
+  .reviewer-option:has(input:checked) { border-color: rgba(245,158,11,0.6); background: rgba(245,158,11,0.08); }
+</style>
