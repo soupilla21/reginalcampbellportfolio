@@ -53,15 +53,25 @@ export const sessionCookieOptions = (secure: boolean) => ({
   maxAge: SESSION_DAYS * 86400,
 });
 
-/** POSTs must come from this site (defence in depth on top of SameSite=Lax). */
+/** POSTs must come from this site (defence in depth on top of SameSite=Lax).
+ *  Accepts the hosts the request actually arrived on (Host, X-Forwarded-Host, the URL
+ *  Astro sees) plus the site's own domains, so proxies and custom domains don't break it. */
+const SITE_HOSTS = ["reginalcampbell.com", "www.reginalcampbell.com"];
 export function sameOrigin(request: Request, url: URL): boolean {
-  const origin = request.headers.get("origin");
-  if (origin) return origin === url.origin;
-  const referer = request.headers.get("referer");
-  if (referer) {
-    try { return new URL(referer).origin === url.origin; } catch { return false; }
+  const raw = request.headers.get("origin") ?? (() => {
+    const ref = request.headers.get("referer");
+    try { return ref ? new URL(ref).origin : null; } catch { return null; }
+  })();
+  if (!raw || raw === "null") return false;
+  let origin: URL;
+  try { origin = new URL(raw); } catch { return false; }
+  const local = origin.hostname === "localhost" || origin.hostname === "127.0.0.1";
+  if (origin.protocol !== "https:" && !local) return false;
+  const hosts = new Set<string>([url.host, ...SITE_HOSTS]);
+  for (const h of [request.headers.get("host"), request.headers.get("x-forwarded-host")]) {
+    if (h) h.split(",").forEach((v) => hosts.add(v.trim().toLowerCase()));
   }
-  return false;
+  return hosts.has(origin.host.toLowerCase());
 }
 
 /** Only redirect back into /jobs. */
