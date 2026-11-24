@@ -1,0 +1,144 @@
+---
+// /jobs/about: how the daily job matches work, written from Reggie to Yahsh.
+// Private (same sign-in as /jobs). Numbers come from src/lib/jobs/rules.ts, which mirrors
+// config/scoring_config.json; the page flags when the latest run used a different version.
+import JobsLayout from "../../layouts/JobsLayout.astro";
+import { PATHS, readJson } from "../../lib/jobs/github";
+import type { MatchesFile } from "../../lib/jobs/data";
+import { REVIEW_DAYS, REVIEW_TARGET, reviewModeOn } from "../../lib/jobs/review";
+import { RULES } from "../../lib/jobs/rules";
+
+export const prerender = false;
+
+const reviewer = Astro.locals.reviewer!;
+const reviewMode = reviewModeOn();
+const latest = await readJson<MatchesFile>(PATHS.latest).catch(() => null);
+const usedVersion = latest?.run.scoring_config_version ?? null;
+const stale = usedVersion !== null && usedVersion !== RULES.configVersion;
+const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW";
+---
+<JobsLayout title="How this works · Job matches" reviewer={reviewer}>
+  <article class="max-w-2xl about">
+    <p class="mb-6"><a href="/jobs" class="text-sm text-amber-300 hover:text-amber-200">← Back to today's matches</a></p>
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">From Reggie</span>
+    <h1 class="text-3xl md:text-4xl font-bold mt-2 text-white">How this works</h1>
+
+    {stale && (
+      <p class="mt-6 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3 text-sm text-amber-100">
+        I've retuned the scoring since this page was written, so some numbers below may be slightly out of date.
+      </p>
+    )}
+
+    <h2>Why I built this</h2>
+    <p>
+      Searching job boards is slow, and most of what comes back isn't close. I wanted your time going to the few jobs worth
+      a cover letter, along with a clear read on why each one fits and where it doesn't. So this does the searching every
+      morning and gives you a short, ranked list.
+    </p>
+
+    <h2>Where the jobs come from</h2>
+    <ul>
+      <li>
+        Every morning around 6:30, it checks the careers pages of the companies on your target list: airlines, airline
+        technology, and the aviation and supply-chain companies around them. It also checks any job links I add by hand.
+      </li>
+      <li>It reads employers' own job boards only. It doesn't scrape LinkedIn, Indeed, Glassdoor or ZipRecruiter.</li>
+      <li>Every job links straight to the employer's own posting.</li>
+    </ul>
+
+    <h2>What gets filtered out first</h2>
+    <p>Simple rules remove jobs that clearly don't work:</p>
+    <ul>
+      <li>jobs that aren't full-time;</li>
+      <li>jobs outside the US, or in a location or work arrangement that doesn't fit what you told me;</li>
+      <li>titles that are clearly the wrong kind of role;</li>
+      <li>jobs whose listed pay tops out below your minimum.</li>
+    </ul>
+    <p>
+      If a job lists no pay, it stays and is marked "Pay not listed." Your minimum is never shown on this page or sent anywhere.
+    </p>
+
+    <h2>How each job is scored (0–100)</h2>
+    <p>
+      An AI reads each posting and pulls out what the employer is asking for. Then the scoring code, not the AI, compares
+      that to your profile:
+    </p>
+    <ul>
+      <li><strong>Role direction (up to 35):</strong> is it one of your four directions? Those are airline sales and account management, business development and partnerships, channel sales, and real estate acquisitions.</li>
+      <li><strong>Requirements (up to 35):</strong> how well your record covers what the posting asks for. Must-haves count double.</li>
+      <li><strong>Seniority (up to 10):</strong> manager and senior manager roles fit best.</li>
+      <li><strong>Details (up to 10):</strong> points when the posting says it's full-time and states a location and travel that work for you.</li>
+      <li><strong>Sector (up to 10):</strong> airline and real estate companies score highest, and related aviation companies score some.</li>
+      <li><strong>Blocking gaps (down to −20):</strong> a requirement you can't meet right now, such as a license you don't currently hold.</li>
+    </ul>
+
+    <h2>Evidence confidence</h2>
+    <p>
+      Each job also gets a High, Medium or Low evidence rating. It reflects how much of what the job requires is backed by
+      your record. Figures you reported yourself, such as percentages, are labeled "client-attested" and count a little
+      less, because we don't have documents for them. That keeps the list honest about where you'd be stretching.
+    </p>
+
+    <h2>The tiers</h2>
+    <ul>
+      <li><strong>Apply first:</strong> a score of {RULES.applyFirst} or more, with Medium or better evidence and no blocking gap.</li>
+      <li><strong>Worth reviewing:</strong> {RULES.worthReviewing}–{RULES.applyFirst - 1}, or a higher score held back by low evidence or a blocking gap.</li>
+      <li><strong>Stretch:</strong> {RULES.stretch}–{RULES.worthReviewing - 1}. Anything lower isn't shown.</li>
+    </ul>
+    <p>
+      You get up to {RULES.dailyCap} new jobs a day, and Apply first jobs are never cut. Extra jobs wait up to
+      {" "}{RULES.holdDays} days for a slot. A job you haven't reviewed drops off after {RULES.unreviewedDays} days.
+    </p>
+
+    <h2>Your privacy</h2>
+    <p>
+      Your name, contact details and pay minimum never go to the AI. It sees the job posting, with the pay text removed, and
+      a cleaned-up summary of your experience. This page is password-protected, only you and I can see it, and search
+      engines don't index it.
+    </p>
+
+    {reviewMode && (
+      <>
+        <h2>The review period: what your clicks do</h2>
+        <p>
+          For the next two weeks, or until about {REVIEW_TARGET} jobs are rated, we're tuning this to you. There are two
+          kinds of clicks:
+        </p>
+        <ul>
+          <li>
+            <strong>Right kind / Wrong kind of job</strong> answers "Is this the sort of job it should be finding for you?"
+            A job can be the right kind even if you'd pass on this particular one. If it's the wrong kind, pick why. This is
+            how I'll decide what to add to or take out of the method.
+          </li>
+          <li>
+            <strong>Interested / Not interested / Applied / Interview</strong> is your own call on this specific job. Not
+            interested hides the job for good, and a quick note on why helps. Every pass is saved, and either of us can bring
+            a job back.
+          </li>
+        </ul>
+        <p>
+          When the review period ends ({REVIEW_DAYS} days or {REVIEW_TARGET} rated jobs, whichever comes first), I'll adjust
+          the filters, the scoring and the company list based on what we learned.
+        </p>
+      </>
+    )}
+
+    {pending && (
+      <>
+        <h2>One thing I need from you</h2>
+        <p>Your profile is still marked as pending your approval, so the scores are provisional. I'll send it to you to sign off.</p>
+      </>
+    )}
+
+    <p class="mt-10"><a href="/jobs" class="text-amber-300 underline underline-offset-4 hover:text-amber-200">Back to today's matches →</a></p>
+  </article>
+</JobsLayout>
+
+<style>
+  .about h2 { font-size: 1.25rem; font-weight: 700; color: #fff; margin-top: 2.25rem; margin-bottom: 0.6rem; }
+  .about p, .about li { color: #d4d4d4; line-height: 1.72; font-size: 0.975rem; }
+  .about p + p { margin-top: 0.75rem; }
+  .about ul { list-style: disc; padding-left: 1.25rem; margin-top: 0.5rem; }
+  .about li + li { margin-top: 0.4rem; }
+  .about strong { color: #fff; }
+</style>

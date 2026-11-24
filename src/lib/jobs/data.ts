@@ -1,6 +1,7 @@
 // Loads one day of matches for the /jobs page and overlays live feedback (spec §15).
 import { latestByPosting, type FeedbackFile, type Reason, type Status } from "./feedback";
 import { listArchiveDates, PATHS, readJson } from "./github";
+import type { ReviewFile } from "./review";
 
 // Types cover only the fields the page reads (data/daily_matches_schema.json 1.2).
 export interface Match {
@@ -78,9 +79,10 @@ export function claimTexts(profile: unknown): Map<string, string> {
 
 export async function loadDay(date: string | null) {
   const path = date ? PATHS.archive(date) : PATHS.latest;
-  const [day, feedback, profile, archiveDates] = await Promise.all([
+  const [day, feedback, review, profile, archiveDates] = await Promise.all([
     readJson<MatchesFile>(path),
     readJson<FeedbackFile>(PATHS.feedback),
+    readJson<ReviewFile>(PATHS.review).catch(() => null), // review period extras; never block the list
     readJson(PATHS.profile).catch(() => null), // claim text is a nice-to-have
     listArchiveDates().catch(() => [] as string[]),
   ]);
@@ -97,7 +99,14 @@ export async function loadDay(date: string | null) {
       }
     }
   }
-  return { day, current, claims: claimTexts(profile), archiveDates };
+  return { day, current, review, claims: claimTexts(profile), archiveDates };
+}
+
+/** One posting from the latest list, or from an archived day when `date` is given. */
+export async function findMatch(postingId: string, date?: string | null): Promise<{ match: Match; runDate: string } | null> {
+  const file = await readJson<MatchesFile>(date ? PATHS.archive(date) : PATHS.latest);
+  const match = [...(file?.matches ?? []), ...(file?.tracking ?? [])].find((m) => m.posting_id === postingId);
+  return match && file ? { match, runDate: file.run.run_date } : null;
 }
 
 /** posting_ids the pipeline has published on the latest list (feedback targets). */

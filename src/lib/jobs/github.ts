@@ -1,21 +1,22 @@
 // Server-side access to the private data repo through the GitHub Contents API.
 // Spec §2: only the served files can be read, through an exact-path allowlist.
-// Any other path is refused before a request is made. The only writable path is
-// data/feedback.json.
+// Any other path is refused before a request is made. The only writable paths are
+// data/feedback.json and data/review.json (review period, see docs/jobs-dashboard.md).
 import { jobsEnv } from "./env";
 
 export const PATHS = {
   latest: "data/matches/latest.json",
   feedback: "data/feedback.json",
+  review: "data/review.json",
   profile: "config/matching_profile_sanitized.json",
   archiveDir: "data/matches/archive",
   archive: (date: string) => `data/matches/archive/${date}.json`,
 } as const;
 
-const READ_EXACT = new Set<string>([PATHS.latest, PATHS.feedback, PATHS.profile]);
+const READ_EXACT = new Set<string>([PATHS.latest, PATHS.feedback, PATHS.review, PATHS.profile]);
 const READ_ARCHIVE = /^data\/matches\/archive\/\d{4}-\d{2}-\d{2}\.json$/;
 const LIST_EXACT = new Set<string>([PATHS.archiveDir]); // file names only, filtered to dates
-const WRITE_EXACT = new Set<string>([PATHS.feedback]);
+const WRITE_EXACT = new Set<string>([PATHS.feedback, PATHS.review]);
 
 export class NotAllowedError extends Error {}
 export class ConfigError extends Error {}

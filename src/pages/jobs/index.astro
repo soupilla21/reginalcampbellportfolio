@@ -5,6 +5,7 @@
 import JobsLayout from "../../layouts/JobsLayout.astro";
 import { DATE_RE, loadDay, type CurrentFeedback, type Match } from "../../lib/jobs/data";
 import { REASONS } from "../../lib/jobs/feedback";
+import { activePasses, latestRatings, reviewModeOn, reviewProgress, REVIEW_TARGET, WRONG_REASONS } from "../../lib/jobs/review";
 import { ConfigError } from "../../lib/jobs/github";
 import {
   ADJUSTMENTS, ARRANGEMENTS, BREAKDOWN, DIRECTIONS, FLAGS, humanize, RUN_STATUS, SENIORITY, STATUS_LABELS, TIERS, type Tier,
@@ -31,6 +32,17 @@ const current = loaded?.current ?? new Map<string, CurrentFeedback>();
 const claims = loaded?.claims ?? new Map<string, string>();
 const archiveDates = loaded?.archiveDates ?? [];
 const readOnly = Boolean(date);
+const reviewMode = reviewModeOn();
+const forWhom = reviewer === "Yahsh" ? "for you" : "for Yahsh";
+const theyd = reviewer === "Yahsh" ? "you'd" : "he'd";
+const ratings = latestRatings(loaded?.review ?? null);
+const passes = activePasses(loaded?.review ?? null);
+const progress = reviewProgress(loaded?.review ?? null);
+const ratingText = (id: string, who: "Reggie" | "Yahsh") => {
+  const x = ratings.get(id)?.[who];
+  if (!x) return `${who}: not rated`;
+  return `${who}: ${x.verdict === "right" ? "Right kind" : `Wrong kind (${WRONG_REASONS[x.wrong_reason!].replace(" (add a note)", "")})`}`;
+};
 if (date && loaded && !day) Astro.response.status = 404;
 
 const TZ = "America/Chicago";
@@ -78,6 +90,40 @@ const scoreClass = (t: string) =>
       </p>
     )}
   </header>
+
+  <details id="intro" open class="mb-6 rounded-2xl border border-amber-500/25 bg-amber-500/[0.05] p-4 md:p-5">
+    <summary class="cursor-pointer select-none text-sm font-medium text-amber-200">From Reggie: what this is and how it works</summary>
+    <p class="mt-3 text-sm text-neutral-200 leading-relaxed">
+      <strong class="text-white">Yahsh, I built this to do the job-board digging for you.</strong> Every morning it checks the careers
+      pages of the companies on your target list, removes the jobs that clearly don't fit, and scores the rest against your
+      actual record.{reviewMode && " For the next couple of weeks we're in a review period, and your clicks teach it what you're looking for."}
+    </p>
+    <p class="mt-3 text-sm"><a href="/jobs/about" class="text-amber-300 underline underline-offset-4 hover:text-amber-200">How this works →</a></p>
+  </details>
+
+  {reviewMode && (
+    <section aria-label="Review period progress" class="mb-6 rounded-2xl border border-violet-400/30 bg-violet-500/[0.06] p-4 text-sm">
+      <div class="flex flex-wrap items-baseline justify-between gap-2">
+        <p class="font-medium text-violet-200">
+          Review period{progress.done ? " complete" : ""}: {progress.rated} of {REVIEW_TARGET} jobs rated{progress.started ? ` · day ${progress.day} of ${progress.days}` : ""}
+        </p>
+        {progress.rightPct !== null && <p class="text-violet-100">Right kind: {progress.rightPct}%</p>}
+      </div>
+      <div class="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden" aria-hidden="true">
+        <div class="h-full bg-violet-400" style={`width:${Math.min(100, Math.round((progress.rated / REVIEW_TARGET) * 100))}%`}></div>
+      </div>
+      {progress.byTier.length > 0 && (
+        <p class="mt-2 text-xs text-neutral-400">
+          {progress.byTier.map((t) => `${TIERS[t.tier].label}: ${t.right} of ${t.total} right kind`).join(" · ")}
+        </p>
+      )}
+      <p class="mt-2 text-xs text-neutral-400">
+        {progress.done
+          ? (progress.doneReason === "target" ? "Target reached. Time to tune the filters and scoring." : "Two weeks are up. Time to tune the filters and scoring.")
+          : `On each job, say whether it's the right kind of job ${forWhom}, even if ${theyd} pass on this one.`}
+      </p>
+    </section>
+  )}
 
   {problem && <p role="alert" class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{problem}</p>}
 
@@ -163,7 +209,7 @@ const scoreClass = (t: string) =>
                 const cited = [...new Set(m.cited_claim_ids ?? [])];
                 return (
                   <article class="job-card rounded-2xl border border-white/10 bg-neutral-900/40 p-4 md:p-5"
-                    data-id={m.posting_id} data-status={status} data-rank={m.rank} data-fit={m.fit_score}
+                    data-id={m.posting_id} data-status={status} data-date={date ?? ""} data-rank={m.rank} data-fit={m.fit_score}
                     data-posted={m.posting.posted_at ? Date.parse(m.posting.posted_at) : 0}
                     data-company={m.company.name.toLowerCase()}
                     data-search={`${m.posting.title} ${m.company.name}`.toLowerCase()}>
@@ -265,6 +311,36 @@ const scoreClass = (t: string) =>
                           )}
                         </details>
 
+                        {reviewMode && (
+                          <div class="review-row mt-4 rounded-xl border border-violet-400/25 bg-violet-500/[0.05] p-3">
+                            <div class="flex flex-wrap items-center gap-2">
+                              <span class="text-xs font-medium text-violet-200 mr-1">Right kind of job {forWhom}?</span>
+                              <button type="button" class="rv" data-rate="right" aria-pressed={ratings.get(m.posting_id)?.[reviewer]?.verdict === "right" ? "true" : "false"}>Right kind</button>
+                              <button type="button" class="rv" data-rate="wrong" aria-pressed={ratings.get(m.posting_id)?.[reviewer]?.verdict === "wrong" ? "true" : "false"}>Wrong kind</button>
+                            </div>
+                            <p class="rating-line text-xs text-neutral-400 mt-2"><span data-who="Reggie">{ratingText(m.posting_id, "Reggie")}</span> · <span data-who="Yahsh">{ratingText(m.posting_id, "Yahsh")}</span></p>
+                            <form class="wrong-form mt-3 space-y-2" hidden>
+                              <label class="block">
+                                <span class="text-xs text-neutral-400">Why is it the wrong kind?</span>
+                                <select name="wrong_reason" required class="ctl mt-1">
+                                  <option value="">Choose a reason…</option>
+                                  {Object.entries(WRONG_REASONS).map(([k, v]) => <option value={k}>{v}</option>)}
+                                </select>
+                              </label>
+                              <label class="block">
+                                <span class="text-xs text-neutral-400">Note (optional)</span>
+                                <textarea name="note" maxlength="280" rows="2" class="ctl mt-1 resize-y"></textarea>
+                                <span class="block text-[11px] text-neutral-500 mt-1">No numbers or @: that keeps pay figures and contact details out of the data.</span>
+                              </label>
+                              <div class="flex gap-2">
+                                <button type="submit" class="fb fb-primary">Save</button>
+                                <button type="button" class="fb wrong-cancel">Cancel</button>
+                              </div>
+                            </form>
+                            <p class="rv-error text-xs text-red-300 mt-2" role="alert" hidden></p>
+                          </div>
+                        )}
+
                         <div class="feedback mt-4 pt-3 border-t border-white/10">
                           <p class="status-line text-xs text-neutral-400 mb-2">{statusLine(f)}</p>
                           {!readOnly && (
@@ -285,8 +361,9 @@ const scoreClass = (t: string) =>
                                   </select>
                                 </label>
                                 <label class="block">
-                                  <span class="text-xs text-neutral-400">Note (optional, no numbers or @)</span>
+                                  <span class="text-xs text-neutral-400">Why not? (optional, but it helps)</span>
                                   <textarea name="note" maxlength="280" rows="2" class="ctl mt-1 resize-y"></textarea>
+                                  <span class="block text-[11px] text-neutral-500 mt-1">No numbers or @: that keeps pay figures and contact details out of the data. Passed jobs are saved, and either of you can bring one back.</span>
                                 </label>
                                 <div class="flex gap-2">
                                   <button type="submit" class="fb fb-primary">Save</button>
@@ -308,7 +385,35 @@ const scoreClass = (t: string) =>
         );
       })}
 
-      <details class="mt-8 rounded-2xl border border-white/10 bg-neutral-900/30 p-4 text-sm text-neutral-400">
+      <details id="passed" class="mt-8 rounded-2xl border border-white/10 bg-neutral-900/30 p-4 text-sm">
+        <summary class="cursor-pointer text-neutral-200">Passed on <span class="font-mono text-neutral-500">{passes.length}</span></summary>
+        {passes.length === 0
+          ? <p class="mt-3 text-neutral-500">Nothing passed on yet. Jobs marked Not interested show up here with the reason, and either of you can bring one back.</p>
+          : (
+            <ul class="mt-3 divide-y divide-white/10">
+              {passes.map((p) => (
+                <li class="passed-item py-3 flex flex-col md:flex-row md:items-start gap-3" data-id={p.posting_id}>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-neutral-100 font-medium">
+                      {httpsOnly(p.url) ? <a href={p.url} target="_blank" rel="noopener noreferrer" class="hover:text-amber-300">{p.title} <span aria-hidden="true" class="text-neutral-500">↗</span></a> : p.title}
+                    </p>
+                    <p class="text-xs text-neutral-400 mt-0.5">{p.company} · {TIERS[p.tier].label}, fit {p.fit_score} · list of {fmtDay(p.run_date)}</p>
+                    <p class="text-xs text-neutral-300 mt-1">
+                      {REASONS[p.reason].replace(" (add a note)", "")}{p.note ? `: “${p.note}”` : ""} <span class="text-neutral-500">· {p.reviewer}, {fmtDateTime(p.timestamp)}</span>
+                    </p>
+                  </div>
+                  <div class="shrink-0">
+                    <button type="button" class="fb bring-back">Bring back</button>
+                    <p class="bb-msg text-xs mt-1" role="status" hidden></p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        <p class="mt-3 text-xs text-neutral-500">Bring back puts a job back on the list from the next morning's run, as long as the employer still has it open.</p>
+      </details>
+
+      <details class="mt-4 rounded-2xl border border-white/10 bg-neutral-900/30 p-4 text-sm text-neutral-400">
         <summary class="cursor-pointer text-neutral-300">Run details</summary>
         <dl class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2 text-xs">
           <div><dt>Companies checked</dt><dd class="font-mono text-neutral-200">{counts.api_companies_checked ?? "–"}</dd></div>
@@ -343,6 +448,10 @@ const scoreClass = (t: string) =>
   .fb-primary:hover { background:#fbbf24; }
   .fb:disabled { opacity:.5; cursor:wait; }
   .job-card[data-status="not_interested"] { opacity:.6; }
+  .rv { border:1px solid rgba(167,139,250,0.35); border-radius:0.6rem; padding:0.3rem 0.75rem; font-size:0.78rem; color:#ddd6fe; background:transparent; }
+  .rv:hover { border-color:rgba(167,139,250,0.7); }
+  .rv[aria-pressed="true"] { background:rgba(139,92,246,0.25); border-color:rgba(167,139,250,0.85); color:#fff; }
+  .rv:disabled, .bring-back:disabled { opacity:.5; cursor:wait; }
 </style>
 
 <script>
@@ -458,6 +567,7 @@ const scoreClass = (t: string) =>
       const form = card.querySelector<HTMLFormElement>(".ni-form");
       if (form) { form.hidden = true; form.reset(); }
       const hiddenNow = !matchesStatus(data.status, statusSel?.value ?? "open");
+      if (data.warning) { showToast(data.warning); apply(); return; }
       showToast(`Saved: ${LABELS[data.status]}.${hiddenNow ? " Hidden by the current filter." : ""}${data.status === "applied" || data.status === "interview" ? " Moves to Tracking after the next run." : ""}`);
       apply();
     } catch (e) {
@@ -497,5 +607,78 @@ const scoreClass = (t: string) =>
     if (/[0-9@]/.test(note)) return fail("Notes can't contain numbers or @.");
     if (reason === "other" && note.length < 3) return fail("Add a short note for Other.");
     void send(card, { status: "not_interested", not_interested_reason: reason, ...(note ? { reason_note: note } : {}) });
+  });
+
+  // ── Intro card: remember collapsed/open per device ──
+  const intro = document.getElementById("intro") as HTMLDetailsElement | null;
+  try { if (intro && localStorage.getItem("jobs_intro_closed") === "1") intro.open = false; } catch {}
+  intro?.addEventListener("toggle", () => { try { localStorage.setItem("jobs_intro_closed", intro.open ? "0" : "1"); } catch {} });
+
+  // ── Review period: right kind / wrong kind ──
+  const WRONG_LABELS: Record<string, string> = {
+    wrong_function: "Wrong kind of work", wrong_level: "Wrong level", wrong_industry: "Wrong industry",
+    location_or_arrangement: "Location or work arrangement", other: "Other",
+  };
+  async function postReview(body: Record<string, string>) {
+    const res = await fetch("/api/jobs/review", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `Save failed (${res.status}).`);
+    return data;
+  }
+  async function rate(card: Card, body: Record<string, string>) {
+    const row = card.querySelector<HTMLElement>(".review-row")!;
+    const err = row.querySelector<HTMLElement>(".rv-error")!;
+    const btns = row.querySelectorAll<HTMLButtonElement>("button");
+    err.hidden = true; btns.forEach((b) => (b.disabled = true));
+    try {
+      const data = await postReview({ action: "rate", posting_id: card.dataset.id!, ...(card.dataset.date ? { date: card.dataset.date } : {}), ...body });
+      row.querySelectorAll<HTMLButtonElement>(".rv").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.rate === data.verdict)));
+      const span = row.querySelector<HTMLElement>(`[data-who="${data.reviewer}"]`);
+      if (span) span.textContent = `${data.reviewer}: ${data.verdict === "right" ? "Right kind" : `Wrong kind (${WRONG_LABELS[data.wrong_reason] ?? "other"})`}`;
+      const form = row.querySelector<HTMLFormElement>(".wrong-form");
+      if (form) { form.hidden = true; form.reset(); }
+      showToast(`Rated: ${data.verdict === "right" ? "right kind of job" : "wrong kind of job"}.`);
+    } catch (e) {
+      err.textContent = e instanceof Error ? e.message : "Save failed."; err.hidden = false;
+    } finally { btns.forEach((b) => (b.disabled = false)); }
+  }
+  document.addEventListener("click", (ev) => {
+    const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>("button");
+    if (!btn) return;
+    const card = btn.closest<Card>(".job-card");
+    if (card && btn.dataset.rate) {
+      const form = card.querySelector<HTMLFormElement>(".wrong-form");
+      if (btn.dataset.rate === "wrong") { if (form) { form.hidden = !form.hidden; form.querySelector("select")?.focus(); } return; }
+      if (form) form.hidden = true;
+      void rate(card, { verdict: "right" });
+      return;
+    }
+    if (card && btn.classList.contains("wrong-cancel")) { const f = card.querySelector<HTMLFormElement>(".wrong-form"); if (f) f.hidden = true; return; }
+    if (btn.classList.contains("bring-back")) {
+      const item = btn.closest<HTMLElement>(".passed-item")!;
+      const msg = item.querySelector<HTMLElement>(".bb-msg")!;
+      btn.disabled = true; msg.hidden = true;
+      postReview({ action: "restore", posting_id: item.dataset.id! }).then(() => {
+        btn.hidden = true; msg.hidden = false; msg.className = "bb-msg text-xs mt-1 text-emerald-300";
+        msg.textContent = "Coming back on the next run.";
+      }, (e) => {
+        btn.disabled = false; msg.hidden = false; msg.className = "bb-msg text-xs mt-1 text-red-300";
+        msg.textContent = e instanceof Error ? e.message : "Couldn't bring it back.";
+      });
+    }
+  });
+  document.addEventListener("submit", (ev) => {
+    const form = (ev.target as HTMLElement).closest<HTMLFormElement>(".wrong-form");
+    if (!form) return;
+    ev.preventDefault();
+    const card = form.closest<Card>(".job-card")!;
+    const reason = (form.elements.namedItem("wrong_reason") as HTMLSelectElement).value;
+    const note = (form.elements.namedItem("note") as HTMLTextAreaElement).value.trim();
+    const err = card.querySelector<HTMLElement>(".rv-error")!;
+    const fail = (m: string) => { err.textContent = m; err.hidden = false; };
+    if (!reason) return fail("Choose why it's the wrong kind.");
+    if (/[0-9@]/.test(note)) return fail("Notes can't contain numbers or @.");
+    if (reason === "other" && note.length < 3) return fail("Add a short note for Other.");
+    void rate(card, { verdict: "wrong", wrong_reason: reason, ...(note ? { note } : {}) });
   });
 </script>
