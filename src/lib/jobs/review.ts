@@ -61,7 +61,18 @@ export interface ReviewFile {
   restores: Restore[];
 }
 
-export const reviewModeOn = () => /^(on|true|1|yes)$/i.test((process.env.JOBS_REVIEW_MODE ?? (import.meta as any).env?.JOBS_REVIEW_MODE ?? "").trim());
+// The review period is on unless JOBS_REVIEW_MODE is set to off (or false/0/no) in Vercel.
+export const reviewModeOn = () => !/^(off|false|0|no)$/i.test((process.env.JOBS_REVIEW_MODE ?? (import.meta as any).env?.JOBS_REVIEW_MODE ?? "").trim());
+
+// Yahsh opens to /jobs/about on each new visit until the review period is over: switched
+// off in Vercel, or the exit rule reached (REVIEW_TARGET rated jobs or REVIEW_DAYS days).
+export const INTRO_COOKIE = "jobs_intro_seen"; // browser-session cookie: set when /jobs/about is shown
+export async function introLandingActive(reviewer: string | undefined): Promise<boolean> {
+  if (reviewer !== "Yahsh" || !reviewModeOn()) return false;
+  const { PATHS, readJson } = await import("./github");
+  const file = await readJson<ReviewFile>(PATHS.review).catch(() => null);
+  return !reviewProgress(file).done;
+}
 export const emptyReview = (): ReviewFile => ({ schema_version: "1.0", updated_at: nowIso(), ratings: [], passes: [], restores: [] });
 export const nowIso = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
 export const newId = () => randomUUID();

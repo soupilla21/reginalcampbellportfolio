@@ -5,12 +5,15 @@
 import JobsLayout from "../../layouts/JobsLayout.astro";
 import { PATHS, readJson } from "../../lib/jobs/github";
 import type { MatchesFile } from "../../lib/jobs/data";
-import { REVIEW_DAYS, REVIEW_TARGET, reviewModeOn } from "../../lib/jobs/review";
+import { INTRO_COOKIE, REVIEW_DAYS, REVIEW_TARGET, reviewModeOn } from "../../lib/jobs/review";
 import { RULES } from "../../lib/jobs/rules";
 
 export const prerender = false;
 
 const reviewer = Astro.locals.reviewer!;
+// Marks the explainer as seen for this browser session (no expiry: it clears when the
+// browser closes, so the next visit opens here again during the review period).
+Astro.cookies.set(INTRO_COOKIE, "1", { httpOnly: true, secure: Astro.url.protocol === "https:", sameSite: "lax", path: "/" });
 const reviewMode = reviewModeOn();
 const latest = await readJson<MatchesFile>(PATHS.latest).catch(() => null);
 const usedVersion = latest?.run.scoring_config_version ?? null;

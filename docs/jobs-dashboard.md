@@ -95,8 +95,13 @@ pipeline never reads that file, so nothing here can fail a daily run.
   when you retune.
 - **Right kind / Wrong kind of job.** On every job, including archived days. "Wrong kind"
   needs a reason (wrong kind of work, wrong level, wrong industry, location or arrangement,
-  other) and takes an optional note. The latest rating per job and reviewer counts. Shown
-  only while `JOBS_REVIEW_MODE=on` in Vercel.
+  other) and takes an optional note. The latest rating per job and reviewer counts. The
+  review period is on unless `JOBS_REVIEW_MODE=off` is set in Vercel.
+- **Yahsh's first page.** While the review period is on and the exit rule isn't reached,
+  Yahsh opens to `/jobs/about` on every sign-in and on the first `/jobs` visit of each
+  browser session (cookie `jobs_intro_seen`, cleared when the browser closes or he signs
+  out). Links to a specific view (`/jobs?date=…`) go straight there. Reggie always opens
+  to `/jobs`.
 - **Progress and exit rule.** The panel under the header shows rated jobs out of 40, the day
   out of 14, and the share rated "right kind", overall and by tier. It says when either
   limit is reached. Values: `REVIEW_TARGET` and `REVIEW_DAYS` in `src/lib/jobs/review.ts`.
@@ -110,4 +115,4 @@ Routes: `POST /api/jobs/review` with `{action: "rate", posting_id, verdict, wron
 note?, date?}` or `{action: "restore", posting_id}`. Same sign-in, origin check, allowlist and
 validate-then-commit rules as feedback. Notes never contain digits or `@`.
 
-To end the review period, set `JOBS_REVIEW_MODE` to `off` (or delete it) and redeploy.
+The review period ends on its own for Yahsh's landing page once the exit rule is reached. To hide the rating buttons and progress panel, set `JOBS_REVIEW_MODE` to `off` and redeploy.

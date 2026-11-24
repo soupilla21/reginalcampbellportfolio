@@ -5,7 +5,7 @@
 import JobsLayout from "../../layouts/JobsLayout.astro";
 import { DATE_RE, loadDay, type CurrentFeedback, type Match } from "../../lib/jobs/data";
 import { REASONS } from "../../lib/jobs/feedback";
-import { activePasses, latestRatings, reviewModeOn, reviewProgress, REVIEW_TARGET, WRONG_REASONS } from "../../lib/jobs/review";
+import { activePasses, INTRO_COOKIE, introLandingActive, latestRatings, reviewModeOn, reviewProgress, REVIEW_TARGET, WRONG_REASONS } from "../../lib/jobs/review";
 import { ConfigError } from "../../lib/jobs/github";
 import {
   ADJUSTMENTS, ARRANGEMENTS, BREAKDOWN, DIRECTIONS, FLAGS, humanize, RUN_STATUS, SENIORITY, STATUS_LABELS, TIERS, type Tier,
@@ -14,6 +14,11 @@ import {
 export const prerender = false;
 
 const reviewer = Astro.locals.reviewer!;
+// First page of each visit for Yahsh during the review period is the explainer. A plain
+// /jobs request without the browser-session cookie means he hasn't seen it this visit.
+if (!Astro.url.search && !Astro.cookies.get(INTRO_COOKIE)?.value && (await introLandingActive(reviewer))) {
+  return Astro.redirect("/jobs/about", 302);
+}
 const dateParam = Astro.url.searchParams.get("date");
 const date = dateParam && DATE_RE.test(dateParam) ? dateParam : null;
 

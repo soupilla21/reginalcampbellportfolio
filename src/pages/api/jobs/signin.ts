@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { isReviewer, jobsEnv } from "../../../lib/jobs/env";
-import { reviewModeOn } from "../../../lib/jobs/review";
+import { INTRO_COOKIE, introLandingActive } from "../../../lib/jobs/review";
 import { createSession, passwordMatches, safeNext, sameOrigin, SESSION_COOKIE, sessionCookieOptions } from "../../../lib/jobs/session";
 
 export const prerender = false;
@@ -22,7 +22,8 @@ export const POST: APIRoute = async ({ request, url, cookies, redirect }) => {
   cookies.set(SESSION_COOKIE, createSession(reviewer), sessionCookieOptions(url.protocol === "https:"));
   // During the review period, Yahsh lands on the explainer first, unless he followed a
   // link to a specific view (an archived day or a filtered list).
-  if (reviewer === "Yahsh" && reviewModeOn() && next === "/jobs") return redirect("/jobs/about", 303);
+  cookies.delete(INTRO_COOKIE, { path: "/" });
+  if (next === "/jobs" && (await introLandingActive(reviewer))) return redirect("/jobs/about", 303);
   return redirect(next, 303);
 };
 
