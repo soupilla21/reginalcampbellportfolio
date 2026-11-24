@@ -1,0 +1,39 @@
+---
+// Private layout for /jobs: the site's look (fonts, global.css, minimal nav) without
+// analytics, click tracking, canonical links or the public footer.
+import SiteNav from "../components/SiteNav.astro";
+import "../styles/global.css";
+
+interface Props { title: string; reviewer?: string }
+const { title, reviewer } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="same-origin">
+  <title>{title}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="antialiased">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <SiteNav variant="minimal" />
+  {reviewer && (
+    <div class="fixed top-0 right-0 z-[49] h-[var(--nav-height)] flex items-center gap-3 pr-5 text-sm">
+      <span class="text-neutral-400 hidden sm:inline">Reviewing as</span>
+      <span class="font-medium text-amber-300">{reviewer}</span>
+      <form method="post" action="/api/jobs/signout">
+        <button class="text-neutral-400 hover:text-white underline-offset-4 hover:underline" type="submit">Switch / sign out</button>
+      </form>
+    </div>
+  )}
+  <main id="main-content" style="max-width:1040px;margin:0 auto;padding:calc(var(--nav-height, 64px) + 36px) 20px 64px;">
+    <slot />
+  </main>
+</body>
+</html>

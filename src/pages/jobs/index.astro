@@ -1,0 +1,501 @@
+---
+// /jobs: private review page for the daily job matches (PROJECT_CONTEXT, spec §2, §11, §14, §15).
+// Rendered on demand. Data is read server-side from the private data repo through the
+// allowlist in src/lib/jobs/github.ts; nothing here is a public static file.
+import JobsLayout from "../../layouts/JobsLayout.astro";
+import { DATE_RE, loadDay, type CurrentFeedback, type Match } from "../../lib/jobs/data";
+import { REASONS } from "../../lib/jobs/feedback";
+import { ConfigError } from "../../lib/jobs/github";
+import {
+  ADJUSTMENTS, ARRANGEMENTS, BREAKDOWN, DIRECTIONS, FLAGS, humanize, RUN_STATUS, SENIORITY, STATUS_LABELS, TIERS, type Tier,
+} from "../../lib/jobs/labels";
+
+export const prerender = false;
+
+const reviewer = Astro.locals.reviewer!;
+const dateParam = Astro.url.searchParams.get("date");
+const date = dateParam && DATE_RE.test(dateParam) ? dateParam : null;
+
+let loaded: Awaited<ReturnType<typeof loadDay>> | null = null;
+let problem: string | null = null;
+try {
+  loaded = await loadDay(date);
+} catch (err) {
+  problem = err instanceof ConfigError
+    ? "The data repo isn't configured on the server. Check GITHUB_DATA_TOKEN and DATA_REPO in Vercel."
+    : "Couldn't read the data repo just now. Reload in a minute.";
+  console.error("jobs load failed:", err instanceof Error ? err.message : "unknown");
+}
+const day = loaded?.day ?? null;
+const current = loaded?.current ?? new Map<string, CurrentFeedback>();
+const claims = loaded?.claims ?? new Map<string, string>();
+const archiveDates = loaded?.archiveDates ?? [];
+const readOnly = Boolean(date);
+if (date && loaded && !day) Astro.response.status = 404;
+
+const TZ = "America/Chicago";
+const fmtDate = (iso: string | null | undefined) =>
+  iso ? new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric" }).format(new Date(iso)) : "";
+const fmtDateTime = (iso: string | null | undefined) =>
+  iso ? new Intl.DateTimeFormat("en-US", { timeZone: TZ, month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(iso)) : "";
+const fmtDay = (d: string) =>
+  new Intl.DateTimeFormat("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric", year: "numeric" }).format(new Date(d + "T00:00:00Z"));
+const part = (m: Match, k: string) => Math.round(Number((m.score_breakdown as any)[k] ?? 0) * 10) / 10;
+const httpsOnly = (u: string | null | undefined) => (u && /^https:\/\//i.test(u) ? u : null);
+
+const tiers: Tier[] = ["apply_first", "worth_reviewing", "stretch", "tracking"];
+const byTier = new Map<Tier, Match[]>(tiers.map((t) => [t, []]));
+for (const m of day?.matches ?? []) byTier.get(m.tier as Tier)?.push(m);
+for (const m of day?.tracking ?? []) byTier.get("tracking")!.push(m);
+for (const list of byTier.values()) list.sort((a, b) => a.rank - b.rank);
+
+const counts = day?.run.counts ?? {};
+const hardFiltered = Object.values((counts.hard_filtered ?? {}) as Record<string, number>).reduce((a, b) => a + (Number(b) || 0), 0);
+const newCount = [...(day?.matches ?? [])].filter((m) => m.run_status === "new" || m.run_status === "released_from_hold").length;
+const pending = day?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW";
+
+const statusLine = (f: CurrentFeedback | undefined) => {
+  if (!f || f.status === "unreviewed") return "Not reviewed yet";
+  const reason = f.status === "not_interested" && f.reason ? ` (${REASONS[f.reason].replace(" (add a note)", "")})` : "";
+  return `${STATUS_LABELS[f.status]}${reason}${f.reviewer ? ` · ${f.reviewer}` : ""}${f.at ? ` · ${fmtDateTime(f.at)}` : ""}`;
+};
+const scoreClass = (t: string) =>
+  t === "apply_first" ? "text-amber-300 border-amber-500/50 bg-amber-500/10"
+  : t === "worth_reviewing" ? "text-sky-300 border-sky-500/40 bg-sky-500/10"
+  : t === "tracking" ? "text-emerald-300 border-emerald-500/40 bg-emerald-500/10"
+  : "text-neutral-300 border-white/15 bg-white/5";
+---
+<JobsLayout title="Job matches" reviewer={reviewer}>
+  <header class="mb-6">
+    <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Private · Daily matches</span>
+    <h1 class="text-3xl md:text-4xl font-bold mt-2 text-white">
+      {day ? (readOnly ? `Matches for ${fmtDay(day.run.run_date)}` : "Today's matches") : "Job matches"}
+    </h1>
+    {day && (
+      <p class="text-neutral-400 mt-2 text-sm">
+        Run {fmtDay(day.run.run_date)}, finished {fmtDateTime(day.run.completed_at)} ·
+        {(day.matches?.length ?? 0)} on the list · {newCount} new · {(day.tracking?.length ?? 0)} tracking
+      </p>
+    )}
+  </header>
+
+  {problem && <p role="alert" class="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{problem}</p>}
+
+  {!problem && !day && (
+    <div class="rounded-2xl border border-white/10 bg-neutral-900/40 p-6 text-neutral-300">
+      {date
+        ? <p>There's no archived list for {fmtDay(date)}. <a href="/jobs" class="text-amber-300 underline underline-offset-4">Go to the latest list</a>.</p>
+        : <p>No matches yet. The list appears after the first daily run commits <code class="font-mono text-amber-200">data/matches/latest.json</code>.</p>}
+    </div>
+  )}
+
+  {day && (
+    <>
+      {pending && (
+        <p class="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3 text-sm text-amber-100">
+          The matching profile is still pending client approval, so these scores are provisional.
+        </p>
+      )}
+      {readOnly && (
+        <p class="mb-4 rounded-xl border border-sky-500/30 bg-sky-500/[0.07] px-4 py-3 text-sm text-sky-100">
+          You're viewing an archived day. Statuses shown are current, but you can only change them on the <a href="/jobs" class="underline underline-offset-4">latest list</a>.
+        </p>
+      )}
+
+      <section id="controls" aria-label="Filter and sort" class="md:sticky z-30 mb-6 rounded-2xl border border-white/10 bg-[#0a0a0a]/95 backdrop-blur p-3 md:p-4" style="top:calc(var(--nav-height, 64px) + 8px)">
+        <div class="grid grid-cols-2 md:grid-cols-[1.6fr_1fr_1fr_1fr] gap-3">
+          <label class="col-span-2 md:col-span-1">
+            <span class="label-mono text-neutral-500 block mb-1">Search</span>
+            <input id="f-search" type="search" placeholder="Search title or company" autocomplete="off"
+              class="ctl text-white placeholder:text-neutral-500 focus:outline-none focus:border-amber-500/60" />
+          </label>
+          <label>
+            <span class="label-mono text-neutral-500 block mb-1">Status</span>
+            <select id="f-status" class="ctl">
+              <option value="open">Hide not interested</option>
+              <option value="all">All statuses</option>
+              <option value="unreviewed">Not reviewed</option>
+              <option value="interested">Interested</option>
+              <option value="active">Applied or interview</option>
+              <option value="not_interested">Not interested</option>
+            </select>
+          </label>
+          <label>
+            <span class="label-mono text-neutral-500 block mb-1">Sort</span>
+            <select id="f-sort" class="ctl">
+              <option value="rank">Pipeline order</option>
+              <option value="fit">Fit score</option>
+              <option value="posted">Newest posted</option>
+              <option value="company">Company A–Z</option>
+            </select>
+          </label>
+          <label>
+            <span class="label-mono text-neutral-500 block mb-1">Day</span>
+            <select id="f-day" class="ctl">
+              <option value="" selected={!date}>Latest</option>
+              {archiveDates.map((d) => <option value={d} selected={d === date}>{fmtDay(d)}</option>)}
+              {date && !archiveDates.includes(date) && <option value={date} selected>{fmtDay(date)}</option>}
+            </select>
+          </label>
+        </div>
+        <p id="f-summary" class="text-xs text-neutral-500 mt-2" aria-live="polite"></p>
+      </section>
+
+      {tiers.map((tier) => {
+        const list = byTier.get(tier)!;
+        if (tier === "tracking" && list.length === 0) return null;
+        return (
+          <section class="tier mb-10" data-tier={tier} aria-labelledby={`h-${tier}`}>
+            <div class="flex items-baseline justify-between gap-3 mb-3 border-b border-white/10 pb-2">
+              <h2 id={`h-${tier}`} class="text-xl font-bold text-white">
+                {TIERS[tier].label} <span class="tier-count text-neutral-500 font-mono text-sm align-middle" data-total={list.length}>{list.length}</span>
+              </h2>
+              <p class="text-xs text-neutral-500 hidden sm:block">{TIERS[tier].blurb}</p>
+            </div>
+            <div class="tier-list space-y-4">
+              {list.map((m) => {
+                const f = current.get(m.posting_id);
+                const status = f?.status ?? "unreviewed";
+                const url = httpsOnly(m.posting.url);
+                const applyUrl = httpsOnly(m.posting.apply_url);
+                const runBadge = RUN_STATUS[m.run_status];
+                const ex = m.explanation;
+                const cited = [...new Set(m.cited_claim_ids ?? [])];
+                return (
+                  <article class="job-card rounded-2xl border border-white/10 bg-neutral-900/40 p-4 md:p-5"
+                    data-id={m.posting_id} data-status={status} data-rank={m.rank} data-fit={m.fit_score}
+                    data-posted={m.posting.posted_at ? Date.parse(m.posting.posted_at) : 0}
+                    data-company={m.company.name.toLowerCase()}
+                    data-search={`${m.posting.title} ${m.company.name}`.toLowerCase()}>
+                    <div class="flex gap-4">
+                      <div class={`shrink-0 w-16 h-16 rounded-xl border flex flex-col items-center justify-center ${scoreClass(m.tier)}`} title="Fit score (0–100)">
+                        <span class="text-2xl font-bold leading-none">{m.fit_score}</span>
+                        <span class="label-mono !text-[9px] mt-1 opacity-80">fit</span>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <div class="flex flex-wrap items-center gap-2 mb-1">
+                          {runBadge && <span class="badge border-amber-500/40 text-amber-300">{runBadge}</span>}
+                          <span class="badge">{humanize(m.company.sector_tag)}</span>
+                          <span class="badge">{DIRECTIONS[m.posting.role_direction] ?? humanize(m.posting.role_direction)}</span>
+                          <span class={`badge ${m.evidence_confidence.level === "high" ? "text-emerald-300 border-emerald-500/40" : m.evidence_confidence.level === "medium" ? "text-sky-300 border-sky-500/40" : "text-neutral-400"}`}>
+                            {humanize(m.evidence_confidence.level)} evidence
+                          </span>
+                          {!m.posting.still_open && <span class="badge border-red-500/40 text-red-300">May be closed</span>}
+                        </div>
+                        <h3 class="text-lg font-semibold text-white leading-snug">
+                          {url ? <a href={url} target="_blank" rel="noopener noreferrer" class="hover:text-amber-300 transition">{m.posting.title} <span aria-hidden="true" class="text-neutral-500">↗</span></a> : m.posting.title}
+                        </h3>
+                        <p class="text-sm text-neutral-300 mt-0.5">
+                          <span class="font-medium">{m.company.name}</span>
+                          {m.posting.location_text && <> · {m.posting.location_text}</>}
+                          {" · "}{ARRANGEMENTS[m.posting.work_arrangement] ?? humanize(m.posting.work_arrangement)}
+                        </p>
+                        <p class="text-xs text-neutral-400 mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                          <span>Pay: {m.posting.pay.display_text ?? "Not listed"}</span>
+                          <span>Travel: {m.posting.travel.stated ? (m.posting.travel.percent_max != null ? `up to ${m.posting.travel.percent_max}%` : "stated") : "not stated"}</span>
+                          <span>{SENIORITY[m.posting.seniority] ?? humanize(m.posting.seniority)}</span>
+                          {m.posting.posted_at && <span>Posted {fmtDate(m.posting.posted_at)}</span>}
+                          <span>First seen {fmtDate(m.posting.first_seen)}</span>
+                        </p>
+                        <p class="text-sm text-neutral-200 mt-3 leading-relaxed">{ex.summary}</p>
+
+                        <details class="mt-3 group">
+                          <summary class="cursor-pointer text-sm text-amber-300 hover:text-amber-200 select-none">Why it fits, gaps and score</summary>
+                          <div class="mt-3 grid gap-4 md:grid-cols-2 text-sm">
+                            {ex.strengths.length > 0 && (
+                              <div>
+                                <p class="label-mono text-emerald-400 mb-2">Strengths</p>
+                                <ul class="space-y-2">
+                                  {ex.strengths.map((s) => (
+                                    <li>
+                                      <p class="text-neutral-200"><span class={s.match_strength === "strong" ? "text-emerald-300" : "text-sky-300"}>{s.match_strength === "strong" ? "Strong" : "Partial"}:</span> {s.requirement}</p>
+                                      <p class="text-neutral-400 text-xs mt-0.5">{s.note}</p>
+                                      <p class="mt-1 flex flex-wrap gap-1">{s.claim_ids.map((c) => <span class="claim" title={claims.get(c) ?? ""}>{c}</span>)}</p>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            <div class="space-y-4">
+                              {ex.gaps.length > 0 && (
+                                <div>
+                                  <p class="label-mono text-red-300 mb-2">Gaps</p>
+                                  <ul class="space-y-2">
+                                    {ex.gaps.map((g) => (
+                                      <li>
+                                        <p class="text-neutral-200">{g.blocking && <span class="text-red-300 font-medium">Blocking: </span>}{g.requirement}</p>
+                                        <p class="text-neutral-400 text-xs mt-0.5">{g.note}</p>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                              {ex.open_questions.length > 0 && (
+                                <div>
+                                  <p class="label-mono text-amber-400 mb-2">Open questions</p>
+                                  <ul class="space-y-1">{ex.open_questions.map((q) => <li class="text-neutral-300"><span class="font-mono text-xs text-neutral-500">{q.oq_id}</span> {q.label}</li>)}</ul>
+                                </div>
+                              )}
+                              <div>
+                                <p class="label-mono text-neutral-400 mb-2">Score</p>
+                                <dl class="grid grid-cols-[1fr_auto] gap-x-4 gap-y-1 text-xs">
+                                  {BREAKDOWN.map(([k, label, max]) => (
+                                    <><dt class="text-neutral-400">{label}</dt><dd class="font-mono text-neutral-200 text-right">{part(m, k)}{max > 0 ? ` / ${max}` : ""}</dd></>
+                                  ))}
+                                  <dt class="text-neutral-300 font-medium border-t border-white/10 pt-1">Fit score</dt><dd class="font-mono text-white text-right border-t border-white/10 pt-1">{m.fit_score}</dd>
+                                </dl>
+                                <p class="text-xs text-neutral-500 mt-2">
+                                  Evidence: {Math.round(m.evidence_confidence.must_have_coverage * 100)}% of must-haves covered, claim weight {m.evidence_confidence.mean_claim_weight.toFixed(2)}.
+                                </p>
+                                {m.tier_adjustments.map((a) => <p class="text-xs text-amber-200 mt-1">{ADJUSTMENTS[a] ?? humanize(a)}</p>)}
+                              </div>
+                            </div>
+                          </div>
+                          {ex.flags.length > 0 && (
+                            <p class="mt-4 flex flex-wrap gap-1.5">{ex.flags.map((fl) => <span class="badge">{FLAGS[fl] ?? humanize(fl)}</span>)}</p>
+                          )}
+                          {cited.length > 0 && claims.size > 0 && (
+                            <div class="mt-4">
+                              <p class="label-mono text-neutral-400 mb-2">Evidence cited</p>
+                              <ul class="space-y-1 text-xs">{cited.map((c) => <li class="text-neutral-300"><span class="claim mr-1">{c}</span>{claims.get(c) ?? "Claim text not found in the profile."}</li>)}</ul>
+                            </div>
+                          )}
+                          {applyUrl && applyUrl !== url && (
+                            <p class="mt-4 text-sm"><a href={applyUrl} target="_blank" rel="noopener noreferrer" class="text-amber-300 underline underline-offset-4">Apply page ↗</a></p>
+                          )}
+                        </details>
+
+                        <div class="feedback mt-4 pt-3 border-t border-white/10">
+                          <p class="status-line text-xs text-neutral-400 mb-2">{statusLine(f)}</p>
+                          {!readOnly && (
+                            <>
+                              <div class="flex flex-wrap gap-2" role="group" aria-label="Set status">
+                                <button type="button" class="fb" data-set="interested" aria-pressed={status === "interested" ? "true" : "false"}>Interested</button>
+                                <button type="button" class="fb" data-set="not_interested" aria-pressed={status === "not_interested" ? "true" : "false"}>Not interested</button>
+                                <button type="button" class="fb" data-set="applied" aria-pressed={status === "applied" ? "true" : "false"}>Applied</button>
+                                <button type="button" class="fb" data-set="interview" aria-pressed={status === "interview" ? "true" : "false"}>Interview</button>
+                                <button type="button" class="fb fb-reset" data-set="unreviewed" hidden={status === "unreviewed"}>Reset</button>
+                              </div>
+                              <form class="ni-form mt-3 space-y-2" hidden>
+                                <label class="block">
+                                  <span class="text-xs text-neutral-400">Reason</span>
+                                  <select name="reason" required class="ctl mt-1">
+                                    <option value="">Choose a reason…</option>
+                                    {Object.entries(REASONS).map(([k, v]) => <option value={k}>{v}</option>)}
+                                  </select>
+                                </label>
+                                <label class="block">
+                                  <span class="text-xs text-neutral-400">Note (optional, no numbers or @)</span>
+                                  <textarea name="note" maxlength="280" rows="2" class="ctl mt-1 resize-y"></textarea>
+                                </label>
+                                <div class="flex gap-2">
+                                  <button type="submit" class="fb fb-primary">Save</button>
+                                  <button type="button" class="fb ni-cancel">Cancel</button>
+                                </div>
+                              </form>
+                              <p class="fb-error text-xs text-red-300 mt-2" role="alert" hidden></p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+            <p class="tier-empty text-sm text-neutral-500 py-4" hidden={list.length > 0}>{list.length ? "No postings match the filters." : "Nothing in this tier today."}</p>
+          </section>
+        );
+      })}
+
+      <details class="mt-8 rounded-2xl border border-white/10 bg-neutral-900/30 p-4 text-sm text-neutral-400">
+        <summary class="cursor-pointer text-neutral-300">Run details</summary>
+        <dl class="mt-3 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-2 text-xs">
+          <div><dt>Companies checked</dt><dd class="font-mono text-neutral-200">{counts.api_companies_checked ?? "–"}</dd></div>
+          <div><dt>Queued links</dt><dd class="font-mono text-neutral-200">{counts.url_queue_links ?? "–"}</dd></div>
+          <div><dt>Discovered</dt><dd class="font-mono text-neutral-200">{counts.discovered ?? "–"}</dd></div>
+          <div><dt>After dedupe</dt><dd class="font-mono text-neutral-200">{counts.after_dedupe ?? "–"}</dd></div>
+          <div><dt>Filtered out by rules</dt><dd class="font-mono text-neutral-200">{hardFiltered}</dd></div>
+          <div><dt>AI extracted / cached</dt><dd class="font-mono text-neutral-200">{counts.ai_extracted ?? 0} / {counts.cache_hits ?? 0}</dd></div>
+          <div><dt>Below cutoff</dt><dd class="font-mono text-neutral-200">{counts.hidden_below_cutoff ?? 0}</dd></div>
+          <div><dt>Held for later / deferred</dt><dd class="font-mono text-neutral-200">{counts.held_overflow ?? 0} / {counts.deferred_budget ?? 0}</dd></div>
+          <div><dt>Dropped this run</dt><dd class="font-mono text-neutral-200">{day.removed?.length ?? 0}</dd></div>
+          <div><dt>Scoring config</dt><dd class="font-mono text-neutral-200">{day.run.scoring_config_version}</dd></div>
+          <div><dt>Model / prompt</dt><dd class="font-mono text-neutral-200 break-all">{day.run.model.model} / {day.run.model.prompt_version}</dd></div>
+          <div><dt>Run ID</dt><dd class="font-mono text-neutral-200 break-all">{day.run.run_id}</dd></div>
+        </dl>
+      </details>
+      <div id="toast" role="status" aria-live="polite" hidden
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-xl border border-white/15 bg-neutral-900 px-4 py-3 text-sm text-white shadow-lg"></div>
+    </>
+  )}
+</JobsLayout>
+
+<style is:global>
+  .badge { display:inline-flex; align-items:center; border:1px solid rgba(255,255,255,0.12); border-radius:9999px; padding:1px 8px; font-size:11px; color:#a3a3a3; white-space:nowrap; }
+  .claim { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.04em; color:#fcd34d; border:1px solid rgba(245,158,11,0.3); border-radius:6px; padding:0 5px; }
+  .ctl { width:100%; border-radius:0.75rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.15); padding:0.5rem 0.75rem; font-size:0.875rem; color:#fff; }
+  .ctl:focus { outline:none; border-color:rgba(245,158,11,0.6); }
+  .fb { border:1px solid rgba(255,255,255,0.15); border-radius:0.6rem; padding:0.35rem 0.8rem; font-size:0.8rem; color:#e5e5e5; background:rgba(255,255,255,0.03); transition:border-color .15s, background .15s; }
+  .fb:hover { border-color:rgba(245,158,11,0.5); }
+  .fb[aria-pressed="true"] { border-color:rgba(245,158,11,0.7); background:rgba(245,158,11,0.15); color:#fde68a; }
+  .fb-primary { background:#f59e0b; color:#000; border-color:#f59e0b; font-weight:600; }
+  .fb-primary:hover { background:#fbbf24; }
+  .fb:disabled { opacity:.5; cursor:wait; }
+  .job-card[data-status="not_interested"] { opacity:.6; }
+</style>
+
+<script>
+  type Card = HTMLElement & { dataset: DOMStringMap };
+  const $ = <T extends Element>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
+  const cards = () => Array.from(document.querySelectorAll<Card>(".job-card"));
+  const search = $<HTMLInputElement>("#f-search");
+  const statusSel = $<HTMLSelectElement>("#f-status");
+  const sortSel = $<HTMLSelectElement>("#f-sort");
+  const daySel = $<HTMLSelectElement>("#f-day");
+  const summary = $<HTMLElement>("#f-summary");
+  const toast = $<HTMLElement>("#toast");
+
+  const LABELS: Record<string, string> = { unreviewed: "Not reviewed", interested: "Interested", not_interested: "Not interested", applied: "Applied", interview: "Interview" };
+
+  // Restore controls from the URL so a filtered view can be shared or reloaded.
+  const params = new URLSearchParams(location.search);
+  if (search && params.get("q")) search.value = params.get("q")!;
+  if (statusSel && params.get("status")) statusSel.value = params.get("status")!;
+  if (sortSel && params.get("sort")) sortSel.value = params.get("sort")!;
+  if (statusSel && !statusSel.value) statusSel.value = "open";
+  if (sortSel && !sortSel.value) sortSel.value = "rank";
+
+  function matchesStatus(s: string, f: string) {
+    if (f === "all") return true;
+    if (f === "open") return s !== "not_interested";
+    if (f === "active") return s === "applied" || s === "interview";
+    return s === f;
+  }
+
+  function apply() {
+    const q = (search?.value ?? "").trim().toLowerCase();
+    const f = statusSel?.value ?? "open";
+    const sort = sortSel?.value ?? "rank";
+    let shown = 0, total = 0;
+    document.querySelectorAll<HTMLElement>(".tier").forEach((tier) => {
+      const list = tier.querySelector<HTMLElement>(".tier-list")!;
+      const items = Array.from(list.querySelectorAll<Card>(".job-card"));
+      items.sort((a, b) => {
+        const d = a.dataset;
+        const e = b.dataset;
+        if (sort === "fit") return Number(e.fit) - Number(d.fit) || Number(d.rank) - Number(e.rank);
+        if (sort === "posted") return Number(e.posted) - Number(d.posted) || Number(d.rank) - Number(e.rank);
+        if (sort === "company") return (d.company ?? "").localeCompare(e.company ?? "") || Number(d.rank) - Number(e.rank);
+        return Number(d.rank) - Number(e.rank);
+      });
+      let visible = 0;
+      for (const c of items) {
+        const ok = matchesStatus(c.dataset.status ?? "unreviewed", f) && (!q || (c.dataset.search ?? "").includes(q));
+        c.hidden = !ok;
+        if (ok) visible++;
+        list.appendChild(c);
+      }
+      total += items.length; shown += visible;
+      const count = tier.querySelector<HTMLElement>(".tier-count");
+      if (count) count.textContent = visible === items.length ? String(items.length) : `${visible} of ${items.length}`;
+      const empty = tier.querySelector<HTMLElement>(".tier-empty");
+      if (empty) { empty.hidden = visible > 0; if (items.length) empty.textContent = "No postings match the filters."; }
+    });
+    if (summary) summary.textContent = shown === total ? `Showing all ${total}.` : `Showing ${shown} of ${total}.`;
+    const next = new URLSearchParams(location.search);
+    q ? next.set("q", q) : next.delete("q");
+    f !== "open" ? next.set("status", f) : next.delete("status");
+    sort !== "rank" ? next.set("sort", sort) : next.delete("sort");
+    const qs = next.toString();
+    history.replaceState(null, "", location.pathname + (qs ? `?${qs}` : ""));
+  }
+
+  let t: number | undefined;
+  search?.addEventListener("input", () => { clearTimeout(t); t = window.setTimeout(apply, 120); });
+  statusSel?.addEventListener("change", apply);
+  sortSel?.addEventListener("change", apply);
+  daySel?.addEventListener("change", () => {
+    const next = new URLSearchParams(location.search);
+    daySel.value ? next.set("date", daySel.value) : next.delete("date");
+    location.search = next.toString();
+  });
+  apply();
+
+  function showToast(msg: string) {
+    if (!toast) return;
+    toast.textContent = msg; toast.hidden = false;
+    clearTimeout((toast as any)._t);
+    (toast as any)._t = setTimeout(() => (toast.hidden = true), 3500);
+  }
+
+  function fmt(iso: string) {
+    return new Intl.DateTimeFormat("en-US", { timeZone: "America/Chicago", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(iso));
+  }
+
+  async function send(card: Card, body: Record<string, string>) {
+    const err = card.querySelector<HTMLElement>(".fb-error")!;
+    const buttons = card.querySelectorAll<HTMLButtonElement>(".feedback button");
+    err.hidden = true;
+    buttons.forEach((b) => (b.disabled = true));
+    try {
+      const res = await fetch("/api/jobs/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ posting_id: card.dataset.id, ...body }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Save failed (${res.status}).`);
+      card.dataset.status = data.status;
+      card.querySelectorAll<HTMLButtonElement>(".fb[data-set]").forEach((b) => {
+        if (b.dataset.set === "unreviewed") b.hidden = data.status === "unreviewed";
+        else b.setAttribute("aria-pressed", String(b.dataset.set === data.status));
+      });
+      const line = card.querySelector<HTMLElement>(".status-line")!;
+      const reasonSel = card.querySelector<HTMLSelectElement>(".ni-form select");
+      const reasonText = data.reason && reasonSel ? ` (${reasonSel.selectedOptions[0]?.text.replace(" (add a note)", "")})` : "";
+      line.textContent = data.status === "unreviewed" ? "Not reviewed yet" : `${LABELS[data.status]}${reasonText} · ${data.reviewer} · ${fmt(data.at)}`;
+      const form = card.querySelector<HTMLFormElement>(".ni-form");
+      if (form) { form.hidden = true; form.reset(); }
+      const hiddenNow = !matchesStatus(data.status, statusSel?.value ?? "open");
+      showToast(`Saved: ${LABELS[data.status]}.${hiddenNow ? " Hidden by the current filter." : ""}${data.status === "applied" || data.status === "interview" ? " Moves to Tracking after the next run." : ""}`);
+      apply();
+    } catch (e) {
+      err.textContent = e instanceof Error ? e.message : "Save failed.";
+      err.hidden = false;
+    } finally {
+      buttons.forEach((b) => (b.disabled = false));
+    }
+  }
+
+  document.addEventListener("click", (ev) => {
+    const btn = (ev.target as HTMLElement).closest<HTMLButtonElement>("button");
+    const card = btn?.closest<Card>(".job-card");
+    if (!btn || !card) return;
+    const form = card.querySelector<HTMLFormElement>(".ni-form");
+    if (btn.classList.contains("ni-cancel")) { if (form) form.hidden = true; return; }
+    const set = btn.dataset.set;
+    if (!set) return;
+    if (set === "not_interested") {
+      if (form) { form.hidden = !form.hidden; form.querySelector<HTMLSelectElement>("select")?.focus(); }
+      return;
+    }
+    if (set === card.dataset.status) return;
+    void send(card, { status: set });
+  });
+
+  document.addEventListener("submit", (ev) => {
+    const form = (ev.target as HTMLElement).closest<HTMLFormElement>(".ni-form");
+    if (!form) return;
+    ev.preventDefault();
+    const card = form.closest<Card>(".job-card")!;
+    const reason = (form.elements.namedItem("reason") as HTMLSelectElement).value;
+    const note = (form.elements.namedItem("note") as HTMLTextAreaElement).value.trim();
+    const err = card.querySelector<HTMLElement>(".fb-error")!;
+    const fail = (m: string) => { err.textContent = m; err.hidden = false; };
+    if (!reason) return fail("Choose a reason.");
+    if (/[0-9@]/.test(note)) return fail("Notes can't contain numbers or @.");
+    if (reason === "other" && note.length < 3) return fail("Add a short note for Other.");
+    void send(card, { status: "not_interested", not_interested_reason: reason, ...(note ? { reason_note: note } : {}) });
+  });
+</script>
