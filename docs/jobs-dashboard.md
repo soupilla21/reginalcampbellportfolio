@@ -19,7 +19,8 @@ in the data repo (§2 trust boundaries, §11 tiers, §14 explanations, §15 feed
 
 | Name | Value |
 |---|---|
-| `JOBS_PASSWORD` | Shared password for Reggie and Yahsh. Changing it signs everyone out. |
+| `JOBS_PASSWORD_REGGIE` | Reggie's own password. Changing it signs out only Reggie. |
+| `JOBS_PASSWORD_YAHSH` | Yahsh's own password. Changing it signs out only Yahsh. The two must differ, or neither can sign in. |
 | `GITHUB_DATA_TOKEN` | Fine-grained token, Contents read/write on `soupilla21/yahsh-job-matcher` only. |
 | `DATA_REPO` | `soupilla21/yahsh-job-matcher` |
 | `DATA_BRANCH` | Optional. Defaults to `main`. |
@@ -29,9 +30,9 @@ Preview deployments then write to the same `data/feedback.json`.
 
 ## Sign-in
 
-`/jobs/signin` asks for the password and who is reviewing (Reggie or Yahsh). It sets an
+`/jobs/signin` asks for your name (Reggie or Yahsh) and your own password, checked against that name only. It sets an
 HttpOnly, Secure, SameSite=Lax cookie for 30 days, signed with HMAC-SHA256 under a key
-derived from `JOBS_PASSWORD`. The reviewer saved with each feedback event comes from that
+derived from that reviewer's own password. The reviewer saved with each feedback event comes from that
 cookie, not from the browser's request body. "Switch / sign out" clears it.
 
 POSTs must carry this site's Origin. Failed sign-ins wait 0.75 s. There is no lockout,
@@ -75,7 +76,7 @@ filtered view.
 
 ```bash
 GITHUB_API_URL=http://127.0.0.1:8787 GITHUB_DATA_TOKEN=test DATA_REPO=owner/data \
-JOBS_PASSWORD='test password' npx astro dev
+JOBS_PASSWORD_REGGIE='test one' JOBS_PASSWORD_YAHSH='test two' npx astro dev
 ```
 
 `GITHUB_API_URL` only applies in `astro dev`. Point it at a mock of the GitHub Contents API.

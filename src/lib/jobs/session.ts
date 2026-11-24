@@ -1,6 +1,7 @@
 // Signed session cookie for /jobs. The cookie holds the reviewer name and an expiry,
-// signed with HMAC-SHA256 under a key derived from JOBS_PASSWORD. Changing the
-// password therefore signs everyone out.
+// signed with HMAC-SHA256 under a key derived from that reviewer's own password
+// (JOBS_PASSWORD_REGGIE or JOBS_PASSWORD_YAHSH). Changing one person's password signs
+// out only that person.
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { isReviewer, jobsEnv, type Reviewer } from "./env";
 
@@ -13,36 +14,35 @@ function key(password: string): Buffer {
 const b64u = (b: Buffer | string) => Buffer.from(b).toString("base64url");
 const sign = (k: Buffer, data: string) => createHmac("sha256", k).update(data).digest();
 
-/** Constant-time password check (compares HMACs of equal length). */
-export function passwordMatches(input: string): boolean {
-  const expected = jobsEnv.password();
+/** Constant-time check of a password against the chosen reviewer's own password. */
+export function passwordMatches(reviewer: Reviewer, input: string): boolean {
+  const expected = jobsEnv.passwordFor(reviewer);
   if (!expected || typeof input !== "string" || input.length > 512) return false;
   const k = key(expected);
   return timingSafeEqual(sign(k, "pw:" + input), sign(k, "pw:" + expected));
 }
 
 export function createSession(reviewer: Reviewer): string {
-  const password = jobsEnv.password();
-  if (!password) throw new Error("JOBS_PASSWORD is not set");
-  const payload = b64u(JSON.stringify({ v: 1, r: reviewer, exp: Date.now() + SESSION_DAYS * 864e5 }));
+  const password = jobsEnv.passwordFor(reviewer);
+  if (!password) throw new Error(`No password set for ${reviewer}`);
+  const payload = b64u(JSON.stringify({ v: 2, r: reviewer, exp: Date.now() + SESSION_DAYS * 864e5 }));
   return `${payload}.${b64u(sign(key(password), payload))}`;
 }
 
 export function readSession(value: string | undefined): Reviewer | null {
-  const password = jobsEnv.password();
-  if (!password || !value || value.length > 512) return null;
+  if (!value || value.length > 512) return null;
   const [payload, sig] = value.split(".");
   if (!payload || !sig) return null;
+  let data: { v?: unknown; r?: unknown; exp?: unknown };
+  try { data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")); } catch { return null; }
+  // The reviewer named in the payload picks the key; the signature then proves it.
+  if (data?.v !== 2 || !isReviewer(data.r) || typeof data.exp !== "number" || data.exp < Date.now()) return null;
+  const password = jobsEnv.passwordFor(data.r);
+  if (!password) return null;
   const expected = sign(key(password), payload);
   const given = Buffer.from(sig, "base64url");
   if (given.length !== expected.length || !timingSafeEqual(given, expected)) return null;
-  try {
-    const data = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
-    if (data?.v !== 1 || typeof data.exp !== "number" || data.exp < Date.now()) return null;
-    return isReviewer(data.r) ? data.r : null;
-  } catch {
-    return null;
-  }
+  return data.r;
 }
 
 export const sessionCookieOptions = (secure: boolean) => ({

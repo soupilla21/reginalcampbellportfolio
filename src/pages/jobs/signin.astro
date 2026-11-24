@@ -10,16 +10,16 @@ if (readSession(Astro.cookies.get(SESSION_COOKIE)?.value)) return Astro.redirect
 
 const error = Astro.url.searchParams.get("error");
 const messages: Record<string, string> = {
-  password: "That password didn't match.",
+  password: "That password didn't match the name you chose.",
   reviewer: "Choose who's reviewing.",
-  config: "Sign-in isn't configured on the server yet (JOBS_PASSWORD is missing).",
+  config: "Sign-in isn't set up for that name yet. Each reviewer needs their own password in Vercel (JOBS_PASSWORD_REGGIE, JOBS_PASSWORD_YAHSH), and the two must be different.",
 };
 ---
 <JobsLayout title="Sign in · Job matches">
   <div class="max-w-md mx-auto mt-6">
     <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">Private</span>
     <h1 class="text-3xl font-bold mt-2 text-white">Job matches</h1>
-    <p class="text-neutral-400 mt-3 text-sm leading-relaxed">Daily matches for review. Sign in with the shared password and choose who's reviewing. Your choice is saved with every status you set.</p>
+    <p class="text-neutral-400 mt-3 text-sm leading-relaxed">Daily matches for review. Choose your name and enter your own password. Your name is saved with every status and rating you set.</p>
 
     {error && messages[error] && (
       <p role="alert" class="mt-6 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">{messages[error]}</p>
@@ -28,7 +28,7 @@ const messages: Record<string, string> = {
     <form method="post" action="/api/jobs/signin" class="mt-6 bg-neutral-900/40 rounded-2xl border border-white/10 p-6 space-y-5">
       <input type="hidden" name="next" value={next} />
       <fieldset>
-        <legend class="label-mono text-amber-400 mb-3">Reviewing as</legend>
+        <legend class="label-mono text-amber-400 mb-3">Your name</legend>
         <div class="grid grid-cols-2 gap-3">
           {REVIEWERS.map((r) => (
             <label class="reviewer-option flex items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-3 cursor-pointer hover:border-amber-500/40 transition">
@@ -39,7 +39,7 @@ const messages: Record<string, string> = {
         </div>
       </fieldset>
       <label class="block">
-        <span class="label-mono text-amber-400">Password</span>
+        <span class="label-mono text-amber-400">Your password</span>
         <input type="password" name="password" required autocomplete="current-password" autofocus
           class="mt-2 w-full rounded-xl bg-black/40 border border-white/15 px-4 py-3 text-white focus:outline-none focus:border-amber-500/60" />
       </label>

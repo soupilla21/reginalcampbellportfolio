@@ -10,11 +10,11 @@ export const POST: APIRoute = async ({ request, url, cookies, redirect }) => {
   const next = safeNext(form?.get("next"));
   const back = (code: string) => redirect(`/jobs/signin?error=${code}&next=${encodeURIComponent(next)}`, 303);
 
-  if (!jobsEnv.password()) return back("config");
   const password = String(form?.get("password") ?? "");
   const reviewer = form?.get("reviewer");
   if (!isReviewer(reviewer)) return back("reviewer");
-  if (!passwordMatches(password)) {
+  if (!jobsEnv.passwordFor(reviewer)) return back("config");
+  if (!passwordMatches(reviewer, password)) {
     await new Promise((r) => setTimeout(r, 750)); // slow down guessing
     return back("password");
   }
