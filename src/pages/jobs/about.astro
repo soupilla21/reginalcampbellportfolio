@@ -16,12 +16,26 @@ const latest = await readJson<MatchesFile>(PATHS.latest).catch(() => null);
 const usedVersion = latest?.run.scoring_config_version ?? null;
 const stale = usedVersion !== null && usedVersion !== RULES.configVersion;
 const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW";
+const matchesLabel = reviewer === "Yahsh" ? "Go to your job matches" : "Go to the job matches";
+const toc = [
+  ["why", "Why I built this"], ["sources", "Where jobs come from"], ["filters", "Filters"], ["scoring", "Scoring"],
+  ["evidence", "Evidence"], ["tiers", "Tiers"], ["privacy", "Privacy"],
+  ...(reviewMode ? [["review", "Review period"]] : []), ...(pending ? [["ask", "One ask"]] : []),
+];
 ---
 <JobsLayout title="How this works · Job matches" reviewer={reviewer}>
   <article class="max-w-2xl about">
-    <p class="mb-6"><a href="/jobs" class="text-sm text-amber-300 hover:text-amber-200">← Back to today's matches</a></p>
+    <p class="mb-6"><a href="/jobs" class="text-sm text-amber-300 hover:text-amber-200">← {matchesLabel}</a></p>
     <span class="text-amber-400 font-mono text-sm uppercase tracking-wider">From Reggie</span>
     <h1 class="text-3xl md:text-4xl font-bold mt-2 text-white">How this works</h1>
+
+    <nav aria-label="On this page" class="mt-6 rounded-2xl border border-white/10 bg-neutral-900/40 p-4">
+      <p class="label-mono text-neutral-500 mb-2">On this page</p>
+      <ul class="toc flex flex-wrap gap-2">
+        {toc.map(([id, label]) => <li><a href={`#${id}`} class="toc-chip">{label}</a></li>)}
+      </ul>
+      <a href="/jobs" class="jump-btn mt-4">{matchesLabel} <span aria-hidden="true">→</span></a>
+    </nav>
 
     {stale && (
       <p class="mt-6 rounded-xl border border-amber-500/30 bg-amber-500/[0.07] px-4 py-3 text-sm text-amber-100">
@@ -29,14 +43,14 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
       </p>
     )}
 
-    <h2>Why I built this</h2>
+    <h2 id="why">Why I built this</h2>
     <p>
       Searching job boards is slow, and most of what comes back isn't close. I wanted your time going to the few jobs worth
       a cover letter, along with a clear read on why each one fits and where it doesn't. So this does the searching every
       morning and gives you a short, ranked list.
     </p>
 
-    <h2>Where the jobs come from</h2>
+    <h2 id="sources">Where the jobs come from</h2>
     <ul>
       <li>
         Every morning around 6:30, it checks the careers pages of the companies on your target list: airlines, airline
@@ -46,7 +60,8 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
       <li>Every job links straight to the employer's own posting.</li>
     </ul>
 
-    <h2>What gets filtered out first</h2>
+    <p class="jump"><a href="/jobs">{matchesLabel} <span aria-hidden="true">→</span></a></p>
+    <h2 id="filters">What gets filtered out first</h2>
     <p>Simple rules remove jobs that clearly don't work:</p>
     <ul>
       <li>jobs that aren't full-time;</li>
@@ -58,7 +73,7 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
       If a job lists no pay, it stays and is marked "Pay not listed." Your minimum is never shown on this page or sent anywhere.
     </p>
 
-    <h2>How each job is scored (0–100)</h2>
+    <h2 id="scoring">How each job is scored (0–100)</h2>
     <p>
       An AI reads each posting and pulls out what the employer is asking for. Then the scoring code, not the AI, compares
       that to your profile:
@@ -72,14 +87,15 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
       <li><strong>Blocking gaps (down to −20):</strong> a requirement you can't meet right now, such as a license you don't currently hold.</li>
     </ul>
 
-    <h2>Evidence confidence</h2>
+    <p class="jump"><a href="/jobs">{matchesLabel} <span aria-hidden="true">→</span></a></p>
+    <h2 id="evidence">Evidence confidence</h2>
     <p>
       Each job also gets a High, Medium or Low evidence rating. It reflects how much of what the job requires is backed by
       your record. Figures you reported yourself, such as percentages, are labeled "client-attested" and count a little
       less, because we don't have documents for them. That keeps the list honest about where you'd be stretching.
     </p>
 
-    <h2>The tiers</h2>
+    <h2 id="tiers">The tiers</h2>
     <ul>
       <li><strong>Apply first:</strong> a score of {RULES.applyFirst} or more, with Medium or better evidence and no blocking gap.</li>
       <li><strong>Worth reviewing:</strong> {RULES.worthReviewing}–{RULES.applyFirst - 1}, or a higher score held back by low evidence or a blocking gap.</li>
@@ -90,7 +106,8 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
       {" "}{RULES.holdDays} days for a slot. A job you haven't reviewed drops off after {RULES.unreviewedDays} days.
     </p>
 
-    <h2>Your privacy</h2>
+    <p class="jump"><a href="/jobs">{matchesLabel} <span aria-hidden="true">→</span></a></p>
+    <h2 id="privacy">Your privacy</h2>
     <p>
       Your name, contact details and pay minimum never go to the AI. It sees the job posting, with the pay text removed, and
       a cleaned-up summary of your experience. This page is password-protected, only you and I can see it, and search
@@ -99,7 +116,7 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
 
     {reviewMode && (
       <>
-        <h2>The review period: what your clicks do</h2>
+        <h2 id="review">The review period: what your clicks do</h2>
         <p>
           For the next two weeks, or until about {REVIEW_TARGET} jobs are rated, we're tuning this to you. There are two
           kinds of clicks:
@@ -125,13 +142,15 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
 
     {pending && (
       <>
-        <h2>One thing I need from you</h2>
+        <h2 id="ask">One thing I need from you</h2>
         <p>Your profile is still marked as pending your approval, so the scores are provisional. I'll send it to you to sign off.</p>
       </>
     )}
 
-    <p class="mt-10"><a href="/jobs" class="text-amber-300 underline underline-offset-4 hover:text-amber-200">Back to today's matches →</a></p>
+    <p class="mt-10"><a href="/jobs" class="jump-btn">{matchesLabel} <span aria-hidden="true">→</span></a></p>
   </article>
+
+  <a href="/jobs" class="float-btn" aria-label={matchesLabel}>Job matches <span aria-hidden="true">→</span></a>
 </JobsLayout>
 
 <style>
@@ -141,4 +160,20 @@ const pending = latest?.run.profile?.approval_status === "PENDING_CLIENT_REVIEW"
   .about ul { list-style: disc; padding-left: 1.25rem; margin-top: 0.5rem; }
   .about li + li { margin-top: 0.4rem; }
   .about strong { color: #fff; }
+  .about h2 { scroll-margin-top: calc(var(--nav-height, 64px) + 16px); }
+  .about ul.toc { list-style:none; padding-left:0; margin-top:0; }
+  .about ul.toc li + li { margin-top:0; }
+  .about ul + p { margin-top:0.75rem; }
+  .toc-chip { display:inline-block; border:1px solid rgba(255,255,255,0.12); border-radius:9999px; padding:3px 10px; font-size:12px; color:#d4d4d4; }
+  .toc-chip:hover { border-color:rgba(245,158,11,0.5); color:#fde68a; }
+  .jump-btn { display:inline-flex; align-items:center; gap:6px; border-radius:0.75rem; background:#f59e0b; color:#000; font-weight:600; font-size:0.9rem; padding:0.55rem 1rem; }
+  .jump-btn:hover { background:#fbbf24; }
+  .about .jump { margin-top: 1.5rem; }
+  .about .jump a { color:#fcd34d; font-size:0.9rem; font-weight:500; border-bottom:1px solid rgba(252,211,77,0.35); }
+  .about .jump a:hover { color:#fde68a; }
+  .float-btn { position:fixed; right:20px; bottom:20px; z-index:50; display:inline-flex; align-items:center; gap:6px;
+    border-radius:9999px; background:#f59e0b; color:#000; font-weight:600; font-size:0.875rem; padding:0.6rem 1.1rem;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+  .float-btn:hover { background:#fbbf24; }
+  .about { padding-bottom: 3rem; }
 </style>
