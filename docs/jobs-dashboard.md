@@ -72,6 +72,13 @@ sort by pipeline order, fit score, newest posted or company, and pick a day (Lat
 archive date). The search, status and sort choices are kept in the URL, so you can share a
 filtered view.
 
+Each tier is a collapsible section (native `<details>`) with its count and how many jobs are
+new. Apply first starts open; if it's empty, the first tier that has jobs opens instead, and
+the rest start closed. Opening or closing a tier is remembered on each device
+(`localStorage` key `jobs_tier_open`), and Expand all / Collapse all sit above the list.
+Typing a search opens the tiers with hits and closes the others without saving that layout;
+clearing the search puts the saved layout back. Status changes don't open or close anything.
+
 ## Local testing
 
 ```bash

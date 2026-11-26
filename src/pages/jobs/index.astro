@@ -65,6 +65,10 @@ const byTier = new Map<Tier, Match[]>(tiers.map((t) => [t, []]));
 for (const m of day?.matches ?? []) byTier.get(m.tier as Tier)?.push(m);
 for (const m of day?.tracking ?? []) byTier.get("tracking")!.push(m);
 for (const list of byTier.values()) list.sort((a, b) => a.rank - b.rank);
+// Tier that starts open: Apply first, unless it's empty, then the first tier that has jobs.
+const defaultOpenTier: Tier = byTier.get("apply_first")!.length > 0
+  ? "apply_first"
+  : (tiers.find((t) => byTier.get(t)!.length > 0) ?? "apply_first");
 
 const counts = day?.run.counts ?? {};
 const hardFiltered = Object.values((counts.hard_filtered ?? {}) as Record<string, number>).reduce((a, b) => a + (Number(b) || 0), 0);
@@ -192,17 +196,28 @@ const scoreClass = (t: string) =>
         <p id="f-summary" class="text-xs text-neutral-500 mt-2" aria-live="polite"></p>
       </section>
 
+      <div class="flex justify-end gap-2 mb-3 text-xs" role="group" aria-label="Sections">
+        <button type="button" id="tiers-expand" class="fb">Expand all</button>
+        <button type="button" id="tiers-collapse" class="fb">Collapse all</button>
+      </div>
+
       {tiers.map((tier) => {
         const list = byTier.get(tier)!;
         if (tier === "tracking" && list.length === 0) return null;
+        const tierNew = list.filter((m) => m.run_status === "new" || m.run_status === "released_from_hold").length;
+        // Collapsible tier. Server default: Apply first open (or the first tier with jobs when
+        // Apply first is empty). The script then applies the per-device choice from localStorage.
         return (
-          <section class="tier mb-10" data-tier={tier} aria-labelledby={`h-${tier}`}>
-            <div class="flex items-baseline justify-between gap-3 mb-3 border-b border-white/10 pb-2">
+          <details class="tier mb-10" data-tier={tier} data-default-open={tier === defaultOpenTier ? "1" : "0"}
+            open={tier === defaultOpenTier} aria-labelledby={`h-${tier}`}>
+            <summary class="tier-summary flex items-baseline justify-between gap-3 mb-3 border-b border-white/10 pb-2 cursor-pointer select-none">
               <h2 id={`h-${tier}`} class="text-xl font-bold text-white">
+                <span class="tier-chevron" aria-hidden="true"></span>
                 {TIERS[tier].label} <span class="tier-count text-neutral-500 font-mono text-sm align-middle" data-total={list.length}>{list.length}</span>
+                {tierNew > 0 && <span class="text-amber-300 font-mono text-xs align-middle ml-1">· {tierNew} new</span>}
               </h2>
               <p class="text-xs text-neutral-500 hidden sm:block">{TIERS[tier].blurb}</p>
-            </div>
+            </summary>
             <div class="tier-list space-y-4">
               {list.map((m) => {
                 const f = current.get(m.posting_id);
@@ -386,9 +401,18 @@ const scoreClass = (t: string) =>
               })}
             </div>
             <p class="tier-empty text-sm text-neutral-500 py-4" hidden={list.length > 0}>{list.length ? "No postings match the filters." : "Nothing in this tier today."}</p>
-          </section>
+          </details>
         );
       })}
+      {/* Apply the saved open/closed layout before first paint so tiers don't flash open. */}
+      <script is:inline>
+        try {
+          var s = JSON.parse(localStorage.getItem("jobs_tier_open") || "{}");
+          document.querySelectorAll("details.tier").forEach(function (d) {
+            if (s && Object.prototype.hasOwnProperty.call(s, d.dataset.tier)) d.open = !!s[d.dataset.tier];
+          });
+        } catch (e) {}
+      </script>
 
       <details id="passed" class="mt-8 rounded-2xl border border-white/10 bg-neutral-900/30 p-4 text-sm">
         <summary class="cursor-pointer text-neutral-200">Passed on <span class="font-mono text-neutral-500">{passes.length}</span></summary>
@@ -457,6 +481,13 @@ const scoreClass = (t: string) =>
   .rv:hover { border-color:rgba(167,139,250,0.7); }
   .rv[aria-pressed="true"] { background:rgba(139,92,246,0.25); border-color:rgba(167,139,250,0.85); color:#fff; }
   .rv:disabled, .bring-back:disabled { opacity:.5; cursor:wait; }
+  .tier-summary { list-style:none; }
+  .tier-summary::-webkit-details-marker { display:none; }
+  .tier-summary:hover h2 { color:#fde68a; }
+  .tier-summary:focus-visible { outline:2px solid rgba(245,158,11,0.7); outline-offset:4px; border-radius:6px; }
+  .tier-chevron { display:inline-block; width:0.55em; height:0.55em; margin-right:0.5em; border-right:2px solid #a3a3a3; border-bottom:2px solid #a3a3a3; transform:rotate(-45deg); transition:transform .15s; vertical-align:0.12em; }
+  details.tier[open] > .tier-summary .tier-chevron { transform:rotate(45deg); vertical-align:0.25em; }
+  details.tier:not([open]) { margin-bottom:1.25rem; }
 </style>
 
 <script>
@@ -487,6 +518,39 @@ const scoreClass = (t: string) =>
     return s === f;
   }
 
+  // ── Collapsible tiers: per-device open/closed state ──
+  // Saved choices live in localStorage. While a search is typed, tiers with matches open
+  // automatically and nothing is saved; clearing the search puts the saved layout back.
+  const TIER_KEY = "jobs_tier_open";
+  const tierEls = () => Array.from(document.querySelectorAll<HTMLDetailsElement>("details.tier"));
+  function loadTierState(): Record<string, boolean> {
+    try { const v = JSON.parse(localStorage.getItem(TIER_KEY) ?? "{}"); return v && typeof v === "object" ? v : {}; } catch { return {}; }
+  }
+  function saveTierState(s: Record<string, boolean>) { try { localStorage.setItem(TIER_KEY, JSON.stringify(s)); } catch {} }
+  function restoreTiers() {
+    const saved = loadTierState();
+    for (const d of tierEls()) {
+      const t = d.dataset.tier!;
+      d.open = t in saved ? Boolean(saved[t]) : d.dataset.defaultOpen === "1";
+    }
+  }
+  const searching = () => Boolean((search?.value ?? "").trim());
+  restoreTiers();
+  for (const d of tierEls()) {
+    d.addEventListener("toggle", () => {
+      if (searching()) return;
+      const s = loadTierState(); s[d.dataset.tier!] = d.open; saveTierState(s);
+    });
+  }
+  function setAllTiers(open: boolean) {
+    const s = loadTierState();
+    for (const d of tierEls()) { d.open = open; s[d.dataset.tier!] = open; }
+    if (!searching()) saveTierState(s);
+  }
+  $("#tiers-expand")?.addEventListener("click", () => setAllTiers(true));
+  $("#tiers-collapse")?.addEventListener("click", () => setAllTiers(false));
+  let lastQ = "";
+
   function apply() {
     const q = (search?.value ?? "").trim().toLowerCase();
     const f = statusSel?.value ?? "open";
@@ -515,7 +579,11 @@ const scoreClass = (t: string) =>
       if (count) count.textContent = visible === items.length ? String(items.length) : `${visible} of ${items.length}`;
       const empty = tier.querySelector<HTMLElement>(".tier-empty");
       if (empty) { empty.hidden = visible > 0; if (items.length) empty.textContent = "No postings match the filters."; }
+      // A new or changed search opens the tiers that have hits and closes the rest.
+      if (q && q !== lastQ) (tier as HTMLDetailsElement).open = visible > 0;
     });
+    if (!q && lastQ) restoreTiers();
+    lastQ = q;
     if (summary) summary.textContent = shown === total ? `Showing all ${total}.` : `Showing ${shown} of ${total}.`;
     const next = new URLSearchParams(location.search);
     q ? next.set("q", q) : next.delete("q");
